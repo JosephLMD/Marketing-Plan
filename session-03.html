@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Plan · Session 3 · Marketing Ethics & Social Responsibility</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body{margin:0;padding:0;background:#0e1b32;color:#f0f0eb;font-family:'DM Sans',sans-serif;overflow:hidden}
+    *{box-sizing:border-box}
+    .app-root{height:100vh;height:100dvh}
+    .slide-scroll{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+    .slide-enter{animation:fadeIn .3s ease-out forwards}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .bg-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,143,92,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,143,92,.02) 1px,transparent 1px);background-size:80px 80px;z-index:0}
+    .bg-glow{position:absolute;top:-20%;right:-10%;width:60%;height:80%;background:radial-gradient(circle,rgba(255,143,92,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+    .bg-glow-left{position:absolute;bottom:-20%;left:-10%;width:50%;height:70%;background:radial-gradient(circle,rgba(255,143,92,.035) 0%,transparent 60%);pointer-events:none;z-index:0}
+    .bg-art{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const T  = "#ff8f5c";   // green accent
+const T2 = "#ffd86b";   // bright lime
+const BL = "#4a9eed";   // blue
+const AM = "#8b7cf6";   // amber
+const RD = "#e05252";   // red
+const BG = "#0e1b32";
+const BG2= "#16243f";
+const BG3= "#0b1526";
+const W  = "#f0f0eb";
+const G  = "#7a7a72";
+const BDR= "rgba(255,255,255,.08)";
+
+// ── RESPONSIVE ──────────────────────────────────────────────────
+// MOB is refreshed by App on every resize; V(desktop, mobile) picks per viewport.
+let MOB = typeof window!=='undefined' && window.innerWidth<=820;
+const V = (d,m) => MOB ? m : d;
+// Standard slide root: identical on desktop; on mobile becomes natural-height + scrollable content
+const SR = (style={}) => ({...style, ...(MOB ? {height:'auto', minHeight:'100%'} : {})});
+
+// ── BACKGROUND ART ──────────────────────────────────────────────
+const BgGlobe = ({opacity=0.03}) => (
+  <div style={{position:'absolute',right:'-5%',top:'5%',width:'55%',height:'90%',opacity,zIndex:0}}>
+    <svg viewBox="0 0 200 200" fill="none" stroke={T} strokeWidth=".5" width="100%" height="100%">
+      <circle cx="100" cy="100" r="80"/>
+      <ellipse cx="100" cy="100" rx="40" ry="80"/>
+      <ellipse cx="100" cy="100" rx="70" ry="80"/>
+      <line x1="20" y1="100" x2="180" y2="100" opacity=".5"/>
+      <line x1="100" y1="20" x2="100" y2="180" opacity=".5"/>
+      <path d="M30 60 Q100 55 170 60" fill="none" opacity=".4"/>
+      <path d="M25 140 Q100 135 175 140" fill="none" opacity=".4"/>
+    </svg>
+  </div>
+);
+
+const BgChain = ({opacity=0.03}) => (
+  <div style={{position:'absolute',right:'-5%',top:'5%',width:'55%',height:'90%',opacity,zIndex:0}}>
+    <svg viewBox="0 0 200 200" fill="none" stroke={T} strokeWidth=".6" width="100%" height="100%">
+      <rect x="20" y="80" width="40" height="40" rx="4"/>
+      <rect x="80" y="80" width="40" height="40" rx="4"/>
+      <rect x="140" y="80" width="40" height="40" rx="4"/>
+      <line x1="60" y1="100" x2="80" y2="100"/>
+      <line x1="120" y1="100" x2="140" y2="100"/>
+      <line x1="40" y1="80" x2="40" y2="40"/>
+      <line x1="100" y1="80" x2="100" y2="40"/>
+      <line x1="160" y1="80" x2="160" y2="40"/>
+      <line x1="40" y1="120" x2="40" y2="160"/>
+      <line x1="100" y1="120" x2="100" y2="160"/>
+      <line x1="160" y1="120" x2="160" y2="160"/>
+    </svg>
+  </div>
+);
+
+// ── HELPER COMPONENTS ────────────────────────────────────────────
+function P({children,style={}}){return <div style={{position:'relative',zIndex:2,...style}}>{children}</div>;}
+
+const ModuleTag = ({module,color=T}) => (
+  <div style={{display:'inline-flex',alignItems:'center',gap:6,background:`${color}12`,border:`1px solid ${color}35`,
+    borderRadius:100,padding:'5px 16px',fontSize:12,color,fontWeight:700,letterSpacing:2,
+    textTransform:'uppercase',marginBottom:20}}>
+    {module}
+  </div>
+);
+
+// ── SVG ICONS ────────────────────────────────────────────────────
+const Ico = {
+  globe:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+  target:  c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+  zap:     c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  link:    c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
+  map:     c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>,
+  trend:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
+  users:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  box:     c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>,
+  refresh: c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>,
+  award:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
+  layers:  c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
+  alert:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+  chart:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+  shuffle: c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>,
+  cpu:     c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>,
+  arrow:   c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
+  flag:    c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>,
+  star:    c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+  wifi:    c=><svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round" width="100%" height="100%"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>,
+};
+
+// ── SLIDE DATA ────────────────────────────────────────────────────────────
+const SLIDES = [
+ {
+  "type": "title",
+  "tag": "Marketing Plan · Session 3",
+  "title": "Marketing Ethics &\nSocial Responsibility",
+  "subtitle": "Why doing the right thing is not charity — it is strategy. How ethics shapes trust, loyalty and long-term performance.",
+  "author": "Escuela de Administración · Based on Ferrell & Hartline, Marketing Strategy"
+ },
+ {
+  "type": "impact",
+  "title": "In the new economy, trust is part of the product",
+  "stats": [
+   {
+    "n": "4",
+    "d": "The pyramid of social responsibility has four levels: economic, legal, ethical and philanthropic.",
+    "src": "Carroll's pyramid"
+   },
+   {
+    "n": "6",
+    "d": "A strong code of conduct rests on six core values — from trustworthiness to citizenship.",
+    "src": "Codes of conduct"
+   },
+   {
+    "n": "↑",
+    "d": "Ethical firms earn greater marketing performance: more commitment, trust and customer loyalty.",
+    "src": "Ethics pays"
+   },
+   {
+    "n": "1",
+    "d": "One deceptive campaign or data misuse can undo years of relationship building.",
+    "src": "The downside risk"
+   }
+  ],
+  "quote": "Marketing ethics is a strategic consideration — not a footnote. It shapes whether customers trust you enough to stay."
+ },
+ {
+  "type": "agenda",
+  "title": "Four modules",
+  "modules": [
+   {
+    "num": 1,
+    "title": "Ethics & Responsibility Defined",
+    "desc": "The two dimensions and the pyramid of social responsibility"
+   },
+   {
+    "num": 2,
+    "title": "Ethical Issues & Deception",
+    "desc": "Common issues, deceptive practices and how they're regulated"
+   },
+   {
+    "num": 3,
+    "title": "Building an Ethical Firm",
+    "desc": "Ethical climate, codes of conduct, leadership and training"
+   },
+   {
+    "num": 4,
+    "title": "Ethics & Performance",
+    "desc": "Why ethics pays, and how to build it into strategy"
+   }
+  ]
+ },
+ {
+  "type": "module_title",
+  "num": 1,
+  "title": "Ethics & Responsibility Defined",
+  "icon": "star",
+  "question": "Is it a company's job to do more than obey the law and make a profit?",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "diagram",
+  "kind": "pyramid",
+  "title": "The pyramid of social responsibility",
+  "subtitle": "Each level rests on the ones beneath it.",
+  "note": "Exhibit — Carroll's Pyramid of Social Responsibility.",
+  "items": [
+   {
+    "t": "Philanthropic",
+    "sub": "Be a good corporate citizen"
+   },
+   {
+    "t": "Ethical",
+    "sub": "Do what is right, fair and just"
+   },
+   {
+    "t": "Legal",
+    "sub": "Obey the law"
+   },
+   {
+    "t": "Economic",
+    "sub": "Be profitable — the foundation"
+   }
+  ],
+  "module": "Module 1",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "concept",
+  "module": "Module 1",
+  "icon": "layers",
+  "title": "Two dimensions",
+  "text": "Social responsibility is the organization's obligation to maximize its positive impact on society and minimize the negative. Marketing ethics is the principles and standards that define acceptable marketing conduct. Responsibility is about outcomes for society; ethics is about the conduct that gets you there.",
+  "highlight": "Social responsibility = impact on society · Marketing ethics = standards of conduct.",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "concept",
+  "module": "Module 1",
+  "icon": "trend",
+  "title": "The pyramid of social responsibility",
+  "text": "Carroll's pyramid stacks four responsibilities: ECONOMIC (be profitable — the base), LEGAL (obey the law), ETHICAL (do what is right, fair and just) and PHILANTHROPIC (be a good corporate citizen — the top). Higher levels rest on the ones beneath; you cannot skip the base.",
+  "highlight": "Economic → Legal → Ethical → Philanthropic. Profit funds the rest; it doesn't excuse skipping it.",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "concept",
+  "module": "Module 1",
+  "icon": "target",
+  "title": "Why it's strategic, not soft",
+  "text": "Ethics is a strategic consideration because it directly affects the relationships marketing exists to build. Customers, employees and partners decide whether to trust you — and trust is the foundation of every long-term relationship and every repeat sale.",
+  "highlight": "You can't build long-term relationships on a foundation people don't trust.",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "case",
+  "module": "Module 1",
+  "icon": "alert",
+  "title": "Joe Camel: targeting the wrong audience",
+  "problem": "R.J. Reynolds was accused of using its cartoon “Joe Camel” character to make cigarettes appealing to children.",
+  "solution": "Public pressure, regulators and lawsuits forced the campaign's end and reshaped rules on marketing to minors — a lesson in the ethical duty to protect vulnerable audiences.",
+  "lesson": "Just because a segment is reachable and profitable doesn't make it ethical to target.",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "exercise",
+  "module": "Module 1",
+  "title": "Read the pyramid",
+  "question": "A firm is profitable and law-abiding but ignores whether its actions are fair or just. Which pyramid level is it neglecting?",
+  "options": [
+   "Legal",
+   "It's doing everything",
+   "Ethical",
+   "Economic"
+  ],
+  "correct": 2,
+  "explanation": "It covers the economic and legal levels but skips the ethical level — doing what is right, fair and just beyond the letter of the law.",
+  "ac": "#8b7cf6"
+ },
+ {
+  "type": "module_title",
+  "num": 2,
+  "title": "Ethical Issues & Deception",
+  "icon": "alert",
+  "question": "Where does “persuasive marketing” cross the line into deception?",
+  "ac": "#ffd86b"
+ },
+ {
+  "type": "concept",
+  "module": "Module 2",
+  "icon": "alert",
+  "title": "Deceptive communication & promotion",
+  "text": "Deceptive practices include false or deceptive statements, exaggerated claims, ambiguous statements, misleading product labeling and outright fraud. The test is not whether a claim is literally true in isolation, but whether the overall impression misleads a reasonable customer.",
+  "highlight": "A claim can be technically true and still be deceptive if the overall impression misleads.",
+  "ac": "#ffd86b"
+ },
+ {
+  "type": "concept",
+  "module": "Module 2",
+  "icon": "flag",
+  "title": "How deception is regulated",
+  "text": "Deceptive marketing is checked by trade associations, self-regulatory bodies like the Better Business Bureau (BBB) and government regulators. Self-regulation is faster and cheaper; government action is slower but carries real penalties.",
+  "highlight": "Self-regulation (BBB, trade groups) first; government enforcement when it fails.",
+  "ac": "#ffd86b"
+ },
+ {
+  "type": "case",
+  "module": "Module 2",
+  "icon": "alert",
+  "title": "Volkswagen Dieselgate: deception at scale",
+  "problem": "Volkswagen marketed “clean diesel” cars while secretly using software to cheat emissions tests.",
+  "solution": "When exposed, VW faced billions in fines, recalls, criminal charges and a collapse in trust — proof that deception is not a shortcut but a deferred, compounding cost.",
+  "lesson": "Deception doesn't remove the cost of doing right; it postpones and multiplies it.",
+  "ac": "#ffd86b"
+ },
+ {
+  "type": "exercise",
+  "module": "Module 2",
+  "title": "Name the practice",
+  "question": "An ad's claim is literally true but arranged to leave a false overall impression. This is best described as…",
+  "options": [
+   "Acceptable puffery with no issue",
+   "Philanthropy",
+   "A legal requirement",
+   "A deceptive/ambiguous practice"
+  ],
+  "correct": 3,
+  "explanation": "Ambiguous or misleading statements that create a false overall impression are deceptive practices, even when individual words are technically true.",
+  "ac": "#ffd86b"
+ },
+ {
+  "type": "module_title",
+  "num": 3,
+  "title": "Building an Ethical Firm",
+  "icon": "users",
+  "question": "Who owns ethics in a company — the individual, or leadership?",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "concept",
+  "module": "Module 3",
+  "icon": "star",
+  "title": "Ethical climate & codes of conduct",
+  "text": "An ethical climate is the shared sense of what is acceptable, set by leadership and reinforced daily. Codes of conduct make it concrete, typically built on six core values: trustworthiness, respect, responsibility, fairness, caring and citizenship.",
+  "highlight": "Six core values: trustworthiness · respect · responsibility · fairness · caring · citizenship.",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "concept",
+  "module": "Module 3",
+  "icon": "users",
+  "title": "Ethics and leadership",
+  "text": "Great ethical leaders create a common vision, obtain buy-in, motivate others to be ethical, use available resources and enjoy their work. Ethics is set at the top: when leaders cut corners, everyone learns the real rules.",
+  "highlight": "People follow what leaders reward, not what the poster on the wall says.",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "concept",
+  "module": "Module 3",
+  "icon": "cpu",
+  "title": "Ethics training",
+  "text": "Training ensures everyone can (1) recognize an ethical decision when they see one, (2) understand the firm's culture and values, and (3) evaluate the impact of ethical decisions. It turns vague good intentions into repeatable judgment.",
+  "highlight": "Recognize · Understand values · Evaluate impact — the three goals of ethics training.",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "case",
+  "module": "Module 3",
+  "icon": "award",
+  "title": "LEGO: values that guide the brand",
+  "problem": "Marketing to children puts a brand under intense ethical scrutiny over content, sustainability and influence.",
+  "solution": "LEGO built responsibility into its identity — sustainable materials commitments, child-focused values and transparent conduct — so its ethics reinforce rather than threaten the brand.",
+  "lesson": "When values are lived, ethics becomes a source of brand strength, not a constraint.",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "exercise",
+  "module": "Module 3",
+  "title": "Locate the lever",
+  "question": "A company wants a genuinely ethical culture. Its single most powerful lever is…",
+  "options": [
+   "Lower prices",
+   "Leadership that models and rewards ethical conduct",
+   "More advertising",
+   "A longer legal disclaimer"
+  ],
+  "correct": 1,
+  "explanation": "Ethical climate is set at the top. Leadership that models, motivates and rewards ethical behavior shapes the culture more than any document.",
+  "ac": "#ff8f5c"
+ },
+ {
+  "type": "module_title",
+  "num": 4,
+  "title": "Ethics & Performance",
+  "icon": "trend",
+  "question": "Does being ethical actually help the business — or just feel good?",
+  "ac": "#4a9eed"
+ },
+ {
+  "type": "concept",
+  "module": "Module 4",
+  "icon": "trend",
+  "title": "Ethics pays",
+  "text": "Firms that are ethical and socially responsible are rewarded with greater marketing performance. A strong ethical climate increases employee commitment, supports a strong market orientation, creates trust among stakeholders and increases customer loyalty.",
+  "highlight": "Commitment · market orientation · trust · loyalty — the measurable payoff of ethics.",
+  "ac": "#4a9eed"
+ },
+ {
+  "type": "concept",
+  "module": "Module 4",
+  "icon": "flag",
+  "title": "Build it into strategy",
+  "text": "Marketing strategy and implementation plans should reflect an understanding of the ethical and social consequences of strategic choices and the values of members and stakeholders. Frameworks like the AMA Code of Ethics give a shared reference for acceptable conduct.",
+  "highlight": "Bake ethics into the plan up front — don't bolt it on after the crisis.",
+  "ac": "#4a9eed"
+ },
+ {
+  "type": "case",
+  "module": "Module 4",
+  "icon": "award",
+  "title": "Patagonia: responsibility as positioning",
+  "problem": "Apparel brands are pressured to grow by encouraging endless consumption.",
+  "solution": "Patagonia turned responsibility into positioning — encouraging repair over replacement and funding environmental causes — deepening loyalty precisely because customers trust its values.",
+  "lesson": "Authentic responsibility can be the strongest differentiator a brand owns.",
+  "ac": "#4a9eed"
+ },
+ {
+  "type": "exercise",
+  "module": "Module 4",
+  "title": "Make the case",
+  "question": "Which is a documented business benefit of a strong ethical climate?",
+  "options": [
+   "Higher employee commitment and customer loyalty",
+   "Guaranteed lowest prices",
+   "Immunity from all lawsuits",
+   "No need for a marketing plan"
+  ],
+  "correct": 0,
+  "explanation": "A strong ethical climate raises employee commitment, strengthens market orientation, builds stakeholder trust and increases customer loyalty — real, measurable performance gains.",
+  "ac": "#4a9eed"
+ },
+ {
+  "type": "takeaways",
+  "title": "Six things to remember",
+  "items": [
+   {
+    "icon": "layers",
+    "c": "#ff8f5c",
+    "t": "Two dimensions",
+    "d": "Social responsibility = impact on society; marketing ethics = standards of conduct."
+   },
+   {
+    "icon": "trend",
+    "c": "#4a9eed",
+    "t": "The pyramid",
+    "d": "Economic → Legal → Ethical → Philanthropic."
+   },
+   {
+    "icon": "alert",
+    "c": "#e05252",
+    "t": "Deception is a deferred cost",
+    "d": "It postpones and multiplies the price of doing right (see VW)."
+   },
+   {
+    "icon": "star",
+    "c": "#8b7cf6",
+    "t": "Six core values",
+    "d": "Trustworthiness, respect, responsibility, fairness, caring, citizenship."
+   },
+   {
+    "icon": "users",
+    "c": "#ffd86b",
+    "t": "Leadership sets the climate",
+    "d": "People follow what leaders reward, not the poster."
+   },
+   {
+    "icon": "flag",
+    "c": "#ff8f5c",
+    "t": "Ethics pays",
+    "d": "Commitment, market orientation, trust and loyalty rise with it."
+   }
+  ]
+ },
+ {
+  "type": "discussion",
+  "title": "Discussion",
+  "questions": [
+   "Why is marketing ethics a strategic consideration in organizational decisions?",
+   "Who is most important in managing marketing ethics: the individual or the firm's leadership? Explain.",
+   "What is the relationship between marketing ethics and organizational performance? What makes a strong compliance program?"
+  ],
+  "resource": {
+   "label": "Research resource:",
+   "name": "Marketing Dive",
+   "url": "https://www.marketingdive.com/"
+  }
+ },
+ {
+  "type": "quiz_intro",
+  "title": "Session 3 Assessment",
+  "subtitle": "10 questions on responsibility, deception, ethical culture and performance."
+ },
+ {
+  "type": "quiz",
+  "questions": [
+   {
+    "q": "Social responsibility is best defined as…",
+    "opts": [
+     "Maximizing this quarter's profit",
+     "Advertising more",
+     "Obeying only tax law",
+     "Maximizing positive and minimizing negative impact on society"
+    ],
+    "correct": 3
+   },
+   {
+    "q": "The base level of Carroll's pyramid is…",
+    "opts": [
+     "Economic",
+     "Philanthropic",
+     "Ethical",
+     "Legal"
+    ],
+    "correct": 0
+   },
+   {
+    "q": "The top level of the pyramid is…",
+    "opts": [
+     "Ethical",
+     "Philanthropic",
+     "Legal",
+     "Economic"
+    ],
+    "correct": 1
+   },
+   {
+    "q": "A claim that is literally true but leaves a false overall impression is…",
+    "opts": [
+     "A legal duty",
+     "Perfectly fine",
+     "A deceptive practice",
+     "Philanthropy"
+    ],
+    "correct": 2
+   },
+   {
+    "q": "Which body is a self-regulatory check on deceptive marketing?",
+    "opts": [
+     "The World Bank",
+     "The Better Business Bureau (BBB)",
+     "The UN",
+     "The stock exchange"
+    ],
+    "correct": 1
+   },
+   {
+    "q": "Codes of conduct commonly rest on how many core values?",
+    "opts": [
+     "Six",
+     "Ten",
+     "Four",
+     "Two"
+    ],
+    "correct": 0
+   },
+   {
+    "q": "The strongest lever for an ethical culture is…",
+    "opts": [
+     "Lower prices",
+     "More coupons",
+     "Longer disclaimers",
+     "Leadership that models and rewards ethics"
+    ],
+    "correct": 3
+   },
+   {
+    "q": "Ethics training aims to help employees…",
+    "opts": [
+     "Ignore the code",
+     "Avoid all customers",
+     "Recognize ethical situations, understand values, evaluate impact",
+     "Sell more aggressively"
+    ],
+    "correct": 2
+   },
+   {
+    "q": "A strong ethical climate tends to increase…",
+    "opts": [
+     "Employee turnover",
+     "Employee commitment and customer loyalty",
+     "Deceptive ads",
+     "Fines and recalls"
+    ],
+    "correct": 1
+   },
+   {
+    "q": "Volkswagen's “Dieselgate” illustrates that deception…",
+    "opts": [
+     "Postpones and multiplies the cost of doing right",
+     "Saves money long term",
+     "Is legally required",
+     "Builds trust"
+    ],
+    "correct": 0
+   }
+  ]
+ },
+ {
+  "type": "closing",
+  "title": "Trust is strategy.",
+  "subtitle": "You can now see ethics as a driver of loyalty and performance — and spot deception before it becomes a crisis.\nNext: gathering the information that makes good decisions possible.",
+  "quote": "“Firms that are ethical and socially responsible are rewarded with greater marketing performance.”"
+ }
+];
+
+// ── SLIDE COMPONENTS ──────────────────────────────────────────────────────
+
+const TitleSlide = ({data}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','48px 24px'),zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.05}/></div>
+    <P style={{flex:1.4}}>
+      <div style={{fontSize:V(12,11),color:T,letterSpacing:V(4,2),textTransform:'uppercase',fontWeight:700,marginBottom:20}}>{data.tag}</div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(72,40),lineHeight:1.05,margin:'0 0 28px',whiteSpace:'pre-line'}}>{data.title}</h1>
+      <p style={{fontSize:V(22,17),color:G,maxWidth:680,lineHeight:1.65,whiteSpace:'pre-line',marginBottom:32}}>{data.subtitle}</p>
+      <div style={{fontSize:13,color:`${G}80`,fontStyle:'italic'}}>{data.author}</div>
+    </P>
+    {!MOB&&<P style={{flex:.8,display:'flex',justifyContent:'center',opacity:.06}}>
+      <div style={{width:380,height:380}}>{Ico.globe(T)}</div>
+    </P>}
+  </div>
+);
+
+const ImpactSlide = ({data}) => (
+  <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.03}/></div>
+    <P>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),marginBottom:V(44,24),color:W}}>{data.title}</h2>
+      <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(22,12),marginBottom:V(36,22)}}>
+        {data.stats.map((s,i)=>(
+          <div key={i} style={{background:BG2,padding:V('28px 30px','18px 18px'),borderRadius:14,border:`1px solid ${BDR}`,display:'flex',gap:V(18,14),alignItems:'flex-start'}}>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(42,30),fontWeight:900,color:T,lineHeight:1,flexShrink:0}}>{s.n}</div>
+            <div>
+              <div style={{fontSize:V(18,15),lineHeight:1.5,color:W,marginBottom:5}}>{s.d}</div>
+              <div style={{fontSize:12,color:`${G}80`}}>{s.src}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{background:`${T}10`,border:`1px solid ${T}30`,borderRadius:12,padding:V('18px 26px','14px 16px'),fontSize:V(19,15),color:W,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
+        <div style={{width:24,height:24,flexShrink:0,opacity:.7}}>{Ico.zap(T)}</div> {data.quote}
+      </div>
+    </P>
+  </div>
+);
+
+const AgendaSlide = ({data}) => (
+  <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),textAlign:'center',marginBottom:V(44,24)}}>{data.title}</h2>
+      <div style={{display:'grid',gridTemplateColumns:V('repeat(3,1fr)','1fr 1fr'),gap:V(18,10)}}>
+        {data.modules.map(m=>(
+          <div key={m.num} style={{background:`${T}06`,border:`1px solid ${T}22`,padding:V('26px 24px','16px 12px'),borderRadius:16,textAlign:'center'}}>
+            <div style={{fontSize:V(40,28),fontFamily:"'Fraunces',serif",color:T,marginBottom:V(10,6),fontWeight:900}}>0{m.num}</div>
+            <h3 style={{fontSize:V(18,14),marginBottom:7,color:W}}>{m.title}</h3>
+            <p style={{color:G,fontSize:V(14,12),lineHeight:1.5,margin:0}}>{m.desc}</p>
+          </div>
+        ))}
+      </div>
+    </P>
+  </div>
+);
+
+const ModuleTitleSlide = ({data}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','48px 24px'),zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.05}/></div>
+    <P style={{flex:1.5}}>
+      <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${data.ac||T}15`,border:`1px solid ${data.ac||T}40`,borderRadius:100,padding:'6px 18px',fontSize:13,color:(data.ac||T),fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:24}}>
+        MODULE {data.num}
+      </div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(64,36),lineHeight:1.05,margin:'0 0 32px'}}>{data.title}</h1>
+      <div style={{background:BG2,border:`1px solid ${BDR}`,borderRadius:12,padding:V('18px 24px','14px 16px'),fontSize:V(21,16),color:G,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
+        <div style={{width:22,height:22,flexShrink:0,opacity:.6}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+        {data.question}
+      </div>
+    </P>
+  </div>
+);
+
+const ConceptSlide = ({data}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(80,0),zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.035}/></div>
+    <P style={{flex:1.5}}>
+      <ModuleTag module={data.module} color={data.ac||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),color:(data.ac||T),marginBottom:V(28,18),lineHeight:1.1}}>{data.title}</h2>
+      <p style={{fontSize:V(22,16),lineHeight:1.7,color:W,margin:'0 0 24px'}}>{data.text}</p>
+      {data.highlight&&(
+        <div style={{background:`${AM}10`,border:`1px solid ${AM}35`,borderRadius:10,padding:V('14px 20px','12px 14px'),fontSize:V(17,14),color:AM,display:'flex',gap:12,alignItems:'center'}}>
+          <div style={{width:18,height:18,flexShrink:0}}>{Ico.zap(AM)}</div> {data.highlight}
+        </div>
+      )}
+    </P>
+    {!MOB&&<P style={{flex:.65,display:'flex',justifyContent:'center',opacity:.07}}>
+      <div style={{width:340,height:340}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+    </P>}
+  </div>
+);
+
+const CaseSlide = ({data}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(50,0),zIndex:2})}>
+    {!MOB&&<P style={{flex:.6,display:'flex',justifyContent:'center',opacity:.2}}>
+      <div style={{width:240,height:240}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+    </P>}
+    <P style={{flex:1.8}}>
+      <ModuleTag module={data.module} color={data.ac||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(24,16)}}>{data.title}</h2>
+      <div style={{background:`${RD}10`,borderLeft:`5px solid ${RD}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:14}}>
+        <div style={{fontSize:11,color:RD,fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The challenge</div>
+        <p style={{margin:0,fontSize:V(17,14),lineHeight:1.65}}>{data.problem}</p>
+      </div>
+      <div style={{background:`${data.ac||T}10`,borderLeft:`5px solid ${data.ac||T}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:12}}>
+        <div style={{fontSize:11,color:(data.ac||T),fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The solution</div>
+        <p style={{margin:0,fontSize:V(17,14),lineHeight:1.65}}>{data.solution}</p>
+      </div>
+      <div style={{fontSize:V(15,13),color:AM,fontStyle:'italic',display:'flex',gap:8,alignItems:'flex-start'}}>
+        <div style={{width:16,height:16,flexShrink:0,marginTop:2}}>{Ico.zap(AM)}</div> {data.lesson}
+      </div>
+    </P>
+  </div>
+);
+
+const ComparisonSlide = ({data}) => (
+  <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <ModuleTag module={data.module} color={data.ac||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(44,26),marginBottom:V(28,18)}}>{data.title}</h2>
+      <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(24,14)}}>
+        {[data.left,data.right].map((side,si)=>(
+          <div key={si} style={{background:BG2,borderRadius:16,border:`1px solid ${side.color}30`,overflow:'hidden'}}>
+            <div style={{background:`${side.color}15`,padding:'14px 22px',fontSize:15,fontWeight:700,color:side.color,borderBottom:`1px solid ${side.color}20`}}>
+              {side.label}
+            </div>
+            <div style={{padding:'16px 20px',display:'flex',flexDirection:'column',gap:12}}>
+              {side.items.map((item,i)=>(
+                <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start'}}>
+                  <div style={{fontSize:12,fontWeight:700,color:side.color,minWidth:V(100,82),flexShrink:0,paddingTop:2}}>{item.k}</div>
+                  <div style={{fontSize:V(14,13),color:G,lineHeight:1.5}}>{item.v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </P>
+  </div>
+);
+
+const WindowsGridSlide = () => (
+  <div style={SR({padding:V('0 80px','32px 14px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <ModuleTag module="Module 2"/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(40,24),marginBottom:6}}>Solberg's Nine Strategic Windows</h2>
+      <p style={{color:G,fontSize:V(14,12),marginBottom:22}}>Source: Solberg (1997) — Industry Globalism × Firm Preparedness for Internationalization</p>
+      <div style={{display:'grid',gridTemplateColumns:V('140px 1fr 1fr 1fr','62px 1fr 1fr 1fr'),gap:2}}>
+        {/* Header row */}
+        <div/>
+        {['Local Industry','Potentially Global','Global Industry'].map((h,i)=>(
+          <div key={i} style={{background:`${BL}12`,padding:V('10px 14px','8px 4px'),borderRadius:'8px 8px 0 0',fontSize:V(13,10),fontWeight:700,color:BL,textAlign:'center',border:`1px solid ${BL}25`}}>{h}</div>
+        ))}
+        {/* Rows */}
+        {[
+          { label:'Mature Firm', cells:[
+            {n:'3',t:'Enter new business',c:T},
+            {n:'6',t:'Prepare for globalization',c:AM},
+            {n:'9',t:'Strengthen global position',c:T2},
+          ]},
+          { label:'Adolescent Firm', cells:[
+            {n:'2',t:'Consolidate export markets',c:T},
+            {n:'5',t:'Consider international expansion',c:AM},
+            {n:'8',t:'Seek global alliances',c:AM},
+          ]},
+          { label:'Immature Firm', cells:[
+            {n:'1',t:'Stay at home',c:RD},
+            {n:'4',t:'Seek niches internationally',c:AM},
+            {n:'7',t:'Prepare for buyout',c:RD},
+          ]},
+        ].map((row,ri)=>(
+          <React.Fragment key={ri}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',padding:'0 12px 0 0',fontSize:V(13,10),fontWeight:700,color:G,textAlign:'right'}}>{row.label}</div>
+            {row.cells.map((cell,ci)=>(
+              <div key={ci} style={{background:BG2,padding:V('16px 14px','10px 4px'),border:`1px solid ${cell.c}25`,textAlign:'center',borderRadius:ri===0&&ci===0?'0':(ri===2&&ci===2?'0 0 8px 0':'0')}}>
+                <div style={{fontFamily:"'Fraunces',serif",fontSize:V(28,18),fontWeight:900,color:cell.c,lineHeight:1,marginBottom:6}}>{cell.n}</div>
+                <div style={{fontSize:V(13,10),color:G,lineHeight:1.4}}>{cell.t}</div>
+              </div>
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
+      <p style={{color:`${G}80`,fontSize:12,marginTop:12,fontStyle:'italic'}}>Window 1 = Stay home · Window 9 = Global dominance. Know which window you're in before deciding strategy.</p>
+    </P>
+  </div>
+);
+
+const GlocalVennSlide = () => (
+  <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <ModuleTag module="Module 3"/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>The Glocalization Framework</h2>
+      <div style={{display:'flex',flexDirection:V('row','column'),gap:V(32,20),alignItems:'center'}}>
+        {/* Venn-style diagram */}
+        <div style={{position:'relative',width:V(380,'100%'),maxWidth:380,height:V(220,190),flexShrink:0}}>
+          {/* Global circle */}
+          <div style={{position:'absolute',left:0,top:10,width:V(260,'66%'),height:V(200,170),borderRadius:'50%',background:`${BL}15`,border:`2px solid ${BL}40`,display:'flex',flexDirection:'column',alignItems:'flex-start',justifyContent:'center',paddingLeft:V(24,16)}}>
+            <div style={{fontSize:V(13,11),fontWeight:700,color:BL,marginBottom:8}}>GLOBAL</div>
+            <div style={{fontSize:V(12,10),color:G,lineHeight:1.5}}>Low-cost production<br/>Global roll-out<br/>Low complexity</div>
+          </div>
+          {/* Local circle */}
+          <div style={{position:'absolute',right:0,top:10,width:V(260,'66%'),height:V(200,170),borderRadius:'50%',background:`${T}15`,border:`2px solid ${T}40`,display:'flex',flexDirection:'column',alignItems:'flex-end',justifyContent:'center',paddingRight:V(24,16)}}>
+            <div style={{fontSize:V(13,11),fontWeight:700,color:T,marginBottom:8,textAlign:'right'}}>LOCAL</div>
+            <div style={{fontSize:V(12,10),color:G,lineHeight:1.5,textAlign:'right'}}>Culturally close<br/>Flexible response<br/>Local penetration</div>
+          </div>
+          {/* Center */}
+          <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',textAlign:'center',zIndex:5}}>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:22,fontWeight:900,color:W,lineHeight:1}}>GLOCAL</div>
+            <div style={{fontSize:11,color:`${W}80`}}>Global + Local</div>
+          </div>
+        </div>
+        {/* Right side explanation */}
+        <div style={{flex:1,display:'flex',flexDirection:'column',gap:14}}>
+          {[
+            {t:'Think Global',    d:'Standardize what scales: brand identity, core product, production systems, technology stack.',      c:BL},
+            {t:'Act Local',      d:'Adapt what connects: language, tone, pricing, distribution channel, cultural references, legal compliance.',c:T},
+            {t:'The Sweet Spot', d:'GLOCAL firms achieve global cost advantages while winning local consumer hearts. McDonald\'s. Unilever. Samsung.',c:AM},
+          ].map((item,i)=>(
+            <div key={i} style={{background:BG2,padding:'16px 20px',borderRadius:12,border:`1px solid ${item.c}25`}}>
+              <div style={{fontSize:15,fontWeight:700,color:item.c,marginBottom:5}}>{item.t}</div>
+              <div style={{fontSize:14,color:G,lineHeight:1.5}}>{item.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </P>
+  </div>
+);
+
+const ValueChainVisualSlide = () => (
+  <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <div className="bg-art"><BgChain opacity={.03}/></div>
+    <P>
+      <ModuleTag module="Module 4"/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>A Simplified Value Chain</h2>
+      {/* Chain arrows */}
+      <div style={{display:'flex',flexDirection:V('row','column'),gap:0,marginBottom:24,alignItems:'stretch'}}>
+        {[
+          {label:'R&D',      c:'#e05252',  sub:'Technology · Research · Patents · Product features · Engineering',},
+          {label:'Production',c:AM,        sub:'Purchasing · Scale economies · Component parts · Quality management'},
+          {label:'Marketing', c:BL,        sub:'Distribution · Pricing · Communication · Brand positioning'},
+          {label:'Sales & Service',c:T,    sub:'Sales force · Logistics · Customer service · Terms of payment'},
+        ].map((s,i)=>(
+          <React.Fragment key={i}>
+            <div style={{flex:1,background:BG2,padding:V('18px 16px','14px 14px'),border:`1px solid ${s.c}35`,borderRadius:V(i===0?'12px 0 0 12px':i===3?'0 12px 12px 0':'0',i===0?'12px 12px 0 0':i===3?'0 0 12px 12px':'0'),textAlign:'center'}}>
+              <div style={{fontFamily:"'Fraunces',serif",fontSize:V(20,16),fontWeight:700,color:s.c,marginBottom:8}}>{s.label}</div>
+              <div style={{fontSize:12,color:G,lineHeight:1.6}}>{s.sub}</div>
+            </div>
+            {i<3&&(
+              <div style={{display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,zIndex:5}}>
+                <div style={{background:BG,padding:'0 2px',transform:V('none','rotate(90deg)')}}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" width="20" height="20">
+                    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </div>
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+      {/* Upstream / Downstream label */}
+      <div style={{display:'flex',marginBottom:16}}>
+        <div style={{flex:1,textAlign:'center',fontSize:V(13,11),color:RD,fontWeight:700,letterSpacing:2,textTransform:'uppercase',borderRight:`1px solid ${BDR}`,paddingRight:16}}>{V('← UPSTREAM','↑ UPSTREAM')}</div>
+        <div style={{flex:1,textAlign:'center',fontSize:V(13,11),color:T,fontWeight:700,letterSpacing:2,textTransform:'uppercase',paddingLeft:16}}>{V('DOWNSTREAM →','DOWNSTREAM ↓')}</div>
+      </div>
+      {/* Key insight */}
+      <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(16,12)}}>
+        <div style={{background:`${RD}08`,border:`1px solid ${RD}25`,borderRadius:10,padding:'14px 18px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:RD,marginBottom:6}}>CENTRALIZE UPSTREAM</div>
+          <div style={{fontSize:14,color:G,lineHeight:1.5}}>R&D and production benefit from global scale economies, IP concentration, and quality control. Keep them in one or few locations.</div>
+        </div>
+        <div style={{background:`${T}08`,border:`1px solid ${T}25`,borderRadius:10,padding:'14px 18px'}}>
+          <div style={{fontSize:13,fontWeight:700,color:T,marginBottom:6}}>DECENTRALIZE DOWNSTREAM</div>
+          <div style={{fontSize:14,color:G,lineHeight:1.5}}>Marketing and sales must speak local. Cultural fit, customer relationships, and speed of response require local presence and autonomy.</div>
+        </div>
+      </div>
+    </P>
+  </div>
+);
+
+const FiveStageModelSlide = () => (
+  <div style={SR({padding:V('0 80px','32px 18px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <ModuleTag module="Module 5"/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,24),marginBottom:V(28,18)}}>The 5-Stage Global Marketing Decision Model</h2>
+      <div style={{display:'flex',flexDirection:'column',gap:10,maxWidth:900,margin:'0 auto',width:'100%'}}>
+        {[
+          {n:'I',  t:'The Decision Whether to Internationalize', d:'Should we go? Analyze firm competences vs industry globalism via the 9 windows model.',c:T},
+          {n:'II', t:'Deciding Which Markets to Enter',          d:'SWOT analysis, market size estimation, segmentation, and international market selection.',c:BL},
+          {n:'III',t:'Market Entry Strategies',                  d:'Export modes (low control) → Intermediate modes (shared) → Hierarchical modes (high control).',c:AM},
+          {n:'IV', t:'Designing the Global Marketing Programme', d:'The 4Ps adapted globally: Product, Price, Place, Promotion — per country, per year.',c:T2},
+          {n:'V',  t:'Implementing & Coordinating the Programme',d:'Budget, organization structure, cross-border negotiation, and marketing control systems.',c:RD},
+        ].map((stage,i)=>(
+          <div key={i} style={{display:'flex',gap:V(16,10),alignItems:'center'}}>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(28,20),fontWeight:900,color:stage.c,width:V(36,26),flexShrink:0,textAlign:'center'}}>{stage.n}</div>
+            <div style={{flex:1,background:BG2,padding:V('14px 20px','12px 14px'),borderRadius:10,border:`1px solid ${stage.c}25`,display:'flex',gap:16,alignItems:'center'}}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:V(16,14),fontWeight:700,color:stage.c,marginBottom:4}}>{stage.t}</div>
+                <div style={{fontSize:V(13,12),color:G,lineHeight:1.5}}>{stage.d}</div>
+              </div>
+            </div>
+            {i<4&&!MOB&&<div style={{width:12,height:12,flexShrink:0,opacity:.4}}>{Ico.arrow(G)}</div>}
+          </div>
+        ))}
+      </div>
+    </P>
+  </div>
+);
+
+const EntryModesSlide = () => (
+  <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <ModuleTag module="Module 5"/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>Market Entry Mode Strategies</h2>
+      <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr 1fr','1fr'),gap:V(18,14)}}>
+        {[
+          {label:'Export Modes', c:T, control:'Low Control', risk:'Low Risk', flex:'High Flexibility',
+           examples:['Direct exporting via agents or distributors','Indirect exporting via trading companies','Online direct sales to foreign consumers'],
+           brands:['Smaller Colombian brands exporting coffee','A Bogotá designer selling on Etsy globally']},
+          {label:'Intermediate Modes', c:AM, control:'Shared Control', risk:'Shared Risk', flex:'Medium Flexibility',
+           examples:['Licensing (pay to use brand/IP)','Franchising (replicate the model)','Joint ventures (co-own an operation)','Strategic alliances'],
+           brands:['McDonald\'s franchising internationally','BBW franchising after Germany failure']},
+          {label:'Hierarchical Modes', c:RD, control:'High Control', risk:'High Risk', flex:'Low Flexibility',
+           examples:['Wholly owned subsidiary','Acquisition of a local firm','Greenfield investment (build from scratch)','Own retail stores globally'],
+           brands:['ZARA-owned stores worldwide','Samsung\'s own manufacturing plants']},
+        ].map((mode,i)=>(
+          <div key={i} style={{background:BG2,borderRadius:14,border:`1px solid ${mode.c}30`,overflow:'hidden'}}>
+            <div style={{background:`${mode.c}15`,padding:'14px 18px',borderBottom:`1px solid ${mode.c}20`}}>
+              <div style={{fontSize:17,fontWeight:700,color:mode.c,marginBottom:8}}>{mode.label}</div>
+              <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                {[mode.control, mode.risk, mode.flex].map((tag,ti)=>(
+                  <span key={ti} style={{background:`${mode.c}20`,color:mode.c,fontSize:11,fontWeight:600,padding:'2px 8px',borderRadius:100}}>{tag}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{padding:'14px 16px'}}>
+              {mode.examples.map((ex,ei)=>(
+                <div key={ei} style={{display:'flex',gap:8,alignItems:'flex-start',marginBottom:7}}>
+                  <div style={{width:5,height:5,borderRadius:'50%',background:mode.c,flexShrink:0,marginTop:7}}/>
+                  <div style={{fontSize:13,color:G,lineHeight:1.5}}>{ex}</div>
+                </div>
+              ))}
+              <div style={{marginTop:12,borderTop:`1px solid ${BDR}`,paddingTop:10}}>
+                {mode.brands.map((b,bi)=>(
+                  <div key={bi} style={{fontSize:12,color:`${mode.c}90`,fontStyle:'italic',marginBottom:4}}>→ {b}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </P>
+  </div>
+);
+
+const TakeawaysSlide = ({data}) => (
+  <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.04}/></div>
+    <P>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,28),marginBottom:V(36,22),textAlign:'center'}}>{data.title}</h2>
+      <div style={{display:'flex',flexDirection:'column',gap:V(14,10),maxWidth:900,margin:'0 auto',width:'100%'}}>
+        {data.items.map((item,i)=>(
+          <div key={i} style={{background:BG2,padding:V('18px 24px','14px 14px'),borderRadius:14,border:`1px solid ${item.c}25`,display:'flex',gap:V(20,12),alignItems:'center'}}>
+            <div style={{width:V(36,26),height:V(36,26),flexShrink:0,opacity:.85}}>{Ico[item.icon]?Ico[item.icon](item.c):null}</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:V(17,15),fontWeight:700,color:item.c,marginBottom:4}}>{item.t}</div>
+              <div style={{fontSize:V(15,13),color:G,lineHeight:1.5}}>{item.d}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </P>
+  </div>
+);
+
+const DiscussionSlide = ({data}) => (
+  <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(48,28),marginBottom:V(36,22),color:T}}>{data.title}</h2>
+      <div style={{display:'flex',flexDirection:'column',gap:V(18,12)}}>
+        {data.questions.map((q,i)=>(
+          <div key={i} style={{background:BG2,padding:V('20px 24px','14px 16px'),borderRadius:14,border:`1px solid ${BDR}`,display:'flex',gap:V(18,12),alignItems:'flex-start'}}>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(32,22),fontWeight:900,color:T,lineHeight:1,flexShrink:0,minWidth:V(32,24)}}>{i+1}</div>
+            <div style={{fontSize:V(19,15),lineHeight:1.6,color:W}}>{q}</div>
+          </div>
+        ))}
+      </div>
+      {data.resource && (
+        <div style={{marginTop:V(28,18),display:'flex',alignItems:'center',gap:14,background:`${T}0d`,border:`1px solid ${T}35`,borderRadius:14,padding:V('16px 24px','13px 16px')}}>
+          <div style={{width:22,height:22,flexShrink:0}}>{Ico.link(T)}</div>
+          <div style={{fontSize:V(16,14),color:G,lineHeight:1.5}}>
+            {data.resource.label}{' '}
+            <a href={data.resource.url} target="_blank" rel="noopener noreferrer" style={{color:T2,fontWeight:700,textDecoration:'none',borderBottom:`1px solid ${T2}60`}}>{data.resource.name} →</a>
+          </div>
+        </div>
+      )}
+    </P>
+  </div>
+);
+
+const ExerciseSlide = ({data}) => {
+  const [revealed,setRevealed] = useState(false);
+  return(
+    <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',maxWidth:1100,margin:'0 auto',zIndex:2})}>
+      <P>
+        <ModuleTag module={data.module} color={data.ac||T}/>
+        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(40,24),color:(data.ac||T),textAlign:'center',marginBottom:22}}>{data.title}</h2>
+        <div style={{fontSize:V(22,16),lineHeight:1.55,textAlign:'center',marginBottom:V(32,20),color:W}}>{data.question}</div>
+        <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:V(28,20)}}>
+          {data.options.map((opt,i)=>(
+            <div key={i} style={{padding:V('18px 22px','14px 16px'),borderRadius:12,border:revealed?(i===data.correct?`2px solid ${data.ac||T}`:`1px solid ${RD}30`):`1px solid ${BDR}`,background:revealed?(i===data.correct?`${data.ac||T}12`:`${RD}08`):BG2,fontSize:V(18,15),transition:'all .25s',color:revealed?(i===data.correct?(data.ac||T):G):W}}>
+              {opt}
+            </div>
+          ))}
+        </div>
+        <div style={{textAlign:'center'}}>
+          {!revealed?(
+            <button onClick={()=>setRevealed(true)} style={{background:(data.ac||T),color:'#000',border:'none',padding:'15px 42px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+              Reveal Answer
+            </button>
+          ):(
+            <div style={{background:`${data.ac||T}12`,border:`1px solid ${data.ac||T}35`,padding:V('18px 24px','14px 16px'),borderRadius:12,color:(data.ac||T),fontSize:V(17,14),lineHeight:1.6,textAlign:'left'}}>
+              <strong>Explanation:</strong> {data.explanation}
+            </div>
+          )}
+        </div>
+      </P>
+    </div>
+  );
+};
+
+const QuizIntroSlide = ({data,onStart}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:V(0,'48px 24px'),zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.05}/></div>
+    <P style={{textAlign:'center'}}>
+      <div style={{width:V(80,60),height:V(80,60),margin:'0 auto 28px',opacity:.8}}>{Ico.target(T)}</div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(68,38),marginBottom:14}}>{data.title}</h1>
+      <p style={{fontSize:V(22,16),color:G,marginBottom:V(48,32)}}>{data.subtitle}</p>
+      <button onClick={onStart} style={{background:T,color:'#000',border:'none',padding:'18px 56px',fontSize:20,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+        Start Assessment →
+      </button>
+    </P>
+  </div>
+);
+
+const QuizSlide = ({data,onFinish}) => {
+  const [current,setCurrent]=useState(0);
+  const [answers,setAnswers]=useState({});
+  const [done,setDone]=useState(false);
+
+  const answer=(idx)=>{
+    if(answers[current]!==undefined) return;
+    setAnswers(p=>({...p,[current]:idx}));
+  };
+  const next=()=>{
+    if(current<data.questions.length-1) setCurrent(c=>c+1);
+    else setDone(true);
+  };
+
+  if(done){
+    const score=Object.keys(answers).filter(k=>answers[k]===data.questions[k].correct).length;
+    const pct=Math.round((score/data.questions.length)*100);
+    const rating=pct>=90?{l:'Marketing Plan Expert 🏆',c:T}:pct>=70?{l:'Solid understanding — keep going ✅',c:BL}:pct>=50?{l:'Getting there — review the slides ⚠️',c:AM}:{l:'Needs reinforcement — review this session 🔴',c:RD};
+    return(
+      <div style={SR({display:'flex',height:'100%',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:V(0,'48px 24px'),zIndex:2})}>
+        <P style={{textAlign:'center'}}>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:V(96,64),color:rating.c,marginBottom:8}}>{score}/{data.questions.length}</div>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:V(32,22),color:rating.c,marginBottom:14}}>{rating.l}</div>
+          <div style={{fontSize:18,color:G,marginBottom:36}}>{pct}% correct answers</div>
+          <div style={{display:'flex',gap:V(10,8),justifyContent:'center',flexWrap:'wrap',maxWidth:700,marginBottom:36}}>
+            {data.questions.map((q,i)=>(
+              <div key={i} style={{width:V(44,36),height:V(44,36),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:answers[i]===q.correct?`${T}25`:`${RD}20`,border:`2px solid ${answers[i]===q.correct?T:RD}`,fontSize:V(16,14),color:answers[i]===q.correct?T:RD,fontWeight:700}}>
+                {answers[i]===q.correct?'✓':'✗'}
+              </div>
+            ))}
+          </div>
+          <button onClick={onFinish} style={{background:T,color:'#000',border:'none',padding:'14px 40px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+            Continue →
+          </button>
+        </P>
+      </div>
+    );
+  }
+
+  const q=data.questions[current];
+  const answered=answers[current]!==undefined;
+  return(
+    <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+      <P>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:20,alignItems:'center',gap:14}}>
+          <div style={{fontSize:12,color:G,fontWeight:700,letterSpacing:2}}>QUESTION {current+1} / {data.questions.length}</div>
+          <div style={{width:V(220,100),height:5,background:BG2,borderRadius:3,overflow:'hidden'}}>
+            <div style={{height:'100%',background:`linear-gradient(90deg,${T},${T2})`,width:`${((current+1)/data.questions.length)*100}%`,transition:'width .3s'}}/>
+          </div>
+        </div>
+        <h3 style={{fontFamily:"'Fraunces',serif",fontSize:V(34,21),marginBottom:V(28,18),color:W,lineHeight:1.35}}>{q.q}</h3>
+        <div style={{display:'flex',flexDirection:'column',gap:11,marginBottom:24}}>
+          {q.opts.map((opt,i)=>{
+            let bg=BG2,border=`1px solid ${BDR}`,color=W;
+            if(answered){
+              if(i===q.correct){bg=`${T}15`;border=`2px solid ${T}`;color=T;}
+              else if(i===answers[current]){bg=`${RD}10`;border=`2px solid ${RD}`;color=RD;}
+            }
+            return(
+              <div key={i} onClick={()=>answer(i)} style={{padding:V('15px 20px','13px 14px'),borderRadius:10,border,background:bg,fontSize:V(18,15),color,cursor:answered?'default':'pointer',transition:'all .2s'}}>
+                {opt}
+              </div>
+            );
+          })}
+        </div>
+        {answered&&(
+          <button onClick={next} style={{background:T,color:'#000',border:'none',padding:'13px 34px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+            {current<data.questions.length-1?'Next Question →':'See Results →'}
+          </button>
+        )}
+      </P>
+    </div>
+  );
+};
+
+const ClosingSlide = ({data}) => (
+  <div style={SR({display:'flex',height:'100%',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:V('0 120px','48px 24px'),textAlign:'center',zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.06}/></div>
+    <P>
+      <div style={{width:60,height:60,margin:'0 auto 28px',opacity:.7}}>{Ico.globe(T)}</div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(62,34),marginBottom:20,lineHeight:1.1}}>{data.title}</h1>
+      <p style={{fontSize:V(20,16),color:G,marginBottom:V(40,28),whiteSpace:'pre-line',lineHeight:1.7}}>{data.subtitle}</p>
+      <div style={{background:`${T}10`,border:`1px solid ${T}30`,borderRadius:14,padding:V('22px 36px','16px 18px'),maxWidth:800,margin:'0 auto'}}>
+        <div style={{fontSize:V(18,15),color:W,fontStyle:'italic',lineHeight:1.7}}>{data.quote}</div>
+      </div>
+      <div style={{marginTop:V(40,28),fontSize:V(13,11),color:`${G}60`,letterSpacing:2,textTransform:'uppercase'}}>Escuela de Administración · Marketing Plan · Ferrell & Hartline, Marketing Strategy</div>
+    </P>
+  </div>
+);
+
+// ── DIAGRAM — SVG exhibits ────────────────────────────────────────────────
+const Diagram = ({kind,items,ac}) => {
+  const PAL=[ac,BL,AM,T2,RD,T];
+  const col=(i)=>PAL[i%PAL.length];
+  if(kind==='pyramid'||kind==='funnel'){
+    const n=items.length, WD=1000, HT=430, bh=HT/n, cx=WD/2, maxW=780;
+    return (
+      <svg viewBox={`0 0 ${WD} ${HT+8}`} width="100%" style={{maxHeight:V(420,300),display:'block',margin:'0 auto'}}>
+        {items.map((it,i)=>{
+          const tf = kind==='pyramid' ? i/n : (n-i)/n;
+          const bf = kind==='pyramid' ? (i+1)/n : (n-i-1)/n;
+          const wt=Math.max(tf*maxW,90), wb=Math.max(bf*maxW,90);
+          const yt=i*bh+4, yb=(i+1)*bh+4, c=col(i);
+          const pts=`${cx-wt/2},${yt} ${cx+wt/2},${yt} ${cx+wb/2},${yb} ${cx-wb/2},${yb}`;
+          return (
+            <g key={i}>
+              <polygon points={pts} fill={c+'26'} stroke={c} strokeWidth="1.6"/>
+              <text x={cx} y={(yt+yb)/2-(it.sub?8:0)} fill={c} fontSize={V(21,15)} fontWeight="700" fontFamily="'Fraunces',serif" textAnchor="middle" dominantBaseline="middle">{it.t}</text>
+              {it.sub&&<text x={cx} y={(yt+yb)/2+15} fill={W} fontSize={V(12.5,10)} textAnchor="middle" dominantBaseline="middle" opacity="0.82">{it.sub}</text>}
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+  if(kind==='steps'){
+    const n=items.length, rowH=V(82,60), WD=1000, HT=n*rowH+16, x=46;
+    return (
+      <svg viewBox={`0 0 ${WD} ${HT}`} width="100%" style={{maxHeight:V(440,360),display:'block'}}>
+        <line x1={x} y1={28} x2={x} y2={HT-28} stroke={ac+'44'} strokeWidth="2.5"/>
+        {items.map((it,i)=>{
+          const cy=28+i*rowH+rowH/2, c=col(i);
+          return (
+            <g key={i}>
+              <circle cx={x} cy={cy} r="20" fill={c+'26'} stroke={c} strokeWidth="2.2"/>
+              <text x={x} y={cy} fill={c} fontSize="17" fontWeight="700" fontFamily="'Fraunces',serif" textAnchor="middle" dominantBaseline="middle">{it.n||(i+1)}</text>
+              <text x={x+42} y={cy-(it.sub?9:0)} fill={W} fontSize={V(18,14)} fontWeight="600" dominantBaseline="middle">{it.t}</text>
+              {it.sub&&<text x={x+42} y={cy+14} fill={G} fontSize={V(13,11)} dominantBaseline="middle">{it.sub}</text>}
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+  if(kind==='pillars'){
+    const n=items.length, WD=1000, gap=16, pw=(WD-gap*(n-1))/n, HT=290;
+    return (
+      <svg viewBox={`0 0 ${WD} ${HT}`} width="100%" style={{maxHeight:V(290,260),display:'block'}}>
+        {items.map((it,i)=>{
+          const x=i*(pw+gap), c=col(i);
+          return (
+            <g key={i}>
+              <rect x={x} y={18} width={pw} height={HT-36} rx="12" fill={c+'1c'} stroke={c+'55'} strokeWidth="1.5"/>
+              <rect x={x} y={18} width={pw} height={6} rx="3" fill={c}/>
+              <text x={x+pw/2} y={82} fill={c} fontSize={V(23,17)} fontWeight="800" fontFamily="'Fraunces',serif" textAnchor="middle">{it.n||(i+1)}</text>
+              <text x={x+pw/2} y={126} fill={W} fontSize={V(15,11.5)} fontWeight="700" textAnchor="middle">{it.t}</text>
+              {it.sub&&<text x={x+pw/2} y={156} fill={G} fontSize={V(12,9.5)} textAnchor="middle">{it.sub}</text>}
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+  if(kind==='matrix'){
+    const WD=1000,HT=420,cx=WD/2,cy=HT/2, qw=cx-46, qh=cy-38;
+    const pos=[[36,26],[cx+10,26],[36,cy+12],[cx+10,cy+12]];
+    return (
+      <svg viewBox={`0 0 ${WD} ${HT}`} width="100%" style={{maxHeight:V(420,320),display:'block'}}>
+        {items.slice(0,4).map((it,i)=>{
+          const p=pos[i], c=col(i);
+          return (
+            <g key={i}>
+              <rect x={p[0]} y={p[1]} width={qw} height={qh} rx="12" fill={c+'1c'} stroke={c+'55'} strokeWidth="1.5"/>
+              <text x={p[0]+qw/2} y={p[1]+qh/2-8} fill={c} fontSize={V(20,15)} fontWeight="800" fontFamily="'Fraunces',serif" textAnchor="middle">{it.t}</text>
+              <text x={p[0]+qw/2} y={p[1]+qh/2+18} fill={W} fontSize={V(12.5,10.5)} textAnchor="middle" opacity="0.85">{it.sub}</text>
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+  if(kind==='outsourcing'){
+    const WD=1000, apexY=95, baseY=380, halfW=125, bandH=(baseY-apexY)/3, HT=470;
+    const cxs=[195,500,805];
+    const stages=[{label:'Past',out:0},{label:'Present',out:1},{label:'Future',out:2}];
+    const names=['Core','Admin','IT'];
+    const hw=(y)=>(y-apexY)/(baseY-apexY)*halfW;
+    return (
+      <svg viewBox={`0 0 ${WD} ${HT}`} width="100%" style={{maxHeight:V(450,360),display:'block'}}>
+        {stages.map((st,si)=>{
+          const cx=cxs[si];
+          return (
+            <g key={si}>
+              {[0,1,2].map((bi)=>{
+                const yt=apexY+bi*bandH, yb=apexY+(bi+1)*bandH, wt=hw(yt), wb=hw(yb);
+                const outsourced=bi>=(3-st.out), c=outsourced?G:ac;
+                const pts=`${cx-wt},${yt} ${cx+wt},${yt} ${cx+wb},${yb} ${cx-wb},${yb}`;
+                return (
+                  <g key={bi}>
+                    <polygon points={pts} fill={outsourced?G+'22':ac+'2a'} stroke={c} strokeWidth="1.4"/>
+                    <text x={cx} y={(yt+yb)/2} fill={c} fontSize={V(12,9)} fontWeight="700" textAnchor="middle" dominantBaseline="middle">{names[bi]}</text>
+                  </g>
+                );
+              })}
+              <text x={cx} y={baseY+28} fill={W} fontSize={V(16,12)} fontWeight="700" fontFamily="'Fraunces',serif" textAnchor="middle">{st.label}</text>
+            </g>
+          );
+        })}
+        <rect x={WD-262} y={18} width={14} height={14} rx="3" fill={ac+'2a'} stroke={ac}/>
+        <text x={WD-242} y={30} fill={G} fontSize="13">In-house</text>
+        <rect x={WD-150} y={18} width={14} height={14} rx="3" fill={G+'22'} stroke={G}/>
+        <text x={WD-130} y={30} fill={G} fontSize="13">Outsourced</text>
+      </svg>
+    );
+  }
+  return null;
+};
+
+const DiagramSlide = ({data}) => { const AC=data.ac||T; return (
+  <div style={SR({padding:V('0 70px','26px 16px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <P>
+      {data.module&&<ModuleTag module={data.module} color={AC}/>}
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(38,23),color:AC,marginBottom:V(4,3),lineHeight:1.1}}>{data.title}</h2>
+      {data.subtitle&&<p style={{color:G,fontSize:V(14,12),marginBottom:V(18,12)}}>{data.subtitle}</p>}
+      <Diagram kind={data.kind} items={data.items} ac={AC}/>
+      {data.note&&<p style={{color:G,fontSize:12,marginTop:12,fontStyle:'italic',opacity:.75}}>{data.note}</p>}
+    </P>
+  </div>
+); };
+
+// ── PROMPT — copy-paste AI mother prompt ────────────────────────────────
+const PromptSlide = ({data}) => {
+  const c = data.ac || data.color || T;
+  const [copied,setCopied] = useState(false);
+  const copy = () => {
+    try { navigator.clipboard.writeText(data.prompt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1600);}); }
+    catch(e){ setCopied(true); setTimeout(()=>setCopied(false),1600); }
+  };
+  return (
+  <div style={SR({padding:V('0 80px','26px 16px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
+    <div className="bg-art"><BgGlobe opacity={.035}/></div>
+    <P>
+      <ModuleTag module={data.tool||data.module} color={c}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(38,24),color:W,margin:'0 0 10px',lineHeight:1.1}}>{data.title}</h2>
+      <p style={{fontSize:V(17,13),lineHeight:1.6,color:G,margin:'0 0 18px',maxWidth:900}}>{data.intro}</p>
+      <div style={{position:'relative',background:'#0a1322',border:`1px solid ${c}45`,borderLeft:`4px solid ${c}`,borderRadius:10,padding:V('22px 24px','16px 14px'),maxHeight:V('44vh','46vh'),overflowY:'auto'}}>
+        <button onClick={copy} style={{position:'absolute',top:12,right:12,background:c,color:'#0a1322',border:'none',borderRadius:7,padding:'7px 15px',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:"'DM Sans',sans-serif",zIndex:3}}>{copied?'Copied ✓':'Copy'}</button>
+        <pre style={{margin:0,whiteSpace:'pre-wrap',wordBreak:'break-word',fontFamily:"'Courier New',ui-monospace,monospace",fontSize:V(14.5,11.5),lineHeight:1.62,color:'#d7e2f2',paddingRight:V(64,52)}}>{data.prompt}</pre>
+      </div>
+      {data.output&&<div style={{marginTop:14,fontSize:V(15,12.5),color:c,display:'flex',gap:10,alignItems:'flex-start'}}><div style={{width:16,height:16,flexShrink:0,marginTop:2}}>{Ico.zap(c)}</div>{data.output}</div>}
+    </P>
+  </div>
+  );
+};
+
+// ── APP ────────────────────────────────────────────────────────────────────
+function App(){
+  const [cur,setCur]=useState(0);
+  const [quizDone,setQuizDone]=useState(false);
+  const [vw,setVw]=useState(window.innerWidth);
+  const total=SLIDES.length;
+  MOB = vw<=820; // refresh responsive flag before children render
+
+  const next=useCallback(()=>setCur(c=>Math.min(c+1,total-1)),[total]);
+  const prev=useCallback(()=>setCur(c=>Math.max(c-1,0)),[]);
+
+  useEffect(()=>{
+    const r=()=>setVw(window.innerWidth);
+    window.addEventListener('resize',r);
+    window.addEventListener('orientationchange',r);
+    return()=>{window.removeEventListener('resize',r);window.removeEventListener('orientationchange',r);};
+  },[]);
+
+  useEffect(()=>{
+    const h=e=>{
+      if(e.key==='ArrowRight'||e.key===' ') next();
+      if(e.key==='ArrowLeft') prev();
+      if(e.key==='f'||e.key==='F'){
+        if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+        else document.exitFullscreen();
+      }
+    };
+    window.addEventListener('keydown',h);
+    return()=>window.removeEventListener('keydown',h);
+  },[next,prev]);
+
+  const s=SLIDES[cur];
+
+  // Touch swipe navigation (disabled on the quiz slide so a stray swipe can't lose quiz progress)
+  useEffect(()=>{
+    if(s.type==='quiz') return;
+    let sx=0,sy=0;
+    const ts=e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;};
+    const te=e=>{
+      const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+      if(Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*1.5){ if(dx<0) next(); else prev(); }
+    };
+    window.addEventListener('touchstart',ts,{passive:true});
+    window.addEventListener('touchend',te,{passive:true});
+    return()=>{window.removeEventListener('touchstart',ts);window.removeEventListener('touchend',te);};
+  },[next,prev,s.type]);
+
+  const renderSlide=()=>{
+    switch(s.type){
+      case 'title':            return <TitleSlide data={s}/>;
+      case 'impact':           return <ImpactSlide data={s}/>;
+      case 'agenda':           return <AgendaSlide data={s}/>;
+      case 'module_title':     return <ModuleTitleSlide data={s}/>;
+      case 'concept':          return <ConceptSlide data={s}/>;
+      case 'case':             return <CaseSlide data={s}/>;
+      case 'comparison':       return <ComparisonSlide data={s}/>;
+      case 'windows_grid':     return <WindowsGridSlide/>;
+      case 'glocal_venn':      return <GlocalVennSlide/>;
+      case 'value_chain_visual':return <ValueChainVisualSlide/>;
+      case 'five_stage_model': return <FiveStageModelSlide/>;
+      case 'entry_modes':      return <EntryModesSlide/>;
+      case 'takeaways':        return <TakeawaysSlide data={s}/>;
+      case 'discussion':       return <DiscussionSlide data={s}/>;
+      case 'exercise':         return <ExerciseSlide key={cur} data={s}/>;
+      case 'quiz_intro':       return <QuizIntroSlide data={s} onStart={next}/>;
+      case 'quiz':             return <QuizSlide key={cur} data={s} onFinish={()=>{setQuizDone(true);next();}}/>;
+      case 'closing':          return <ClosingSlide data={s}/>;
+      case 'prompt':           return <PromptSlide data={s}/>;
+      case 'diagram':          return <DiagramSlide data={s}/>;
+      default:                 return <TitleSlide data={s}/>;
+    }
+  };
+
+  // Module color based on current slide
+  const moduleColors = [T,T,T,T,BL,BL,BL,BL,BL,BL,AM,AM,AM,AM,AM,AM,T,T,T,T,T,BL,BL,BL,BL,BL,AM,AM,AM,AM,AM,AM,T,T,T,T,T,T,BL,BL,T,T,T];
+  const accentColor = moduleColors[cur]||T;
+
+  return(
+    <div className="app-root" style={{width:'100vw',display:'flex',flexDirection:'column',position:'relative',background:BG}}>
+      <div className="bg-grid"/>
+      <div className="bg-glow"/>
+      <div className="bg-glow-left"/>
+      <div key={cur} className={`slide-enter${MOB?' slide-scroll':''}`} style={{flex:1,position:'relative',overflow:MOB?'auto':'hidden'}}>
+        {renderSlide()}
+      </div>
+      {/* FOOTER NAV */}
+      <div style={{height:V(72,60),borderTop:`1px solid ${BDR}`,display:'flex',alignItems:'center',justifyContent:'space-between',padding:V('0 40px','0 14px'),gap:V(0,10),zIndex:10,background:BG2,flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'center',gap:14}}>
+          {!MOB&&<div style={{display:'flex',flexDirection:'column',gap:2}}>
+            <div style={{fontSize:12,color:T,fontWeight:700,letterSpacing:3,textTransform:'uppercase'}}>Marketing Plan</div>
+            <div style={{fontSize:11,color:`${G}70`,letterSpacing:1}}>Session 3 · Marketing Ethics & Social Responsibility</div>
+          </div>}
+          {!MOB&&<button onClick={()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});else document.exitFullscreen();}} title="Fullscreen (F)" style={{background:'transparent',border:`1px solid ${BDR}`,color:G,width:32,height:32,borderRadius:8,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',marginLeft:8}}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="14" height="14"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>}
+          {MOB&&<div style={{fontSize:10,color:T,fontWeight:700,letterSpacing:1,textTransform:'uppercase',whiteSpace:'nowrap'}}>Mkt Plan · S3</div>}
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:V(20,10),flex:V('none',1),justifyContent:'center'}}>
+          <button onClick={prev} disabled={cur===0} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===0?'default':'pointer',opacity:cur===0?.25:1,fontSize:18,fontFamily:'inherit',flexShrink:0}}>←</button>
+          <div style={{width:V(300,'100%'),maxWidth:300,height:4,background:BG3,borderRadius:3,overflow:'hidden',flex:V('none',1)}}>
+            <div style={{height:'100%',background:`linear-gradient(90deg,${T},${T2})`,width:`${((cur+1)/total)*100}%`,transition:'width .4s cubic-bezier(.4,0,.2,1)',borderRadius:3}}/>
+          </div>
+          <button onClick={next} disabled={cur===total-1} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===total-1?'default':'pointer',opacity:cur===total-1?.25:1,fontSize:18,fontFamily:'inherit',flexShrink:0}}>→</button>
+        </div>
+        <div style={{fontSize:V(14,12),color:G,fontWeight:600,fontFamily:"'Fraunces',serif",whiteSpace:'nowrap'}}>{cur+1} / {total}</div>
+      </div>
+    </div>
+  );
+}
+
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+<style>
+html.lightmode{filter:invert(1) hue-rotate(180deg);background:#fff;}
+#pmode{position:fixed;top:14px;right:14px;z-index:99999;background:rgba(127,127,127,.18);border:1px solid rgba(127,127,127,.45);color:inherit;font:600 12px/1 'DM Sans',sans-serif;letter-spacing:.5px;padding:9px 13px;border-radius:8px;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+#pmode:hover{background:rgba(127,127,127,.32);}
+</style>
+<button id="pmode" onclick="document.documentElement.classList.toggle('lightmode')" title="Modo proyector / aula iluminada (light mode)">☀ Proyector</button>
+</body>
+</html>

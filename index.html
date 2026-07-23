@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Plan · Interactive Masterclasses · Escuela de Administración</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --t:#ff8f5c; --t2:#ffd86b; --bl:#4a9eed; --vi:#8b7cf6; --rd:#e05252;
+      --bg:#0e1b32; --bg2:#16243f; --w:#f4f1ec; --g:#93a0b4;
+      --bdr:rgba(255,255,255,.09);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;position:relative}
+    .bg-grid{position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,143,92,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,143,92,.025) 1px,transparent 1px);background-size:80px 80px}
+    .bg-glow{position:fixed;top:-20%;right:-10%;width:60%;height:80%;background:radial-gradient(circle,rgba(255,143,92,.08) 0%,transparent 60%);pointer-events:none}
+    .wrap{max-width:1060px;margin:0 auto;padding:60px 24px 80px;position:relative;z-index:2}
+    .tag{font-size:12px;color:var(--t);letter-spacing:4px;text-transform:uppercase;font-weight:700;margin-bottom:18px}
+    h1{font-family:'Fraunces',serif;font-size:clamp(32px,6vw,64px);line-height:1.05;margin:0 0 18px}
+    .sub{font-size:clamp(15px,2.5vw,20px);color:var(--g);line-height:1.65;max-width:640px;margin-bottom:14px}
+    .hint{font-size:13px;color:var(--g);opacity:.75;margin-bottom:20px}
+    .prog{display:flex;align-items:center;gap:12px;margin-bottom:46px;font-size:13px;color:var(--g);flex-wrap:wrap}
+    .prog .bar{flex:1;max-width:280px;min-width:120px;height:6px;background:var(--bg2);border-radius:4px;overflow:hidden}
+    .prog .bar i{display:block;height:100%;width:9%;background:linear-gradient(90deg,var(--t),var(--t2))}
+    .section{font-size:13px;color:var(--g);letter-spacing:3px;text-transform:uppercase;font-weight:700;margin:40px 0 18px;display:flex;align-items:center;gap:14px}
+    .section::after{content:'';flex:1;height:1px;background:var(--bdr)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+    .card{display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--bdr);border-radius:16px;padding:24px 24px 20px;text-decoration:none;color:var(--w);transition:transform .18s ease,border-color .18s ease;position:relative;overflow:hidden}
+    a.card:hover{transform:translateY(-3px);border-color:var(--ac)}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac);opacity:.75}
+    .card.soon{opacity:.5}
+    .ch{font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:var(--ac);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+    .badge{font-size:9.5px;letter-spacing:1px;padding:3px 9px;border-radius:100px;font-weight:700}
+    .badge.ready{background:color-mix(in srgb,var(--ac) 20%,transparent);color:var(--ac)}
+    .badge.wip{background:rgba(255,255,255,.06);color:var(--g)}
+    .card h2{font-family:'Fraunces',serif;font-size:21px;margin:0 0 8px;line-height:1.2}
+    .card p{font-size:13.5px;color:var(--g);line-height:1.55;margin:0 0 16px;flex:1}
+    .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{font-size:10.5px;font-weight:600;color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent);border:1px solid color-mix(in srgb,var(--ac) 32%,transparent);border-radius:100px;padding:3px 10px;letter-spacing:.5px}
+    .open{margin-top:14px;font-size:13px;font-weight:700;color:var(--ac)}
+    footer{margin-top:70px;border-top:1px solid var(--bdr);padding-top:24px;font-size:12px;color:var(--g);letter-spacing:1.2px;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    footer a{color:var(--t);text-decoration:none}
+    @media(max-width:640px){
+      .wrap{padding:38px 16px 56px}
+      .grid{grid-template-columns:1fr}
+      .section{margin:32px 0 14px}
+      footer{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="wrap">
+  <div class="tag">Escuela de Administración · Marketing Strategy</div>
+  <h1>Marketing Plan<br>Interactive Masterclasses</h1>
+  <p class="sub">Eleven interactive study decks built from the course sessions — concepts explained in depth, real brand cases, exercises with instant feedback, and a graded 10-question quiz in every session.</p>
+  <p class="hint">Works on any device · no installation · swipe on mobile, arrow keys on desktop · press F for fullscreen</p>
+  <div class="prog"><span>11 of 11 ready</span><div class="bar"><i style="width:100%"></i></div><span>Course complete ✓</span></div>
+
+  <div class="section">Foundations</div>
+  <div class="grid">
+    <a class="card" style="--ac:var(--t)" href="session-01.html">
+      <div class="ch"><span>Session 1</span><span class="badge ready">Ready</span></div>
+      <h2>Marketing in the New Economy</h2>
+      <p>What marketing is, the vocabulary of markets, the shift to value and relationships, and the six new-economy forces.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--bl)" href="session-02.html">
+      <div class="ch"><span>Session 2</span><span class="badge ready">Ready</span></div>
+      <h2>Strategic Marketing Planning</h2>
+      <p>The marketing plan as a blueprint: mission vs. vision, SWOT, goals and objectives, and the 7-part plan structure.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--vi)" href="session-03.html">
+      <div class="ch"><span>Session 3</span><span class="badge ready">Ready</span></div>
+      <h2>Marketing Ethics &amp; Social Responsibility</h2>
+      <p>The pyramid of social responsibility, deceptive practices, codes of conduct and ethical leadership.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--t2)" href="session-04.html">
+      <div class="ch"><span>Session 4</span><span class="badge ready">Ready</span></div>
+      <h2>Marketing Information &amp; Research</h2>
+      <p>Situation analysis: internal, customer and external environments, competitive intelligence and research.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+  </div>
+
+  <div class="section">Understanding Customers</div>
+  <div class="grid">
+    <a class="card" style="--ac:var(--t)" href="session-05.html">
+      <div class="ch"><span>Session 5</span><span class="badge ready">Ready</span></div>
+      <h2>Managing Customer Relationships</h2>
+      <p>The consumer &amp; business buying process, CRM, and quality–value–satisfaction as the keys to retention.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--bl)" href="session-06.html">
+      <div class="ch"><span>Session 6</span><span class="badge ready">Ready</span></div>
+      <h2>Segmentation &amp; Target Marketing</h2>
+      <p>Segmentation approaches, the five criteria for a viable segment, and targeting strategies.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+  </div>
+
+  <div class="section">The Marketing Mix</div>
+  <div class="grid">
+    <a class="card" style="--ac:var(--vi)" href="session-07.html">
+      <div class="ch"><span>Session 7</span><span class="badge ready">Ready</span></div>
+      <h2>Product Strategy</h2>
+      <p>Products as offerings, consumer &amp; business product types, product mix width/depth, and new-product development.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--t2)" href="session-08.html">
+      <div class="ch"><span>Session 8</span><span class="badge ready">Ready</span></div>
+      <h2>Pricing Strategy</h2>
+      <p>The role of price, elasticity, skimming vs. penetration vs. value-based pricing, and legal/ethical issues.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">5 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--t)" href="session-09.html">
+      <div class="ch"><span>Session 9</span><span class="badge ready">Ready</span></div>
+      <h2>Distribution &amp; Supply Chain</h2>
+      <p>Marketing channels, channel structure, supply-chain power &amp; conflict, category management and trends.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+    <a class="card" style="--ac:var(--bl)" href="session-10.html">
+      <div class="ch"><span>Session 10</span><span class="badge ready">Ready</span></div>
+      <h2>Integrated Marketing Communications</h2>
+      <p>IMC, the AIDA model, push vs. pull, advertising, PR, personal selling and sales promotion.</p>
+      <div class="meta"><span class="pill">5 modules</span><span class="pill">5 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+  </div>
+
+  <div class="section">Execution</div>
+  <div class="grid">
+    <a class="card" style="--ac:var(--vi)" href="session-11.html">
+      <div class="ch"><span>Session 11</span><span class="badge ready">Ready</span></div>
+      <h2>Marketing Implementation &amp; Control</h2>
+      <p>Linking strategy to execution, implementation approaches, internal marketing, and formal &amp; informal control.</p>
+      <div class="meta"><span class="pill">4 modules</span><span class="pill">4 exercises</span><span class="pill">10-question quiz</span></div>
+      <div class="open">Open masterclass →</div>
+    </a>
+  </div>
+
+  <div class="section">Marketing Tools · Bonus</div>
+  <div class="grid">
+    <a class="card" style="--ac:var(--t)" href="tool-brand-funnel.html">
+      <div class="ch"><span>Tool 1</span><span class="badge ready">Ready</span></div>
+      <h2>The Brand Funnel</h2>
+      <p>Awareness → trial → purchase → repurchase → main brand: turning the funnel's gaps into measurable marketing objectives.</p>
+      <div class="meta"><span class="pill">2 modules</span><span class="pill">2 exercises</span><span class="pill">8-question quiz</span></div>
+      <div class="open">Open tool →</div>
+    </a>
+  </div>
+
+  <footer>
+    <div>Based on Ferrell &amp; Hartline · Marketing Strategy</div>
+    <div>Research resource: <a href="https://www.marketingdive.com/" target="_blank" rel="noopener noreferrer">Marketing Dive</a></div>
+  </footer>
+</div>
+</body>
+</html>
