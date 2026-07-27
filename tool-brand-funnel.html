@@ -26,11 +26,12 @@
 <script type="text/babel">
 const { useState, useEffect, useCallback } = React;
 
-const T  = "#ff8f5c";   // green accent
+const T  = "#ff8f5c";   // naranja: acento del módulo (NO usar para "correcto")
 const T2 = "#ffd86b";   // bright lime
 const BL = "#4a9eed";   // blue
 const AM = "#8b7cf6";   // amber
 const RD = "#e05252";   // red
+const OK = "#63b356";   // verde: SIEMPRE "correcto", nunca depende del acento del módulo
 const BG = "#0e1b32";
 const BG2= "#16243f";
 const BG3= "#0b1526";
@@ -902,7 +903,7 @@ const ExerciseSlide = ({data}) => {
         <div style={{fontSize:V(22,16),lineHeight:1.55,textAlign:'center',marginBottom:V(32,20),color:W}}>{data.question}</div>
         <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:V(28,20)}}>
           {data.options.map((opt,i)=>(
-            <div key={i} style={{padding:V('18px 22px','14px 16px'),borderRadius:12,border:revealed?(i===data.correct?`2px solid ${data.ac||T}`:`1px solid ${RD}30`):`1px solid ${BDR}`,background:revealed?(i===data.correct?`${data.ac||T}12`:`${RD}08`):BG2,fontSize:V(18,15),transition:'all .25s',color:revealed?(i===data.correct?(data.ac||T):G):W}}>
+            <div key={i} style={{padding:V('18px 22px','14px 16px'),borderRadius:12,border:revealed?(i===data.correct?`2px solid ${OK}`:`1px solid ${RD}30`):`1px solid ${BDR}`,background:revealed?(i===data.correct?`${OK}12`:`${RD}08`):BG2,fontSize:V(18,15),transition:'all .25s',color:revealed?(i===data.correct?OK:G):W}}>
               {opt}
             </div>
           ))}
@@ -954,7 +955,7 @@ const QuizSlide = ({data,onFinish}) => {
   if(done){
     const score=Object.keys(answers).filter(k=>answers[k]===data.questions[k].correct).length;
     const pct=Math.round((score/data.questions.length)*100);
-    const rating=pct>=90?{l:'Brand Funnel Expert 🏆',c:T}:pct>=70?{l:'Solid understanding — keep going ✅',c:BL}:pct>=50?{l:'Getting there — review the slides ⚠️',c:AM}:{l:'Needs reinforcement — review this session 🔴',c:RD};
+    const rating=pct>=90?{l:'Brand Funnel Expert 🏆',c:OK}:pct>=70?{l:'Solid understanding — keep going ✅',c:BL}:pct>=50?{l:'Getting there — review the slides ⚠️',c:AM}:{l:'Needs reinforcement — review this session 🔴',c:RD};
     return(
       <div style={SR({display:'flex',height:'100%',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:V(0,'48px 24px'),zIndex:2})}>
         <P style={{textAlign:'center'}}>
@@ -963,7 +964,7 @@ const QuizSlide = ({data,onFinish}) => {
           <div style={{fontSize:18,color:G,marginBottom:36}}>{pct}% correct answers</div>
           <div style={{display:'flex',gap:V(10,8),justifyContent:'center',flexWrap:'wrap',maxWidth:700,marginBottom:36}}>
             {data.questions.map((q,i)=>(
-              <div key={i} style={{width:V(44,36),height:V(44,36),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:answers[i]===q.correct?`${T}25`:`${RD}20`,border:`2px solid ${answers[i]===q.correct?T:RD}`,fontSize:V(16,14),color:answers[i]===q.correct?T:RD,fontWeight:700}}>
+              <div key={i} style={{width:V(44,36),height:V(44,36),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:answers[i]===q.correct?`${OK}25`:`${RD}20`,border:`2px solid ${answers[i]===q.correct?OK:RD}`,fontSize:V(16,14),color:answers[i]===q.correct?OK:RD,fontWeight:700}}>
                 {answers[i]===q.correct?'✓':'✗'}
               </div>
             ))}
@@ -992,7 +993,7 @@ const QuizSlide = ({data,onFinish}) => {
           {q.opts.map((opt,i)=>{
             let bg=BG2,border=`1px solid ${BDR}`,color=W;
             if(answered){
-              if(i===q.correct){bg=`${T}15`;border=`2px solid ${T}`;color=T;}
+              if(i===q.correct){bg=`${OK}15`;border=`2px solid ${OK}`;color=OK;}
               else if(i===answers[current]){bg=`${RD}10`;border=`2px solid ${RD}`;color=RD;}
             }
             return(
