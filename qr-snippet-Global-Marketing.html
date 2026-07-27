@@ -1,0 +1,47 @@
+
+<!-- ══ QR del curso · generado sin librerías, funciona sin internet ══ -->
+<style>
+/* ── QR a pantalla completa · proyector con luces encendidas ───────── */
+.qr-open{display:inline-flex;align-items:center;gap:10px;margin:0 0 34px;
+  padding:13px 22px;border-radius:100px;cursor:pointer;font:600 14px/1 'DM Sans',system-ui,sans-serif;
+  letter-spacing:.3px;color:#0e1b32;background:#fff;border:none;transition:transform .15s ease,box-shadow .15s ease;
+  box-shadow:0 4px 20px rgba(0,0,0,.28)}
+.qr-open:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.36)}
+.qr-open svg{width:17px;height:17px;display:block}
+.qr-ov{position:fixed;inset:0;z-index:99999;background:#fff;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:2.2vh;padding:2.5vh 3vw;
+  font-family:'DM Sans',system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+.qr-ov.on{display:flex}
+.qr-ov .qrimg{width:min(74vh,88vw);height:auto;display:block}
+.qr-ov .qr-url{font-size:clamp(15px,2.5vw,30px);font-weight:700;color:#000;
+  letter-spacing:.2px;text-align:center;word-break:break-all;line-height:1.25}
+.qr-ov .qr-tip{font-size:clamp(11px,1.4vw,16px);color:#444;text-align:center;font-weight:500}
+.qr-ov .qr-x{position:fixed;top:14px;right:18px;width:44px;height:44px;border:none;
+  background:#000;color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-family:inherit}
+@media (max-width:640px){.qr-ov .qrimg{width:min(58vh,92vw)}}
+@media print{.qr-open{display:none}.qr-ov{display:flex!important;position:static}}
+</style>
+<button class="qr-open" onclick="qrShow()" aria-label="Mostrar código QR del curso">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h1M21 14h.01"/></svg><span>Mostrar QR — abrir el curso desde el celular</span>
+</button>
+<div class="qr-ov" id="qrOv" role="dialog" aria-modal="true" aria-label="Código QR del curso">
+  <button class="qr-x" onclick="qrHide()" aria-label="Cerrar">&times;</button>
+  <svg class="qrimg" viewBox="0 0 41 41" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><rect width="41" height="41" fill="#fff"/><path fill="#000" d="M4 4h7v1h-7zM13 4h6v1h-6zM22 4h1v1h-1zM25 4h2v1h-2zM30 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM16 5h1v1h-1zM18 5h1v1h-1zM21 5h1v1h-1zM23 5h2v1h-2zM28 5h1v1h-1zM30 5h1v1h-1zM36 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM14 6h3v1h-3zM19 6h1v1h-1zM23 6h3v1h-3zM28 6h1v1h-1zM30 6h1v1h-1zM32 6h3v1h-3zM36 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM12 7h2v1h-2zM16 7h1v1h-1zM22 7h1v1h-1zM24 7h2v1h-2zM28 7h1v1h-1zM30 7h1v1h-1zM32 7h3v1h-3zM36 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM12 8h6v1h-6zM22 8h3v1h-3zM26 8h1v1h-1zM30 8h1v1h-1zM32 8h3v1h-3zM36 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM14 9h6v1h-6zM21 9h2v1h-2zM24 9h1v1h-1zM26 9h2v1h-2zM30 9h1v1h-1zM36 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h1v1h-1zM28 10h1v1h-1zM30 10h7v1h-7zM12 11h1v1h-1zM14 11h1v1h-1zM19 11h1v1h-1zM22 11h1v1h-1zM5 12h1v1h-1zM7 12h4v1h-4zM12 12h1v1h-1zM15 12h1v1h-1zM21 12h1v1h-1zM23 12h2v1h-2zM27 12h1v1h-1zM29 12h2v1h-2zM32 12h2v1h-2zM35 12h1v1h-1zM8 13h2v1h-2zM11 13h2v1h-2zM14 13h3v1h-3zM18 13h1v1h-1zM20 13h2v1h-2zM23 13h1v1h-1zM26 13h2v1h-2zM32 13h3v1h-3zM4 14h2v1h-2zM7 14h1v1h-1zM10 14h1v1h-1zM13 14h2v1h-2zM20 14h1v1h-1zM27 14h1v1h-1zM29 14h1v1h-1zM32 14h5v1h-5zM7 15h1v1h-1zM12 15h2v1h-2zM15 15h1v1h-1zM17 15h3v1h-3zM22 15h1v1h-1zM26 15h2v1h-2zM29 15h3v1h-3zM34 15h1v1h-1zM36 15h1v1h-1zM6 16h1v1h-1zM9 16h2v1h-2zM13 16h1v1h-1zM17 16h1v1h-1zM21 16h1v1h-1zM24 16h1v1h-1zM27 16h2v1h-2zM30 16h2v1h-2zM4 17h2v1h-2zM7 17h1v1h-1zM11 17h1v1h-1zM13 17h3v1h-3zM18 17h1v1h-1zM20 17h1v1h-1zM22 17h1v1h-1zM25 17h1v1h-1zM29 17h1v1h-1zM31 17h1v1h-1zM4 18h2v1h-2zM10 18h2v1h-2zM14 18h1v1h-1zM16 18h2v1h-2zM21 18h3v1h-3zM25 18h1v1h-1zM30 18h5v1h-5zM4 19h2v1h-2zM7 19h2v1h-2zM12 19h1v1h-1zM18 19h4v1h-4zM23 19h1v1h-1zM26 19h1v1h-1zM29 19h1v1h-1zM31 19h1v1h-1zM33 19h2v1h-2zM36 19h1v1h-1zM6 20h3v1h-3zM10 20h5v1h-5zM16 20h2v1h-2zM19 20h2v1h-2zM22 20h3v1h-3zM26 20h1v1h-1zM28 20h6v1h-6zM4 21h1v1h-1zM6 21h1v1h-1zM9 21h1v1h-1zM13 21h1v1h-1zM15 21h2v1h-2zM19 21h1v1h-1zM21 21h1v1h-1zM23 21h4v1h-4zM30 21h1v1h-1zM32 21h1v1h-1zM34 21h1v1h-1zM36 21h1v1h-1zM4 22h1v1h-1zM6 22h6v1h-6zM13 22h1v1h-1zM15 22h1v1h-1zM17 22h1v1h-1zM20 22h2v1h-2zM23 22h1v1h-1zM26 22h2v1h-2zM29 22h3v1h-3zM33 22h4v1h-4zM5 23h2v1h-2zM8 23h2v1h-2zM12 23h2v1h-2zM16 23h1v1h-1zM18 23h5v1h-5zM26 23h4v1h-4zM32 23h4v1h-4zM5 24h1v1h-1zM8 24h3v1h-3zM14 24h1v1h-1zM16 24h1v1h-1zM21 24h1v1h-1zM23 24h1v1h-1zM28 24h1v1h-1zM31 24h1v1h-1zM33 24h1v1h-1zM35 24h1v1h-1zM4 25h3v1h-3zM11 25h2v1h-2zM17 25h2v1h-2zM20 25h1v1h-1zM22 25h2v1h-2zM25 25h4v1h-4zM31 25h3v1h-3zM4 26h1v1h-1zM6 26h1v1h-1zM10 26h2v1h-2zM13 26h1v1h-1zM17 26h6v1h-6zM25 26h4v1h-4zM32 26h1v1h-1zM35 26h2v1h-2zM4 27h1v1h-1zM6 27h1v1h-1zM14 27h1v1h-1zM16 27h1v1h-1zM27 27h1v1h-1zM30 27h6v1h-6zM4 28h2v1h-2zM7 28h2v1h-2zM10 28h2v1h-2zM13 28h1v1h-1zM16 28h1v1h-1zM18 28h1v1h-1zM20 28h2v1h-2zM24 28h1v1h-1zM28 28h6v1h-6zM12 29h1v1h-1zM15 29h1v1h-1zM19 29h2v1h-2zM27 29h2v1h-2zM32 29h1v1h-1zM34 29h2v1h-2zM4 30h7v1h-7zM14 30h2v1h-2zM17 30h2v1h-2zM20 30h2v1h-2zM23 30h1v1h-1zM25 30h1v1h-1zM27 30h2v1h-2zM30 30h1v1h-1zM32 30h1v1h-1zM34 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM12 31h1v1h-1zM15 31h1v1h-1zM21 31h1v1h-1zM23 31h1v1h-1zM27 31h2v1h-2zM32 31h5v1h-5zM4 32h1v1h-1zM6 32h3v1h-3zM10 32h1v1h-1zM12 32h1v1h-1zM18 32h2v1h-2zM23 32h2v1h-2zM26 32h7v1h-7zM35 32h2v1h-2zM4 33h1v1h-1zM6 33h3v1h-3zM10 33h1v1h-1zM12 33h1v1h-1zM17 33h2v1h-2zM23 33h2v1h-2zM29 33h1v1h-1zM31 33h1v1h-1zM36 33h1v1h-1zM4 34h1v1h-1zM6 34h3v1h-3zM10 34h1v1h-1zM14 34h2v1h-2zM17 34h1v1h-1zM20 34h2v1h-2zM23 34h3v1h-3zM29 34h1v1h-1zM31 34h2v1h-2zM35 34h2v1h-2zM4 35h1v1h-1zM10 35h1v1h-1zM12 35h1v1h-1zM14 35h1v1h-1zM17 35h1v1h-1zM19 35h2v1h-2zM23 35h1v1h-1zM29 35h8v1h-8zM4 36h7v1h-7zM14 36h2v1h-2zM17 36h1v1h-1zM19 36h1v1h-1zM22 36h2v1h-2zM26 36h3v1h-3zM31 36h2v1h-2zM34 36h1v1h-1z"/></svg>
+  <div class="qr-url">https://josephlmd.github.io/Global-Marketing/</div>
+  <div class="qr-tip">Global Marketing · Universidad del Rosario · apunta la cámara del celular al código · pulsa Esc o toca para cerrar</div>
+</div>
+<script>
+function qrShow(){document.getElementById('qrOv').classList.add('on');
+  document.body.style.overflow='hidden';
+  if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function(){});}
+function qrHide(){document.getElementById('qrOv').classList.remove('on');
+  document.body.style.overflow='';
+  if(document.fullscreenElement&&document.exitFullscreen) document.exitFullscreen().catch(function(){});}
+document.getElementById('qrOv').addEventListener('click',qrHide);
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') qrHide();
+  if((e.key==='q'||e.key==='Q')&&!/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName))
+    document.getElementById('qrOv').classList.contains('on')?qrHide():qrShow();
+});
+</script>
