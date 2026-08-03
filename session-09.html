@@ -26,25 +26,100 @@
 <script type="text/babel">
 const { useState, useEffect, useCallback } = React;
 
-const T  = "#ff8f5c";   // naranja: acento del módulo (NO usar para "correcto")
-const T2 = "#ffd86b";   // bright lime
-const BL = "#4a9eed";   // blue
-const AM = "#8b7cf6";   // amber
-const RD = "#e05252";   // red
-const OK = "#63b356";   // verde: SIEMPRE "correcto", nunca depende del acento del módulo
-const BG = "#0e1b32";
-const BG2= "#16243f";
-const BG3= "#0b1526";
-const W  = "#f0f0eb";
-const G  = "#7a7a72";
-const BDR= "rgba(255,255,255,.08)";
+let T  = "#ff8f5c";   // naranja: acento del módulo (NO usar para "correcto")
+let T2 = "#ffd86b";   // bright lime
+let BL = "#4a9eed";   // blue
+let AM = "#8b7cf6";   // amber
+let RD = "#e05252";   // red
+let OK = "#63b356";   // verde: SIEMPRE "correcto", nunca depende del acento del módulo
+let BG = "#0e1b32";
+let BG2= "#16243f";
+let BG3= "#0b1526";
+let W  = "#f0f0eb";
+let G  = "#7a7a72";
+let BDR= "rgba(255,255,255,.08)";
 
 // ── RESPONSIVE ──────────────────────────────────────────────────
 // MOB is refreshed by App on every resize; V(desktop, mobile) picks per viewport.
 let MOB = typeof window!=='undefined' && window.innerWidth<=820;
 const V = (d,m) => MOB ? m : d;
+
+/* ═══ MODO PROYECTOR ═══ */
+// Todo lo de aquí abajo sólo actúa cuando PROJ es true. Con PROJ en false el
+// mazo se comporta exactamente igual que antes.
+let PROJ = false;
+const KP = 1.3;                                   // escala tipográfica
+/* ── tamaño por tipo ── */
+// Tipos que aprietan más contenido y por eso venían con letra más chica.
+let TIPO = '';
+const EXTRA_TIPO = {comparison:1.18, case:1.14, diagram:1.15, quiz:1.10,
+                    windows_grid:1.15, glocal_venn:1.15, value_chain_visual:1.15,
+                    five_stage_model:1.15, entry_modes:1.15, io_framework:1.15};
+const KT = () => KP * (EXTRA_TIPO[TIPO] || 1);
+const PX  = n => PROJ ? Math.round(n*KT()) : n;       // tamaños sueltos
+const PXV = (d,m) => PROJ ? Math.round(d*KT()) : (MOB ? m : d);
+const FW  = w => PROJ ? Math.min(900, w+100) : w;   // un escalón más de peso
+const INK = () => PROJ ? '#fff' : '#000';           // texto sobre un acento
+const SURF = a => PROJ ? 'rgba(0,0,0,'+Math.min(1,a*2.2).toFixed(3)+')'
+                       : 'rgba(255,255,255,'+a+')';
+const PAL_N = {"T": "#ff8f5c", "T2": "#ffd86b", "BL": "#4a9eed", "AM": "#8b7cf6", "RD": "#e05252", "OK": "#63b356", "BG": "#0e1b32", "BG2": "#16243f", "BG3": "#0b1526", "W": "#f0f0eb", "G": "#7a7a72", "BDR": "rgba(255,255,255,.08)"};
+const PAL_P = {"T": "#b4441a", "T2": "#8a6100", "BL": "#0b57b8", "AM": "#4b32c3", "RD": "#b3261e", "OK": "#1c7a34", "BG": "#ffffff", "BG2": "#eef2f8", "BG3": "#e4ebf4", "W": "#0b0f14", "G": "#3f4a55", "BDR": "rgba(0,0,0,.16)"};
+const AC_MAP = {"#ff8f5c": "#b4441a", "#4a9eed": "#0b57b8", "#ffd86b": "#8a6100", "#8b7cf6": "#4b32c3"};
+
+function _rl(h){                                     // luminancia relativa
+  h=String(h).replace('#','');
+  if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  var v=[0,2,4].map(function(i){
+    var c=parseInt(h.substr(i,2),16)/255;
+    return c<=0.04045 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4);
+  });
+  return .2126*v[0]+.7152*v[1]+.0722*v[2];
+}
+function _contra(h){ return (1.05)/(_rl(h)+.05); }   // contra blanco
+function _oscurece(h){                               // baja hasta 4,5:1
+  h=String(h).replace('#','');
+  if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
+  for(var i=0;i<40;i++){
+    var hex='#'+[r,g,b].map(function(x){return ('0'+Math.round(x).toString(16)).slice(-2);}).join('');
+    if(_contra(hex)>=4.5) return hex;
+    r*=.92; g*=.92; b*=.92;
+  }
+  return '#333333';
+}
+function AC(c){                                      // acento seguro
+  if(!c || !PROJ) return c;
+  var k=String(c).toLowerCase();
+  return AC_MAP[k] || _oscurece(k);
+}
+function aplicaPaleta(){
+  var p = PROJ ? PAL_P : PAL_N;
+  T = p.T;
+  T2 = p.T2;
+  BL = p.BL;
+  AM = p.AM;
+  RD = p.RD;
+  OK = p.OK;
+  BG = p.BG;
+  BG2 = p.BG2;
+  BG3 = p.BG3;
+  W = p.W;
+  G = p.G;
+  BDR = p.BDR;
+}
+function toggleProyector(){
+  PROJ = !PROJ;
+  document.documentElement.classList.toggle('proyector', PROJ);
+  aplicaPaleta();
+  var b=document.getElementById('pmode');
+  if(b) b.textContent = PROJ ? '\u263e Pantalla' : '\u2600 Proyector';
+  if(window.__rerender) window.__rerender();
+}
+window.toggleProyector = toggleProyector;
+window.__proyectorInfo = function(){ return {PROJ:PROJ, K:KP}; };
+
 // Standard slide root: identical on desktop; on mobile becomes natural-height + scrollable content
-const SR = (style={}) => ({...style, ...(MOB ? {height:'auto', minHeight:'100%'} : {})});
+const SR = (style={}) => ({...style, ...((MOB||PROJ) ? {height:'auto', minHeight:'100%'} : {})});
 
 // ── BACKGROUND ART ──────────────────────────────────────────────
 const BgGlobe = ({opacity=0.03}) => (
@@ -84,7 +159,7 @@ function P({children,style={}}){return <div style={{position:'relative',zIndex:2
 
 const ModuleTag = ({module,color=T}) => (
   <div style={{display:'inline-flex',alignItems:'center',gap:6,background:`${color}12`,border:`1px solid ${color}35`,
-    borderRadius:100,padding:'5px 16px',fontSize:12,color,fontWeight:700,letterSpacing:2,
+    borderRadius:100,padding:'5px 16px',fontSize:PX(12),color,fontWeight:FW(700),letterSpacing:2,
     textTransform:'uppercase',marginBottom:20}}>
     {module}
   </div>
@@ -662,10 +737,10 @@ const TitleSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','48px 24px'),zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.05}/></div>
     <P style={{flex:1.4}}>
-      <div style={{fontSize:V(12,11),color:T,letterSpacing:V(4,2),textTransform:'uppercase',fontWeight:700,marginBottom:20}}>{data.tag}</div>
-      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(72,40),lineHeight:1.05,margin:'0 0 28px',whiteSpace:'pre-line'}}>{data.title}</h1>
-      <p style={{fontSize:V(22,17),color:G,maxWidth:680,lineHeight:1.65,whiteSpace:'pre-line',marginBottom:32}}>{data.subtitle}</p>
-      <div style={{fontSize:13,color:`${G}80`,fontStyle:'italic'}}>{data.author}</div>
+      <div style={{fontSize:PXV(12,11),color:T,letterSpacing:V(4,2),textTransform:'uppercase',fontWeight:FW(700),marginBottom:20}}>{data.tag}</div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(72,40),lineHeight:1.05,margin:'0 0 28px',whiteSpace:'pre-line'}}>{data.title}</h1>
+      <p style={{fontSize:PXV(22,17),color:G,maxWidth:680,lineHeight:1.65,whiteSpace:'pre-line',marginBottom:32}}>{data.subtitle}</p>
+      <div style={{fontSize:PX(13),color:`${G}80`,fontStyle:'italic'}}>{data.author}</div>
     </P>
     {!MOB&&<P style={{flex:.8,display:'flex',justifyContent:'center',opacity:.06}}>
       <div style={{width:380,height:380}}>{Ico.globe(T)}</div>
@@ -677,19 +752,19 @@ const ImpactSlide = ({data}) => (
   <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.03}/></div>
     <P>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),marginBottom:V(44,24),color:W}}>{data.title}</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,30),marginBottom:V(44,24),color:W}}>{data.title}</h2>
       <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(22,12),marginBottom:V(36,22)}}>
         {data.stats.map((s,i)=>(
           <div key={i} style={{background:BG2,padding:V('28px 30px','18px 18px'),borderRadius:14,border:`1px solid ${BDR}`,display:'flex',gap:V(18,14),alignItems:'flex-start'}}>
-            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(42,30),fontWeight:900,color:T,lineHeight:1,flexShrink:0}}>{s.n}</div>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,30),fontWeight:FW(900),color:T,lineHeight:1,flexShrink:0}}>{s.n}</div>
             <div>
-              <div style={{fontSize:V(18,15),lineHeight:1.5,color:W,marginBottom:5}}>{s.d}</div>
-              <div style={{fontSize:12,color:`${G}80`}}>{s.src}</div>
+              <div style={{fontSize:PXV(18,15),lineHeight:1.5,color:W,marginBottom:5}}>{s.d}</div>
+              <div style={{fontSize:PX(12),color:`${G}80`}}>{s.src}</div>
             </div>
           </div>
         ))}
       </div>
-      <div style={{background:`${T}10`,border:`1px solid ${T}30`,borderRadius:12,padding:V('18px 26px','14px 16px'),fontSize:V(19,15),color:W,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
+      <div style={{background:`${T}10`,border:`1px solid ${T}30`,borderRadius:12,padding:V('18px 26px','14px 16px'),fontSize:PXV(19,15),color:W,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
         <div style={{width:24,height:24,flexShrink:0,opacity:.7}}>{Ico.zap(T)}</div> {data.quote}
       </div>
     </P>
@@ -699,13 +774,13 @@ const ImpactSlide = ({data}) => (
 const AgendaSlide = ({data}) => (
   <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),textAlign:'center',marginBottom:V(44,24)}}>{data.title}</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,30),textAlign:'center',marginBottom:V(44,24)}}>{data.title}</h2>
       <div style={{display:'grid',gridTemplateColumns:V('repeat(3,1fr)','1fr 1fr'),gap:V(18,10)}}>
         {data.modules.map(m=>(
           <div key={m.num} style={{background:`${T}06`,border:`1px solid ${T}22`,padding:V('26px 24px','16px 12px'),borderRadius:16,textAlign:'center'}}>
-            <div style={{fontSize:V(40,28),fontFamily:"'Fraunces',serif",color:T,marginBottom:V(10,6),fontWeight:900}}>0{m.num}</div>
-            <h3 style={{fontSize:V(18,14),marginBottom:7,color:W}}>{m.title}</h3>
-            <p style={{color:G,fontSize:V(14,12),lineHeight:1.5,margin:0}}>{m.desc}</p>
+            <div style={{fontSize:PXV(40,28),fontFamily:"'Fraunces',serif",color:T,marginBottom:V(10,6),fontWeight:FW(900)}}>0{m.num}</div>
+            <h3 style={{fontSize:PXV(18,14),marginBottom:7,color:W}}>{m.title}</h3>
+            <p style={{color:G,fontSize:PXV(14,12),lineHeight:1.5,margin:0}}>{m.desc}</p>
           </div>
         ))}
       </div>
@@ -717,12 +792,12 @@ const ModuleTitleSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','48px 24px'),zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.05}/></div>
     <P style={{flex:1.5}}>
-      <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${data.ac||T}15`,border:`1px solid ${data.ac||T}40`,borderRadius:100,padding:'6px 18px',fontSize:13,color:(data.ac||T),fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:24}}>
+      <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${AC(data.ac)||T}15`,border:`1px solid ${AC(data.ac)||T}40`,borderRadius:100,padding:'6px 18px',fontSize:PX(13),color:(AC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:24}}>
         MODULE {data.num}
       </div>
-      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(64,36),lineHeight:1.05,margin:'0 0 32px'}}>{data.title}</h1>
-      <div style={{background:BG2,border:`1px solid ${BDR}`,borderRadius:12,padding:V('18px 24px','14px 16px'),fontSize:V(21,16),color:G,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
-        <div style={{width:22,height:22,flexShrink:0,opacity:.6}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(64,36),lineHeight:1.05,margin:'0 0 32px'}}>{data.title}</h1>
+      <div style={{background:BG2,border:`1px solid ${BDR}`,borderRadius:12,padding:V('18px 24px','14px 16px'),fontSize:PXV(21,16),color:G,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
+        <div style={{width:22,height:22,flexShrink:0,opacity:.6}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
         {data.question}
       </div>
     </P>
@@ -733,17 +808,17 @@ const ConceptSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(80,0),zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.035}/></div>
     <P style={{flex:1.5}}>
-      <ModuleTag module={data.module} color={data.ac||T}/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,30),color:(data.ac||T),marginBottom:V(28,18),lineHeight:1.1}}>{data.title}</h2>
-      <p style={{fontSize:V(22,16),lineHeight:1.7,color:W,margin:'0 0 24px'}}>{data.text}</p>
+      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,30),color:(AC(data.ac)||T),marginBottom:V(28,18),lineHeight:1.1}}>{data.title}</h2>
+      <p style={{fontSize:PXV(22,16),lineHeight:1.7,color:W,margin:'0 0 24px'}}>{data.text}</p>
       {data.highlight&&(
-        <div style={{background:`${AM}10`,border:`1px solid ${AM}35`,borderRadius:10,padding:V('14px 20px','12px 14px'),fontSize:V(17,14),color:AM,display:'flex',gap:12,alignItems:'center'}}>
+        <div style={{background:`${AM}10`,border:`1px solid ${AM}35`,borderRadius:10,padding:V('14px 20px','12px 14px'),fontSize:PXV(17,14),color:AM,display:'flex',gap:12,alignItems:'center'}}>
           <div style={{width:18,height:18,flexShrink:0}}>{Ico.zap(AM)}</div> {data.highlight}
         </div>
       )}
     </P>
     {!MOB&&<P style={{flex:.65,display:'flex',justifyContent:'center',opacity:.07}}>
-      <div style={{width:340,height:340}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+      <div style={{width:340,height:340}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
     </P>}
   </div>
 );
@@ -751,20 +826,20 @@ const ConceptSlide = ({data}) => (
 const CaseSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(50,0),zIndex:2})}>
     {!MOB&&<P style={{flex:.6,display:'flex',justifyContent:'center',opacity:.2}}>
-      <div style={{width:240,height:240}}>{Ico[data.icon]?Ico[data.icon](data.ac||T):null}</div>
+      <div style={{width:240,height:240}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
     </P>}
     <P style={{flex:1.8}}>
-      <ModuleTag module={data.module} color={data.ac||T}/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(24,16)}}>{data.title}</h2>
+      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(24,16)}}>{data.title}</h2>
       <div style={{background:`${RD}10`,borderLeft:`5px solid ${RD}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:14}}>
-        <div style={{fontSize:11,color:RD,fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The challenge</div>
-        <p style={{margin:0,fontSize:V(17,14),lineHeight:1.65}}>{data.problem}</p>
+        <div style={{fontSize:PX(11),color:RD,fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The challenge</div>
+        <p style={{margin:0,fontSize:PXV(17,14),lineHeight:1.65}}>{data.problem}</p>
       </div>
-      <div style={{background:`${data.ac||T}10`,borderLeft:`5px solid ${data.ac||T}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:12}}>
-        <div style={{fontSize:11,color:(data.ac||T),fontWeight:700,letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The solution</div>
-        <p style={{margin:0,fontSize:V(17,14),lineHeight:1.65}}>{data.solution}</p>
+      <div style={{background:`${AC(data.ac)||T}10`,borderLeft:`5px solid ${AC(data.ac)||T}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:12}}>
+        <div style={{fontSize:PX(11),color:(AC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The solution</div>
+        <p style={{margin:0,fontSize:PXV(17,14),lineHeight:1.65}}>{data.solution}</p>
       </div>
-      <div style={{fontSize:V(15,13),color:AM,fontStyle:'italic',display:'flex',gap:8,alignItems:'flex-start'}}>
+      <div style={{fontSize:PXV(15,13),color:AM,fontStyle:'italic',display:'flex',gap:8,alignItems:'flex-start'}}>
         <div style={{width:16,height:16,flexShrink:0,marginTop:2}}>{Ico.zap(AM)}</div> {data.lesson}
       </div>
     </P>
@@ -774,19 +849,19 @@ const CaseSlide = ({data}) => (
 const ComparisonSlide = ({data}) => (
   <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
-      <ModuleTag module={data.module} color={data.ac||T}/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(44,26),marginBottom:V(28,18)}}>{data.title}</h2>
+      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(44,26),marginBottom:V(28,18)}}>{data.title}</h2>
       <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(24,14)}}>
         {[data.left,data.right].map((side,si)=>(
           <div key={si} style={{background:BG2,borderRadius:16,border:`1px solid ${side.color}30`,overflow:'hidden'}}>
-            <div style={{background:`${side.color}15`,padding:'14px 22px',fontSize:15,fontWeight:700,color:side.color,borderBottom:`1px solid ${side.color}20`}}>
+            <div style={{background:`${side.color}15`,padding:'14px 22px',fontSize:PX(15),fontWeight:FW(700),color:side.color,borderBottom:`1px solid ${side.color}20`}}>
               {side.label}
             </div>
             <div style={{padding:'16px 20px',display:'flex',flexDirection:'column',gap:12}}>
               {side.items.map((item,i)=>(
                 <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start'}}>
-                  <div style={{fontSize:12,fontWeight:700,color:side.color,minWidth:V(100,82),flexShrink:0,paddingTop:2}}>{item.k}</div>
-                  <div style={{fontSize:V(14,13),color:G,lineHeight:1.5}}>{item.v}</div>
+                  <div style={{fontSize:PX(12),fontWeight:FW(700),color:side.color,minWidth:V(100,82),flexShrink:0,paddingTop:2}}>{item.k}</div>
+                  <div style={{fontSize:PXV(14,13),color:G,lineHeight:1.5}}>{item.v}</div>
                 </div>
               ))}
             </div>
@@ -801,13 +876,13 @@ const WindowsGridSlide = () => (
   <div style={SR({padding:V('0 80px','32px 14px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       <ModuleTag module="Module 2"/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(40,24),marginBottom:6}}>Solberg's Nine Strategic Windows</h2>
-      <p style={{color:G,fontSize:V(14,12),marginBottom:22}}>Source: Solberg (1997) — Industry Globalism × Firm Preparedness for Internationalization</p>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(40,24),marginBottom:6}}>Solberg's Nine Strategic Windows</h2>
+      <p style={{color:G,fontSize:PXV(14,12),marginBottom:22}}>Source: Solberg (1997) — Industry Globalism × Firm Preparedness for Internationalization</p>
       <div style={{display:'grid',gridTemplateColumns:V('140px 1fr 1fr 1fr','62px 1fr 1fr 1fr'),gap:2}}>
         {/* Header row */}
         <div/>
         {['Local Industry','Potentially Global','Global Industry'].map((h,i)=>(
-          <div key={i} style={{background:`${BL}12`,padding:V('10px 14px','8px 4px'),borderRadius:'8px 8px 0 0',fontSize:V(13,10),fontWeight:700,color:BL,textAlign:'center',border:`1px solid ${BL}25`}}>{h}</div>
+          <div key={i} style={{background:`${BL}12`,padding:V('10px 14px','8px 4px'),borderRadius:'8px 8px 0 0',fontSize:PXV(13,10),fontWeight:FW(700),color:BL,textAlign:'center',border:`1px solid ${BL}25`}}>{h}</div>
         ))}
         {/* Rows */}
         {[
@@ -828,17 +903,17 @@ const WindowsGridSlide = () => (
           ]},
         ].map((row,ri)=>(
           <React.Fragment key={ri}>
-            <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',padding:'0 12px 0 0',fontSize:V(13,10),fontWeight:700,color:G,textAlign:'right'}}>{row.label}</div>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',padding:'0 12px 0 0',fontSize:PXV(13,10),fontWeight:FW(700),color:G,textAlign:'right'}}>{row.label}</div>
             {row.cells.map((cell,ci)=>(
               <div key={ci} style={{background:BG2,padding:V('16px 14px','10px 4px'),border:`1px solid ${cell.c}25`,textAlign:'center',borderRadius:ri===0&&ci===0?'0':(ri===2&&ci===2?'0 0 8px 0':'0')}}>
-                <div style={{fontFamily:"'Fraunces',serif",fontSize:V(28,18),fontWeight:900,color:cell.c,lineHeight:1,marginBottom:6}}>{cell.n}</div>
-                <div style={{fontSize:V(13,10),color:G,lineHeight:1.4}}>{cell.t}</div>
+                <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(28,18),fontWeight:FW(900),color:cell.c,lineHeight:1,marginBottom:6}}>{cell.n}</div>
+                <div style={{fontSize:PXV(13,10),color:G,lineHeight:1.4}}>{cell.t}</div>
               </div>
             ))}
           </React.Fragment>
         ))}
       </div>
-      <p style={{color:`${G}80`,fontSize:12,marginTop:12,fontStyle:'italic'}}>Window 1 = Stay home · Window 9 = Global dominance. Know which window you're in before deciding strategy.</p>
+      <p style={{color:`${G}80`,fontSize:PX(12),marginTop:12,fontStyle:'italic'}}>Window 1 = Stay home · Window 9 = Global dominance. Know which window you're in before deciding strategy.</p>
     </P>
   </div>
 );
@@ -847,24 +922,24 @@ const GlocalVennSlide = () => (
   <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       <ModuleTag module="Module 3"/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>The Glocalization Framework</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(28,18)}}>The Glocalization Framework</h2>
       <div style={{display:'flex',flexDirection:V('row','column'),gap:V(32,20),alignItems:'center'}}>
         {/* Venn-style diagram */}
         <div style={{position:'relative',width:V(380,'100%'),maxWidth:380,height:V(220,190),flexShrink:0}}>
           {/* Global circle */}
           <div style={{position:'absolute',left:0,top:10,width:V(260,'66%'),height:V(200,170),borderRadius:'50%',background:`${BL}15`,border:`2px solid ${BL}40`,display:'flex',flexDirection:'column',alignItems:'flex-start',justifyContent:'center',paddingLeft:V(24,16)}}>
-            <div style={{fontSize:V(13,11),fontWeight:700,color:BL,marginBottom:8}}>GLOBAL</div>
-            <div style={{fontSize:V(12,10),color:G,lineHeight:1.5}}>Low-cost production<br/>Global roll-out<br/>Low complexity</div>
+            <div style={{fontSize:PXV(13,11),fontWeight:FW(700),color:BL,marginBottom:8}}>GLOBAL</div>
+            <div style={{fontSize:PXV(12,10),color:G,lineHeight:1.5}}>Low-cost production<br/>Global roll-out<br/>Low complexity</div>
           </div>
           {/* Local circle */}
           <div style={{position:'absolute',right:0,top:10,width:V(260,'66%'),height:V(200,170),borderRadius:'50%',background:`${T}15`,border:`2px solid ${T}40`,display:'flex',flexDirection:'column',alignItems:'flex-end',justifyContent:'center',paddingRight:V(24,16)}}>
-            <div style={{fontSize:V(13,11),fontWeight:700,color:T,marginBottom:8,textAlign:'right'}}>LOCAL</div>
-            <div style={{fontSize:V(12,10),color:G,lineHeight:1.5,textAlign:'right'}}>Culturally close<br/>Flexible response<br/>Local penetration</div>
+            <div style={{fontSize:PXV(13,11),fontWeight:FW(700),color:T,marginBottom:8,textAlign:'right'}}>LOCAL</div>
+            <div style={{fontSize:PXV(12,10),color:G,lineHeight:1.5,textAlign:'right'}}>Culturally close<br/>Flexible response<br/>Local penetration</div>
           </div>
           {/* Center */}
           <div style={{position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',textAlign:'center',zIndex:5}}>
-            <div style={{fontFamily:"'Fraunces',serif",fontSize:22,fontWeight:900,color:W,lineHeight:1}}>GLOCAL</div>
-            <div style={{fontSize:11,color:`${W}80`}}>Global + Local</div>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:PX(22),fontWeight:FW(900),color:W,lineHeight:1}}>GLOCAL</div>
+            <div style={{fontSize:PX(11),color:`${W}80`}}>Global + Local</div>
           </div>
         </div>
         {/* Right side explanation */}
@@ -875,8 +950,8 @@ const GlocalVennSlide = () => (
             {t:'The Sweet Spot', d:'GLOCAL firms achieve global cost advantages while winning local consumer hearts. McDonald\'s. Unilever. Samsung.',c:AM},
           ].map((item,i)=>(
             <div key={i} style={{background:BG2,padding:'16px 20px',borderRadius:12,border:`1px solid ${item.c}25`}}>
-              <div style={{fontSize:15,fontWeight:700,color:item.c,marginBottom:5}}>{item.t}</div>
-              <div style={{fontSize:14,color:G,lineHeight:1.5}}>{item.d}</div>
+              <div style={{fontSize:PX(15),fontWeight:FW(700),color:item.c,marginBottom:5}}>{item.t}</div>
+              <div style={{fontSize:PX(14),color:G,lineHeight:1.5}}>{item.d}</div>
             </div>
           ))}
         </div>
@@ -890,7 +965,7 @@ const ValueChainVisualSlide = () => (
     <div className="bg-art"><BgChain opacity={.03}/></div>
     <P>
       <ModuleTag module="Module 4"/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>A Simplified Value Chain</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(28,18)}}>A Simplified Value Chain</h2>
       {/* Chain arrows */}
       <div style={{display:'flex',flexDirection:V('row','column'),gap:0,marginBottom:24,alignItems:'stretch'}}>
         {[
@@ -901,8 +976,8 @@ const ValueChainVisualSlide = () => (
         ].map((s,i)=>(
           <React.Fragment key={i}>
             <div style={{flex:1,background:BG2,padding:V('18px 16px','14px 14px'),border:`1px solid ${s.c}35`,borderRadius:V(i===0?'12px 0 0 12px':i===3?'0 12px 12px 0':'0',i===0?'12px 12px 0 0':i===3?'0 0 12px 12px':'0'),textAlign:'center'}}>
-              <div style={{fontFamily:"'Fraunces',serif",fontSize:V(20,16),fontWeight:700,color:s.c,marginBottom:8}}>{s.label}</div>
-              <div style={{fontSize:12,color:G,lineHeight:1.6}}>{s.sub}</div>
+              <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(20,16),fontWeight:FW(700),color:s.c,marginBottom:8}}>{s.label}</div>
+              <div style={{fontSize:PX(12),color:G,lineHeight:1.6}}>{s.sub}</div>
             </div>
             {i<3&&(
               <div style={{display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,zIndex:5}}>
@@ -918,18 +993,18 @@ const ValueChainVisualSlide = () => (
       </div>
       {/* Upstream / Downstream label */}
       <div style={{display:'flex',marginBottom:16}}>
-        <div style={{flex:1,textAlign:'center',fontSize:V(13,11),color:RD,fontWeight:700,letterSpacing:2,textTransform:'uppercase',borderRight:`1px solid ${BDR}`,paddingRight:16}}>{V('← UPSTREAM','↑ UPSTREAM')}</div>
-        <div style={{flex:1,textAlign:'center',fontSize:V(13,11),color:T,fontWeight:700,letterSpacing:2,textTransform:'uppercase',paddingLeft:16}}>{V('DOWNSTREAM →','DOWNSTREAM ↓')}</div>
+        <div style={{flex:1,textAlign:'center',fontSize:PXV(13,11),color:RD,fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',borderRight:`1px solid ${BDR}`,paddingRight:16}}>{V('← UPSTREAM','↑ UPSTREAM')}</div>
+        <div style={{flex:1,textAlign:'center',fontSize:PXV(13,11),color:T,fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',paddingLeft:16}}>{V('DOWNSTREAM →','DOWNSTREAM ↓')}</div>
       </div>
       {/* Key insight */}
       <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(16,12)}}>
         <div style={{background:`${RD}08`,border:`1px solid ${RD}25`,borderRadius:10,padding:'14px 18px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:RD,marginBottom:6}}>CENTRALIZE UPSTREAM</div>
-          <div style={{fontSize:14,color:G,lineHeight:1.5}}>R&D and production benefit from global scale economies, IP concentration, and quality control. Keep them in one or few locations.</div>
+          <div style={{fontSize:PX(13),fontWeight:FW(700),color:RD,marginBottom:6}}>CENTRALIZE UPSTREAM</div>
+          <div style={{fontSize:PX(14),color:G,lineHeight:1.5}}>R&D and production benefit from global scale economies, IP concentration, and quality control. Keep them in one or few locations.</div>
         </div>
         <div style={{background:`${T}08`,border:`1px solid ${T}25`,borderRadius:10,padding:'14px 18px'}}>
-          <div style={{fontSize:13,fontWeight:700,color:T,marginBottom:6}}>DECENTRALIZE DOWNSTREAM</div>
-          <div style={{fontSize:14,color:G,lineHeight:1.5}}>Marketing and sales must speak local. Cultural fit, customer relationships, and speed of response require local presence and autonomy.</div>
+          <div style={{fontSize:PX(13),fontWeight:FW(700),color:T,marginBottom:6}}>DECENTRALIZE DOWNSTREAM</div>
+          <div style={{fontSize:PX(14),color:G,lineHeight:1.5}}>Marketing and sales must speak local. Cultural fit, customer relationships, and speed of response require local presence and autonomy.</div>
         </div>
       </div>
     </P>
@@ -940,7 +1015,7 @@ const FiveStageModelSlide = () => (
   <div style={SR({padding:V('0 80px','32px 18px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       <ModuleTag module="Module 5"/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,24),marginBottom:V(28,18)}}>The 5-Stage Global Marketing Decision Model</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,24),marginBottom:V(28,18)}}>The 5-Stage Global Marketing Decision Model</h2>
       <div style={{display:'flex',flexDirection:'column',gap:10,maxWidth:900,margin:'0 auto',width:'100%'}}>
         {[
           {n:'I',  t:'The Decision Whether to Internationalize', d:'Should we go? Analyze firm competences vs industry globalism via the 9 windows model.',c:T},
@@ -950,11 +1025,11 @@ const FiveStageModelSlide = () => (
           {n:'V',  t:'Implementing & Coordinating the Programme',d:'Budget, organization structure, cross-border negotiation, and marketing control systems.',c:RD},
         ].map((stage,i)=>(
           <div key={i} style={{display:'flex',gap:V(16,10),alignItems:'center'}}>
-            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(28,20),fontWeight:900,color:stage.c,width:V(36,26),flexShrink:0,textAlign:'center'}}>{stage.n}</div>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(28,20),fontWeight:FW(900),color:stage.c,width:V(36,26),flexShrink:0,textAlign:'center'}}>{stage.n}</div>
             <div style={{flex:1,background:BG2,padding:V('14px 20px','12px 14px'),borderRadius:10,border:`1px solid ${stage.c}25`,display:'flex',gap:16,alignItems:'center'}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:V(16,14),fontWeight:700,color:stage.c,marginBottom:4}}>{stage.t}</div>
-                <div style={{fontSize:V(13,12),color:G,lineHeight:1.5}}>{stage.d}</div>
+                <div style={{fontSize:PXV(16,14),fontWeight:FW(700),color:stage.c,marginBottom:4}}>{stage.t}</div>
+                <div style={{fontSize:PXV(13,12),color:G,lineHeight:1.5}}>{stage.d}</div>
               </div>
             </div>
             {i<4&&!MOB&&<div style={{width:12,height:12,flexShrink:0,opacity:.4}}>{Ico.arrow(G)}</div>}
@@ -969,7 +1044,7 @@ const EntryModesSlide = () => (
   <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       <ModuleTag module="Module 5"/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(42,26),marginBottom:V(28,18)}}>Market Entry Mode Strategies</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(28,18)}}>Market Entry Mode Strategies</h2>
       <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr 1fr','1fr'),gap:V(18,14)}}>
         {[
           {label:'Export Modes', c:T, control:'Low Control', risk:'Low Risk', flex:'High Flexibility',
@@ -984,10 +1059,10 @@ const EntryModesSlide = () => (
         ].map((mode,i)=>(
           <div key={i} style={{background:BG2,borderRadius:14,border:`1px solid ${mode.c}30`,overflow:'hidden'}}>
             <div style={{background:`${mode.c}15`,padding:'14px 18px',borderBottom:`1px solid ${mode.c}20`}}>
-              <div style={{fontSize:17,fontWeight:700,color:mode.c,marginBottom:8}}>{mode.label}</div>
+              <div style={{fontSize:PX(17),fontWeight:FW(700),color:mode.c,marginBottom:8}}>{mode.label}</div>
               <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                 {[mode.control, mode.risk, mode.flex].map((tag,ti)=>(
-                  <span key={ti} style={{background:`${mode.c}20`,color:mode.c,fontSize:11,fontWeight:600,padding:'2px 8px',borderRadius:100}}>{tag}</span>
+                  <span key={ti} style={{background:`${mode.c}20`,color:mode.c,fontSize:PX(11),fontWeight:FW(600),padding:'2px 8px',borderRadius:100}}>{tag}</span>
                 ))}
               </div>
             </div>
@@ -995,12 +1070,12 @@ const EntryModesSlide = () => (
               {mode.examples.map((ex,ei)=>(
                 <div key={ei} style={{display:'flex',gap:8,alignItems:'flex-start',marginBottom:7}}>
                   <div style={{width:5,height:5,borderRadius:'50%',background:mode.c,flexShrink:0,marginTop:7}}/>
-                  <div style={{fontSize:13,color:G,lineHeight:1.5}}>{ex}</div>
+                  <div style={{fontSize:PX(13),color:G,lineHeight:1.5}}>{ex}</div>
                 </div>
               ))}
               <div style={{marginTop:12,borderTop:`1px solid ${BDR}`,paddingTop:10}}>
                 {mode.brands.map((b,bi)=>(
-                  <div key={bi} style={{fontSize:12,color:`${mode.c}90`,fontStyle:'italic',marginBottom:4}}>→ {b}</div>
+                  <div key={bi} style={{fontSize:PX(12),color:`${mode.c}90`,fontStyle:'italic',marginBottom:4}}>→ {b}</div>
                 ))}
               </div>
             </div>
@@ -1015,14 +1090,14 @@ const TakeawaysSlide = ({data}) => (
   <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.04}/></div>
     <P>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(52,28),marginBottom:V(36,22),textAlign:'center'}}>{data.title}</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,28),marginBottom:V(36,22),textAlign:'center'}}>{data.title}</h2>
       <div style={{display:'flex',flexDirection:'column',gap:V(14,10),maxWidth:900,margin:'0 auto',width:'100%'}}>
         {data.items.map((item,i)=>(
           <div key={i} style={{background:BG2,padding:V('18px 24px','14px 14px'),borderRadius:14,border:`1px solid ${item.c}25`,display:'flex',gap:V(20,12),alignItems:'center'}}>
             <div style={{width:V(36,26),height:V(36,26),flexShrink:0,opacity:.85}}>{Ico[item.icon]?Ico[item.icon](item.c):null}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:V(17,15),fontWeight:700,color:item.c,marginBottom:4}}>{item.t}</div>
-              <div style={{fontSize:V(15,13),color:G,lineHeight:1.5}}>{item.d}</div>
+              <div style={{fontSize:PXV(17,15),fontWeight:FW(700),color:item.c,marginBottom:4}}>{item.t}</div>
+              <div style={{fontSize:PXV(15,13),color:G,lineHeight:1.5}}>{item.d}</div>
             </div>
           </div>
         ))}
@@ -1034,21 +1109,21 @@ const TakeawaysSlide = ({data}) => (
 const DiscussionSlide = ({data}) => (
   <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(48,28),marginBottom:V(36,22),color:T}}>{data.title}</h2>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(48,28),marginBottom:V(36,22),color:T}}>{data.title}</h2>
       <div style={{display:'flex',flexDirection:'column',gap:V(18,12)}}>
         {data.questions.map((q,i)=>(
           <div key={i} style={{background:BG2,padding:V('20px 24px','14px 16px'),borderRadius:14,border:`1px solid ${BDR}`,display:'flex',gap:V(18,12),alignItems:'flex-start'}}>
-            <div style={{fontFamily:"'Fraunces',serif",fontSize:V(32,22),fontWeight:900,color:T,lineHeight:1,flexShrink:0,minWidth:V(32,24)}}>{i+1}</div>
-            <div style={{fontSize:V(19,15),lineHeight:1.6,color:W}}>{q}</div>
+            <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(32,22),fontWeight:FW(900),color:T,lineHeight:1,flexShrink:0,minWidth:V(32,24)}}>{i+1}</div>
+            <div style={{fontSize:PXV(19,15),lineHeight:1.6,color:W}}>{q}</div>
           </div>
         ))}
       </div>
       {data.resource && (
         <div style={{marginTop:V(28,18),display:'flex',alignItems:'center',gap:14,background:`${T}0d`,border:`1px solid ${T}35`,borderRadius:14,padding:V('16px 24px','13px 16px')}}>
           <div style={{width:22,height:22,flexShrink:0}}>{Ico.link(T)}</div>
-          <div style={{fontSize:V(16,14),color:G,lineHeight:1.5}}>
+          <div style={{fontSize:PXV(16,14),color:G,lineHeight:1.5}}>
             {data.resource.label}{' '}
-            <a href={data.resource.url} target="_blank" rel="noopener noreferrer" style={{color:T2,fontWeight:700,textDecoration:'none',borderBottom:`1px solid ${T2}60`}}>{data.resource.name} →</a>
+            <a href={data.resource.url} target="_blank" rel="noopener noreferrer" style={{color:T2,fontWeight:FW(700),textDecoration:'none',borderBottom:`1px solid ${T2}60`}}>{data.resource.name} →</a>
           </div>
         </div>
       )}
@@ -1061,23 +1136,23 @@ const ExerciseSlide = ({data}) => {
   return(
     <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',maxWidth:1100,margin:'0 auto',zIndex:2})}>
       <P>
-        <ModuleTag module={data.module} color={data.ac||T}/>
-        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(40,24),color:(data.ac||T),textAlign:'center',marginBottom:22}}>{data.title}</h2>
-        <div style={{fontSize:V(22,16),lineHeight:1.55,textAlign:'center',marginBottom:V(32,20),color:W}}>{data.question}</div>
+        <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(40,24),color:(AC(data.ac)||T),textAlign:'center',marginBottom:22}}>{data.title}</h2>
+        <div style={{fontSize:PXV(22,16),lineHeight:1.55,textAlign:'center',marginBottom:V(32,20),color:W}}>{data.question}</div>
         <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:V(28,20)}}>
           {data.options.map((opt,i)=>(
-            <div key={i} style={{padding:V('18px 22px','14px 16px'),borderRadius:12,border:revealed?(i===data.correct?`2px solid ${OK}`:`1px solid ${RD}30`):`1px solid ${BDR}`,background:revealed?(i===data.correct?`${OK}12`:`${RD}08`):BG2,fontSize:V(18,15),transition:'all .25s',color:revealed?(i===data.correct?OK:G):W}}>
+            <div key={i} style={{padding:V('18px 22px','14px 16px'),borderRadius:12,border:revealed?(i===data.correct?`2px solid ${OK}`:`1px solid ${RD}30`):`1px solid ${BDR}`,background:revealed?(i===data.correct?`${OK}12`:`${RD}08`):BG2,fontSize:PXV(18,15),transition:'all .25s',color:revealed?(i===data.correct?OK:G):W}}>
               {opt}
             </div>
           ))}
         </div>
         <div style={{textAlign:'center'}}>
           {!revealed?(
-            <button onClick={()=>setRevealed(true)} style={{background:(data.ac||T),color:'#000',border:'none',padding:'15px 42px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+            <button onClick={()=>setRevealed(true)} style={{background:(AC(data.ac)||T),color:INK(),border:'none',padding:'15px 42px',fontSize:PX(16),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
               Reveal Answer
             </button>
           ):(
-            <div style={{background:`${data.ac||T}12`,border:`1px solid ${data.ac||T}35`,padding:V('18px 24px','14px 16px'),borderRadius:12,color:(data.ac||T),fontSize:V(17,14),lineHeight:1.6,textAlign:'left'}}>
+            <div style={{background:`${AC(data.ac)||T}12`,border:`1px solid ${AC(data.ac)||T}35`,padding:V('18px 24px','14px 16px'),borderRadius:12,color:(AC(data.ac)||T),fontSize:PXV(17,14),lineHeight:1.6,textAlign:'left'}}>
               <strong>Explanation:</strong> {data.explanation}
             </div>
           )}
@@ -1092,9 +1167,9 @@ const QuizIntroSlide = ({data,onStart}) => (
     <div className="bg-art"><BgGlobe opacity={.05}/></div>
     <P style={{textAlign:'center'}}>
       <div style={{width:V(80,60),height:V(80,60),margin:'0 auto 28px',opacity:.8}}>{Ico.target(T)}</div>
-      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(68,38),marginBottom:14}}>{data.title}</h1>
-      <p style={{fontSize:V(22,16),color:G,marginBottom:V(48,32)}}>{data.subtitle}</p>
-      <button onClick={onStart} style={{background:T,color:'#000',border:'none',padding:'18px 56px',fontSize:20,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(68,38),marginBottom:14}}>{data.title}</h1>
+      <p style={{fontSize:PXV(22,16),color:G,marginBottom:V(48,32)}}>{data.subtitle}</p>
+      <button onClick={onStart} style={{background:T,color:INK(),border:'none',padding:'18px 56px',fontSize:PX(20),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
         Start Assessment →
       </button>
     </P>
@@ -1122,17 +1197,17 @@ const QuizSlide = ({data,onFinish}) => {
     return(
       <div style={SR({display:'flex',height:'100%',alignItems:'center',justifyContent:'center',flexDirection:'column',padding:V(0,'48px 24px'),zIndex:2})}>
         <P style={{textAlign:'center'}}>
-          <div style={{fontFamily:"'Fraunces',serif",fontSize:V(96,64),color:rating.c,marginBottom:8}}>{score}/{data.questions.length}</div>
-          <div style={{fontFamily:"'Fraunces',serif",fontSize:V(32,22),color:rating.c,marginBottom:14}}>{rating.l}</div>
-          <div style={{fontSize:18,color:G,marginBottom:36}}>{pct}% correct answers</div>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(96,64),color:rating.c,marginBottom:8}}>{score}/{data.questions.length}</div>
+          <div style={{fontFamily:"'Fraunces',serif",fontSize:PXV(32,22),color:rating.c,marginBottom:14}}>{rating.l}</div>
+          <div style={{fontSize:PX(18),color:G,marginBottom:36}}>{pct}% correct answers</div>
           <div style={{display:'flex',gap:V(10,8),justifyContent:'center',flexWrap:'wrap',maxWidth:700,marginBottom:36}}>
             {data.questions.map((q,i)=>(
-              <div key={i} style={{width:V(44,36),height:V(44,36),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:answers[i]===q.correct?`${OK}25`:`${RD}20`,border:`2px solid ${answers[i]===q.correct?OK:RD}`,fontSize:V(16,14),color:answers[i]===q.correct?OK:RD,fontWeight:700}}>
+              <div key={i} style={{width:V(44,36),height:V(44,36),borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',background:answers[i]===q.correct?`${OK}25`:`${RD}20`,border:`2px solid ${answers[i]===q.correct?OK:RD}`,fontSize:PXV(16,14),color:answers[i]===q.correct?OK:RD,fontWeight:FW(700)}}>
                 {answers[i]===q.correct?'✓':'✗'}
               </div>
             ))}
           </div>
-          <button onClick={onFinish} style={{background:T,color:'#000',border:'none',padding:'14px 40px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+          <button onClick={onFinish} style={{background:T,color:INK(),border:'none',padding:'14px 40px',fontSize:PX(16),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
             Continue →
           </button>
         </P>
@@ -1146,12 +1221,12 @@ const QuizSlide = ({data,onFinish}) => {
     <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
       <P>
         <div style={{display:'flex',justifyContent:'space-between',marginBottom:20,alignItems:'center',gap:14}}>
-          <div style={{fontSize:12,color:G,fontWeight:700,letterSpacing:2}}>QUESTION {current+1} / {data.questions.length}</div>
+          <div style={{fontSize:PX(12),color:G,fontWeight:FW(700),letterSpacing:2}}>QUESTION {current+1} / {data.questions.length}</div>
           <div style={{width:V(220,100),height:5,background:BG2,borderRadius:3,overflow:'hidden'}}>
             <div style={{height:'100%',background:`linear-gradient(90deg,${T},${T2})`,width:`${((current+1)/data.questions.length)*100}%`,transition:'width .3s'}}/>
           </div>
         </div>
-        <h3 style={{fontFamily:"'Fraunces',serif",fontSize:V(34,21),marginBottom:V(28,18),color:W,lineHeight:1.35}}>{q.q}</h3>
+        <h3 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(34,21),marginBottom:V(28,18),color:W,lineHeight:1.35}}>{q.q}</h3>
         <div style={{display:'flex',flexDirection:'column',gap:11,marginBottom:24}}>
           {q.opts.map((opt,i)=>{
             let bg=BG2,border=`1px solid ${BDR}`,color=W;
@@ -1160,14 +1235,14 @@ const QuizSlide = ({data,onFinish}) => {
               else if(i===answers[current]){bg=`${RD}10`;border=`2px solid ${RD}`;color=RD;}
             }
             return(
-              <div key={i} onClick={()=>answer(i)} style={{padding:V('15px 20px','13px 14px'),borderRadius:10,border,background:bg,fontSize:V(18,15),color,cursor:answered?'default':'pointer',transition:'all .2s'}}>
+              <div key={i} onClick={()=>answer(i)} style={{padding:V('15px 20px','13px 14px'),borderRadius:10,border,background:bg,fontSize:PXV(18,15),color,cursor:answered?'default':'pointer',transition:'all .2s'}}>
                 {opt}
               </div>
             );
           })}
         </div>
         {answered&&(
-          <button onClick={next} style={{background:T,color:'#000',border:'none',padding:'13px 34px',fontSize:16,fontWeight:700,borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+          <button onClick={next} style={{background:T,color:INK(),border:'none',padding:'13px 34px',fontSize:PX(16),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
             {current<data.questions.length-1?'Next Question →':'See Results →'}
           </button>
         )}
@@ -1181,12 +1256,12 @@ const ClosingSlide = ({data}) => (
     <div className="bg-art"><BgGlobe opacity={.06}/></div>
     <P>
       <div style={{width:60,height:60,margin:'0 auto 28px',opacity:.7}}>{Ico.globe(T)}</div>
-      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:V(62,34),marginBottom:20,lineHeight:1.1}}>{data.title}</h1>
-      <p style={{fontSize:V(20,16),color:G,marginBottom:V(40,28),whiteSpace:'pre-line',lineHeight:1.7}}>{data.subtitle}</p>
+      <h1 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(62,34),marginBottom:20,lineHeight:1.1}}>{data.title}</h1>
+      <p style={{fontSize:PXV(20,16),color:G,marginBottom:V(40,28),whiteSpace:'pre-line',lineHeight:1.7}}>{data.subtitle}</p>
       <div style={{background:`${T}10`,border:`1px solid ${T}30`,borderRadius:14,padding:V('22px 36px','16px 18px'),maxWidth:800,margin:'0 auto'}}>
-        <div style={{fontSize:V(18,15),color:W,fontStyle:'italic',lineHeight:1.7}}>{data.quote}</div>
+        <div style={{fontSize:PXV(18,15),color:W,fontStyle:'italic',lineHeight:1.7}}>{data.quote}</div>
       </div>
-      <div style={{marginTop:V(40,28),fontSize:V(13,11),color:`${G}60`,letterSpacing:2,textTransform:'uppercase'}}>Escuela de Administración · Marketing Plan · Ferrell & Hartline, Marketing Strategy</div>
+      <div style={{marginTop:V(40,28),fontSize:PXV(13,11),color:`${G}60`,letterSpacing:2,textTransform:'uppercase'}}>Escuela de Administración · Marketing Plan · Ferrell & Hartline, Marketing Strategy</div>
     </P>
   </div>
 );
@@ -1309,21 +1384,21 @@ const Diagram = ({kind,items,ac}) => {
   return null;
 };
 
-const DiagramSlide = ({data}) => { const AC=data.ac||T; return (
+const DiagramSlide = ({data}) => { const AC=AC(data.ac)||T; return (
   <div style={SR({padding:V('0 70px','26px 16px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       {data.module&&<ModuleTag module={data.module} color={AC}/>}
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(38,23),color:AC,marginBottom:V(4,3),lineHeight:1.1}}>{data.title}</h2>
-      {data.subtitle&&<p style={{color:G,fontSize:V(14,12),marginBottom:V(18,12)}}>{data.subtitle}</p>}
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(38,23),color:AC,marginBottom:V(4,3),lineHeight:1.1}}>{data.title}</h2>
+      {data.subtitle&&<p style={{color:G,fontSize:PXV(14,12),marginBottom:V(18,12)}}>{data.subtitle}</p>}
       <Diagram kind={data.kind} items={data.items} ac={AC}/>
-      {data.note&&<p style={{color:G,fontSize:12,marginTop:12,fontStyle:'italic',opacity:.75}}>{data.note}</p>}
+      {data.note&&<p style={{color:G,fontSize:PX(12),marginTop:12,fontStyle:'italic',opacity:.75}}>{data.note}</p>}
     </P>
   </div>
 ); };
 
 // ── PROMPT — copy-paste AI mother prompt ────────────────────────────────
 const PromptSlide = ({data}) => {
-  const c = data.ac || data.color || T;
+  const c = AC(data.ac) || data.color || T;
   const [copied,setCopied] = useState(false);
   const copy = () => {
     try { navigator.clipboard.writeText(data.prompt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1600);}); }
@@ -1334,10 +1409,10 @@ const PromptSlide = ({data}) => {
     <div className="bg-art"><BgGlobe opacity={.035}/></div>
     <P>
       <ModuleTag module={data.tool||data.module} color={c}/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:V(38,24),color:W,margin:'0 0 10px',lineHeight:1.1}}>{data.title}</h2>
-      <p style={{fontSize:V(17,13),lineHeight:1.6,color:G,margin:'0 0 18px',maxWidth:900}}>{data.intro}</p>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(38,24),color:W,margin:'0 0 10px',lineHeight:1.1}}>{data.title}</h2>
+      <p style={{fontSize:PXV(17,13),lineHeight:1.6,color:G,margin:'0 0 18px',maxWidth:900}}>{data.intro}</p>
       <div style={{position:'relative',background:'#0a1322',border:`1px solid ${c}45`,borderLeft:`4px solid ${c}`,borderRadius:10,padding:V('22px 24px','16px 14px'),maxHeight:V('44vh','46vh'),overflowY:'auto'}}>
-        <button onClick={copy} style={{position:'absolute',top:12,right:12,background:c,color:'#0a1322',border:'none',borderRadius:7,padding:'7px 15px',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:"'DM Sans',sans-serif",zIndex:3}}>{copied?'Copied ✓':'Copy'}</button>
+        <button onClick={copy} style={{position:'absolute',top:12,right:12,background:c,color:'#0a1322',border:'none',borderRadius:7,padding:'7px 15px',fontSize:PX(13),fontWeight:FW(700),cursor:'pointer',fontFamily:"'DM Sans',sans-serif",zIndex:3}}>{copied?'Copied ✓':'Copy'}</button>
         <pre style={{margin:0,whiteSpace:'pre-wrap',wordBreak:'break-word',fontFamily:"'Courier New',ui-monospace,monospace",fontSize:V(14.5,11.5),lineHeight:1.62,color:'#d7e2f2',paddingRight:V(64,52)}}>{data.prompt}</pre>
       </div>
       {data.output&&<div style={{marginTop:14,fontSize:V(15,12.5),color:c,display:'flex',gap:10,alignItems:'flex-start'}}><div style={{width:16,height:16,flexShrink:0,marginTop:2}}>{Ico.zap(c)}</div>{data.output}</div>}
@@ -1394,6 +1469,7 @@ function App(){
   },[next,prev,s.type]);
 
   const renderSlide=()=>{
+    TIPO = s.type;
     switch(s.type){
       case 'title':            return <TitleSlide data={s}/>;
       case 'impact':           return <ImpactSlide data={s}/>;
@@ -1428,29 +1504,29 @@ function App(){
       <div className="bg-grid"/>
       <div className="bg-glow"/>
       <div className="bg-glow-left"/>
-      <div key={cur} className={`slide-enter${MOB?' slide-scroll':''}`} style={{flex:1,position:'relative',overflow:MOB?'auto':'hidden'}}>
+      <div key={cur} className={`slide-enter${(MOB||PROJ)?' slide-scroll':''}`} style={{flex:1,position:'relative',overflow:(MOB||PROJ)?'auto':'hidden'}}>
         {renderSlide()}
       </div>
       {/* FOOTER NAV */}
       <div style={{height:V(72,60),borderTop:`1px solid ${BDR}`,display:'flex',alignItems:'center',justifyContent:'space-between',padding:V('0 40px','0 14px'),gap:V(0,10),zIndex:10,background:BG2,flexShrink:0}}>
         <div style={{display:'flex',alignItems:'center',gap:14}}>
           {!MOB&&<div style={{display:'flex',flexDirection:'column',gap:2}}>
-            <div style={{fontSize:12,color:T,fontWeight:700,letterSpacing:3,textTransform:'uppercase'}}>Marketing Plan</div>
-            <div style={{fontSize:11,color:`${G}70`,letterSpacing:1}}>Session 9 · Distribution & Supply Chain</div>
+            <div style={{fontSize:PX(12),color:T,fontWeight:FW(700),letterSpacing:3,textTransform:'uppercase'}}>Marketing Plan</div>
+            <div style={{fontSize:PX(11),color:`${G}70`,letterSpacing:1}}>Session 9 · Distribution & Supply Chain</div>
           </div>}
           {!MOB&&<button onClick={()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});else document.exitFullscreen();}} title="Fullscreen (F)" style={{background:'transparent',border:`1px solid ${BDR}`,color:G,width:32,height:32,borderRadius:8,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',marginLeft:8}}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="14" height="14"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
           </button>}
-          {MOB&&<div style={{fontSize:10,color:T,fontWeight:700,letterSpacing:1,textTransform:'uppercase',whiteSpace:'nowrap'}}>Mkt Plan · S9</div>}
+          {MOB&&<div style={{fontSize:PX(10),color:T,fontWeight:FW(700),letterSpacing:1,textTransform:'uppercase',whiteSpace:'nowrap'}}>Mkt Plan · S9</div>}
         </div>
         <div style={{display:'flex',alignItems:'center',gap:V(20,10),flex:V('none',1),justifyContent:'center'}}>
-          <button onClick={prev} disabled={cur===0} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===0?'default':'pointer',opacity:cur===0?.25:1,fontSize:18,fontFamily:'inherit',flexShrink:0}}>←</button>
+          <button onClick={prev} disabled={cur===0} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===0?'default':'pointer',opacity:cur===0?.25:1,fontSize:PX(18),fontFamily:'inherit',flexShrink:0}}>←</button>
           <div style={{width:V(300,'100%'),maxWidth:300,height:4,background:BG3,borderRadius:3,overflow:'hidden',flex:V('none',1)}}>
             <div style={{height:'100%',background:`linear-gradient(90deg,${T},${T2})`,width:`${((cur+1)/total)*100}%`,transition:'width .4s cubic-bezier(.4,0,.2,1)',borderRadius:3}}/>
           </div>
-          <button onClick={next} disabled={cur===total-1} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===total-1?'default':'pointer',opacity:cur===total-1?.25:1,fontSize:18,fontFamily:'inherit',flexShrink:0}}>→</button>
+          <button onClick={next} disabled={cur===total-1} style={{background:'transparent',border:`1px solid ${BDR}`,color:W,width:42,height:42,borderRadius:'50%',cursor:cur===total-1?'default':'pointer',opacity:cur===total-1?.25:1,fontSize:PX(18),fontFamily:'inherit',flexShrink:0}}>→</button>
         </div>
-        <div style={{fontSize:V(14,12),color:G,fontWeight:600,fontFamily:"'Fraunces',serif",whiteSpace:'nowrap'}}>{cur+1} / {total}</div>
+        <div style={{fontSize:PXV(14,12),color:G,fontWeight:FW(600),fontFamily:"'Fraunces',serif",whiteSpace:'nowrap'}}>{cur+1} / {total}</div>
       </div>
     </div>
   );
@@ -1458,12 +1534,288 @@ function App(){
 
 const root=ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App/>);
+window.__rerender = () => root.render(<App/>);
 </script>
 <style>
-html.lightmode{filter:invert(1) hue-rotate(180deg);background:#fff;}
+html.proyector,html.proyector body{background:#fff;color:#0b0f14}
+html.proyector .bg-grid,html.proyector .bg-glow,html.proyector .bg-glow-left,html.proyector .bg-art{display:none}
+html.proyector #pmode{background:#0b0f14;color:#fff;border-color:#0b0f14}
+/* La diapositiva se desplaza por DENTRO; la barra de navegación no se va de
+   pantalla. El centrado va con margin:auto y NO con justify-content: dentro de
+   una caja con scroll, justify-content:center recorta el principio del
+   contenido y lo deja inalcanzable. */
+html.proyector .slide-enter{display:flex;flex-direction:column}
+html.proyector .slide-enter>*{margin:auto;width:100%;max-width:1560px}
 #pmode{position:fixed;top:14px;right:14px;z-index:99999;background:rgba(127,127,127,.18);border:1px solid rgba(127,127,127,.45);color:inherit;font:600 12px/1 'DM Sans',sans-serif;letter-spacing:.5px;padding:9px 13px;border-radius:8px;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
 #pmode:hover{background:rgba(127,127,127,.32);}
 </style>
-<button id="pmode" onclick="document.documentElement.classList.toggle('lightmode')" title="Modo proyector / aula iluminada (light mode)">☀ Proyector</button>
+<button id="pmode" onclick="toggleProyector()" title="Modo proyector / aula iluminada (light mode)">☀ Proyector</button>
+<script>
+/* ── arreglos proyector ── */
+// React monta un nodo nuevo con className "slide-enter" cada vez que cambia la
+// diapositiva (lleva key={cur}); los re-render dentro de la misma diapositiva
+// reutilizan el nodo, así que esto NO se dispara al pulsar "Reveal answer".
+(function(){
+  var raiz = document.getElementById('root');
+  if (!raiz || !window.MutationObserver) return;
+  function arriba(){
+    window.scrollTo(0, 0);
+    if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+    var s = raiz.querySelector('.slide-enter');
+    if (s) s.scrollTop = 0;
+  }
+  new MutationObserver(function(muts){
+    for (var i = 0; i < muts.length; i++) {
+      var add = muts[i].addedNodes;
+      for (var j = 0; j < add.length; j++) {
+        var n = add[j];
+        if (n.nodeType === 1 && String(n.className || '').indexOf('slide-enter') > -1) {
+          arriba();
+          requestAnimationFrame(arriba);   // por si la animación de entrada mueve algo
+          return;
+        }
+      }
+    }
+  }).observe(raiz, {childList: true, subtree: true});
+})();
+</script>
+<style>
+#vz{position:fixed;inset:0;z-index:100000;background:rgba(8,10,14,.97);display:none;
+  touch-action:none;overscroll-behavior:contain}
+#vz.on{display:block}
+html.proyector #vz{background:rgba(232,237,243,.985)}
+#vz .lienzo svg{background:#fff;border-radius:10px;box-shadow:0 10px 50px rgba(0,0,0,.45);padding:10px}
+html.proyector #vz .lienzo svg{box-shadow:0 10px 40px rgba(0,0,0,.22);border:1px solid #C9D4E0}
+#vz .cerrar{background:#0072CE !important;border-color:#0072CE !important;color:#fff !important;
+  box-shadow:0 4px 16px rgba(0,0,0,.3)}
+#vz .lienzo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  transform-origin:50% 50%;will-change:transform}
+#vz .lienzo svg{max-width:96vw;max-height:88vh;width:auto;height:auto}
+#vz .cerrar{position:fixed;top:14px;right:14px;z-index:2;background:rgba(127,127,127,.22);
+  border:1px solid rgba(127,127,127,.5);color:#fff;font:700 13px/1 system-ui,sans-serif;
+  padding:11px 15px;border-radius:9px;cursor:pointer}
+html.proyector #vz .cerrar{color:#0b0f14}
+#vz .pista{position:fixed;left:0;right:0;bottom:16px;text-align:center;
+  font:600 12px/1.4 system-ui,sans-serif;color:rgba(255,255,255,.62);pointer-events:none}
+html.proyector #vz .pista{color:rgba(0,0,0,.55)}
+.zoomable{cursor:zoom-in}
+.tocar{position:absolute;right:8px;bottom:8px;background:rgba(127,127,127,.2);
+  border:1px solid rgba(127,127,127,.42);border-radius:7px;padding:5px 9px;
+  font:700 10px/1 system-ui,sans-serif;color:inherit;opacity:.75;pointer-events:none}
+#hintmodo{position:fixed;left:12px;right:12px;bottom:12px;z-index:99998;
+  background:#0072CE;color:#fff;border-radius:12px;padding:13px 15px;
+  font:600 13px/1.45 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.4);display:none}
+#hintmodo b{display:block;font-size:14px;margin-bottom:2px}
+#hintmodo .x{position:absolute;top:8px;right:11px;font-size:17px;opacity:.75;cursor:pointer}
+</style>
+<div id="vz"><div class="lienzo"></div>
+  <button class="cerrar" onclick="window.__vzCerrar()">Cerrar ✕</button>
+  <div class="pista">Pellizca para acercar · aleja del todo para volver al encuadre</div>
+</div>
+<script>
+/* ── visor y memoria de modo ── */
+(function(){
+  var CLAVE = 'curso-modo';
+
+  /* ── 1 · recordar el modo entre capítulos ─────────────────────────── */
+  function aplicaGuardado(){
+    var q = null;
+    try { q = localStorage.getItem(CLAVE); } catch(e){}
+    if (q !== 'claro') return;
+    var t = setInterval(function(){
+      if (!window.toggleProyector) return;
+      clearInterval(t);
+      if (!document.documentElement.classList.contains('proyector')) window.toggleProyector();
+    }, 60);
+    setTimeout(function(){ clearInterval(t); }, 6000);
+  }
+  aplicaGuardado();
+
+  var btn = document.getElementById('pmode');
+  if (btn) btn.addEventListener('click', function(){
+    setTimeout(function(){
+      try {
+        localStorage.setItem(CLAVE,
+          document.documentElement.classList.contains('proyector') ? 'claro' : 'oscuro');
+      } catch(e){}
+      var h = document.getElementById('hintmodo');
+      if (h) h.style.display = 'none';
+    }, 30);
+  });
+
+  /* aviso la primera vez, sólo en pantalla pequeña */
+  function pista(){
+    if (window.innerWidth > 820) return;
+    var visto = null;
+    try { visto = localStorage.getItem(CLAVE); } catch(e){}
+    if (visto) return;
+    var d = document.createElement('div');
+    d.id = 'hintmodo';
+    d.innerHTML = '<span class="x">&times;</span>' +
+      '<b>¿Tu profe proyecta en fondo claro?</b>' +
+      'Toca el botón <b style="display:inline">☀ Proyector</b> arriba a la derecha ' +
+      'y verás exactamente lo mismo que está en la pantalla del salón.';
+    document.body.appendChild(d);
+    d.style.display = 'block';
+    d.querySelector('.x').onclick = function(){
+      d.style.display = 'none';
+      try { localStorage.setItem(CLAVE, 'oscuro'); } catch(e){}
+    };
+    setTimeout(function(){ if (d) d.style.display = 'none'; }, 14000);
+  }
+  window.addEventListener('load', function(){ setTimeout(pista, 1200); });
+
+  /* ── 2 · visor de diagramas a pantalla completa ───────────────────── */
+  var vz = document.getElementById('vz'), lienzo = vz.querySelector('.lienzo');
+  var esc = 1, x = 0, y = 0, d0 = 0, esc0 = 1, px = 0, py = 0, arrastrando = false;
+
+  function pinta(){ lienzo.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + esc + ')'; }
+  function encuadre(){ esc = 1; x = 0; y = 0; pinta(); }
+
+  function decorativo(el){
+    /* el arte de fondo va casi transparente y sin recibir clics */
+    for (var i = 0, n = el; i < 4 && n && n !== document.body; i++, n = n.parentElement){
+      var cs = getComputedStyle(n);
+      if (parseFloat(cs.opacity) < 0.3) return true;
+      if (cs.pointerEvents === 'none') return true;
+      var cl = String(n.className && n.className.baseVal !== undefined
+                      ? n.className.baseVal : (n.className || ''));
+      if (/bg-(art|grid|glow)/.test(cl)) return true;
+    }
+    return false;
+  }
+  function grande(svg){
+    var vb = (svg.getAttribute('viewBox') || '').split(/[ ,]+/);
+    if (vb.length < 4) return false;
+    if (!(+vb[2] >= 200 && +vb[3] >= 120)) return false;   // fuera los iconos de 24×24
+    return !decorativo(svg);                                // fuera el arte de fondo
+  }
+
+  window.__vzAbrir = function(svg){
+    lienzo.innerHTML = '';
+    var c = svg.cloneNode(true);
+    c.removeAttribute('style');
+    c.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    lienzo.appendChild(c);
+    encuadre();
+    vz.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  };
+  window.__vzCerrar = function(){
+    vz.classList.remove('on');
+    lienzo.innerHTML = '';
+    document.body.style.overflow = '';
+  };
+
+  /* abrir por delegación: sobrevive a cada re-render de React */
+  function pantallaChica(){
+    return window.innerWidth <= 820 ||
+           (window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+  }
+  document.addEventListener('click', function(e){
+    if (vz.classList.contains('on')) return;
+    if (!pantallaChica()) return;      /* en proyector el esquema ya se ve grande:
+                                          abrirlo taparía la proyección entera */
+    var svg = e.target.closest ? e.target.closest('svg') : null;
+    if (!svg || !grande(svg)) return;
+    if (svg.closest('#vz')) return;
+    e.preventDefault();
+    window.__vzAbrir(svg);
+  }, true);
+
+  /* marcar los diagramas como ampliables */
+  function marcar(){
+    document.querySelectorAll('#root svg').forEach(function(s){
+      if (!grande(s) || s.classList.contains('zoomable')) return;
+      s.classList.add('zoomable');
+      var p = s.parentNode;
+      if (p && pantallaChica() && !p.querySelector('.tocar')) {
+        var cs = getComputedStyle(p);
+        if (cs.position === 'static') p.style.position = 'relative';
+        var b = document.createElement('span');
+        b.className = 'tocar'; b.textContent = 'Toca para ampliar';
+        p.appendChild(b);
+      }
+    });
+  }
+  var raiz = document.getElementById('root');
+  if (raiz && window.MutationObserver) {
+    new MutationObserver(function(){ marcar(); }).observe(raiz, {childList:true, subtree:true});
+  }
+  window.addEventListener('load', function(){ setTimeout(marcar, 500); });
+
+  /* ── gestos ────────────────────────────────────────────────────────── */
+  function dist(t){
+    var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+  vz.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2){ d0 = dist(e.touches); esc0 = esc; }
+    else if (e.touches.length === 1 && esc > 1){
+      arrastrando = true; px = e.touches[0].clientX - x; py = e.touches[0].clientY - y;
+    }
+  }, {passive:true});
+  vz.addEventListener('touchmove', function(e){
+    if (e.touches.length === 2 && d0){
+      e.preventDefault();
+      esc = Math.min(6, Math.max(0.6, esc0 * (dist(e.touches) / d0)));
+      if (esc <= 1.02) { encuadre(); } else { pinta(); }
+    } else if (arrastrando && e.touches.length === 1){
+      e.preventDefault();
+      x = e.touches[0].clientX - px; y = e.touches[0].clientY - py; pinta();
+    }
+  }, {passive:false});
+  vz.addEventListener('touchend', function(e){
+    if (e.touches.length === 0){
+      arrastrando = false; d0 = 0;
+      /* alejar del todo = volver al encuadre original */
+      if (esc <= 1.02) encuadre();
+    }
+  }, {passive:true});
+
+  /* rueda del ratón, para el portátil */
+  vz.addEventListener('wheel', function(e){
+    if (!vz.classList.contains('on')) return;
+    e.preventDefault();
+    esc = Math.min(6, Math.max(0.6, esc * (e.deltaY < 0 ? 1.12 : 0.89)));
+    if (esc <= 1.02) encuadre(); else pinta();
+  }, {passive:false});
+
+  vz.addEventListener('dblclick', function(){ esc > 1.02 ? encuadre() : (esc = 2, pinta()); });
+
+  /* .lienzo cubre toda la pantalla, así que comparar con e.target===vz nunca
+     funcionaba. Cierra cualquier toque que NO caiga sobre el dibujo. */
+  vz.addEventListener('click', function(e){
+    if (e.target.closest && e.target.closest('svg')) return;
+    if (e.target.closest && e.target.closest('.cerrar')) return;
+    window.__vzCerrar();
+  });
+
+  /* las flechas y Escape cierran, en vez de quedar atrapadas detrás del visor */
+  document.addEventListener('keydown', function(e){
+    if (!vz.classList.contains('on')) return;
+    if (e.key === 'Escape' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' ||
+        e.key === ' ' || e.key === 'PageUp' || e.key === 'PageDown') {
+      window.__vzCerrar();
+    }
+  }, true);
+
+  /* si por lo que sea cambia la diapositiva, el visor no se queda encima */
+  if (raiz && window.MutationObserver) {
+    new MutationObserver(function(muts){
+      for (var i = 0; i < muts.length; i++) {
+        var add = muts[i].addedNodes;
+        for (var j = 0; j < add.length; j++) {
+          var n = add[j];
+          if (n.nodeType === 1 && String(n.className || '').indexOf('slide-enter') > -1) {
+            if (vz.classList.contains('on')) window.__vzCerrar();
+            return;
+          }
+        }
+      }
+    }).observe(raiz, {childList: true, subtree: true});
+  }
+})();
+</script>
 </body>
 </html>
