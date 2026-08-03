@@ -87,7 +87,7 @@ function _oscurece(h){                               // baja hasta 4,5:1
   }
   return '#333333';
 }
-function AC(c){                                      // acento seguro
+function ACC(c){                                      // acento seguro
   if(!c || !PROJ) return c;
   var k=String(c).toLowerCase();
   return AC_MAP[k] || _oscurece(k);
@@ -734,12 +734,12 @@ const ModuleTitleSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','48px 24px'),zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.05}/></div>
     <P style={{flex:1.5}}>
-      <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${AC(data.ac)||T}15`,border:`1px solid ${AC(data.ac)||T}40`,borderRadius:100,padding:'6px 18px',fontSize:PX(13),color:(AC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:24}}>
+      <div style={{display:'inline-flex',alignItems:'center',gap:8,background:`${ACC(data.ac)||T}15`,border:`1px solid ${ACC(data.ac)||T}40`,borderRadius:100,padding:'6px 18px',fontSize:PX(13),color:(ACC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:24}}>
         MODULE {data.num}
       </div>
       <h1 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(64,36),lineHeight:1.05,margin:'0 0 32px'}}>{data.title}</h1>
       <div style={{background:BG2,border:`1px solid ${BDR}`,borderRadius:12,padding:V('18px 24px','14px 16px'),fontSize:PXV(21,16),color:G,fontStyle:'italic',display:'flex',gap:14,alignItems:'center'}}>
-        <div style={{width:22,height:22,flexShrink:0,opacity:.6}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
+        <div style={{width:22,height:22,flexShrink:0,opacity:.6}}>{Ico[data.icon]?Ico[data.icon](ACC(data.ac)||T):null}</div>
         {data.question}
       </div>
     </P>
@@ -750,8 +750,8 @@ const ConceptSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(80,0),zIndex:2})}>
     <div className="bg-art"><BgGlobe opacity={.035}/></div>
     <P style={{flex:1.5}}>
-      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
-      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,30),color:(AC(data.ac)||T),marginBottom:V(28,18),lineHeight:1.1}}>{data.title}</h2>
+      <ModuleTag module={data.module} color={ACC(data.ac)||T}/>
+      <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(52,30),color:(ACC(data.ac)||T),marginBottom:V(28,18),lineHeight:1.1}}>{data.title}</h2>
       <p style={{fontSize:PXV(22,16),lineHeight:1.7,color:W,margin:'0 0 24px'}}>{data.text}</p>
       {data.highlight&&(
         <div style={{background:`${AM}10`,border:`1px solid ${AM}35`,borderRadius:10,padding:V('14px 20px','12px 14px'),fontSize:PXV(17,14),color:AM,display:'flex',gap:12,alignItems:'center'}}>
@@ -760,7 +760,7 @@ const ConceptSlide = ({data}) => (
       )}
     </P>
     {!MOB&&<P style={{flex:.65,display:'flex',justifyContent:'center',opacity:.07}}>
-      <div style={{width:340,height:340}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
+      <div style={{width:340,height:340}}>{Ico[data.icon]?Ico[data.icon](ACC(data.ac)||T):null}</div>
     </P>}
   </div>
 );
@@ -768,17 +768,17 @@ const ConceptSlide = ({data}) => (
 const CaseSlide = ({data}) => (
   <div style={SR({display:'flex',height:'100%',alignItems:'center',padding:V('0 100px','40px 22px'),gap:V(50,0),zIndex:2})}>
     {!MOB&&<P style={{flex:.6,display:'flex',justifyContent:'center',opacity:.2}}>
-      <div style={{width:240,height:240}}>{Ico[data.icon]?Ico[data.icon](AC(data.ac)||T):null}</div>
+      <div style={{width:240,height:240}}>{Ico[data.icon]?Ico[data.icon](ACC(data.ac)||T):null}</div>
     </P>}
     <P style={{flex:1.8}}>
-      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+      <ModuleTag module={data.module} color={ACC(data.ac)||T}/>
       <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(24,16)}}>{data.title}</h2>
       <div style={{background:`${RD}10`,borderLeft:`5px solid ${RD}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:14}}>
         <div style={{fontSize:PX(11),color:RD,fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The challenge</div>
         <p style={{margin:0,fontSize:PXV(17,14),lineHeight:1.65}}>{data.problem}</p>
       </div>
-      <div style={{background:`${AC(data.ac)||T}10`,borderLeft:`5px solid ${AC(data.ac)||T}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:12}}>
-        <div style={{fontSize:PX(11),color:(AC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The solution</div>
+      <div style={{background:`${ACC(data.ac)||T}10`,borderLeft:`5px solid ${ACC(data.ac)||T}`,padding:V('18px 22px','14px 14px'),borderRadius:'0 12px 12px 0',marginBottom:12}}>
+        <div style={{fontSize:PX(11),color:(ACC(data.ac)||T),fontWeight:FW(700),letterSpacing:2,textTransform:'uppercase',marginBottom:8}}>The solution</div>
         <p style={{margin:0,fontSize:PXV(17,14),lineHeight:1.65}}>{data.solution}</p>
       </div>
       <div style={{fontSize:PXV(15,13),color:AM,fontStyle:'italic',display:'flex',gap:8,alignItems:'flex-start'}}>
@@ -791,7 +791,7 @@ const CaseSlide = ({data}) => (
 const ComparisonSlide = ({data}) => (
   <div style={SR({padding:V('0 80px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
-      <ModuleTag module={data.module} color={AC(data.ac)||T}/>
+      <ModuleTag module={data.module} color={ACC(data.ac)||T}/>
       <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(44,26),marginBottom:V(28,18)}}>{data.title}</h2>
       <div style={{display:'grid',gridTemplateColumns:V('1fr 1fr','1fr'),gap:V(24,14)}}>
         {[data.left,data.right].map((side,si)=>(
@@ -1078,8 +1078,8 @@ const ExerciseSlide = ({data}) => {
   return(
     <div style={SR({padding:V('0 100px','32px 20px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',maxWidth:1100,margin:'0 auto',zIndex:2})}>
       <P>
-        <ModuleTag module={data.module} color={AC(data.ac)||T}/>
-        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(40,24),color:(AC(data.ac)||T),textAlign:'center',marginBottom:22}}>{data.title}</h2>
+        <ModuleTag module={data.module} color={ACC(data.ac)||T}/>
+        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(40,24),color:(ACC(data.ac)||T),textAlign:'center',marginBottom:22}}>{data.title}</h2>
         <div style={{fontSize:PXV(22,16),lineHeight:1.55,textAlign:'center',marginBottom:V(32,20),color:W}}>{data.question}</div>
         <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:V(28,20)}}>
           {data.options.map((opt,i)=>(
@@ -1090,11 +1090,11 @@ const ExerciseSlide = ({data}) => {
         </div>
         <div style={{textAlign:'center'}}>
           {!revealed?(
-            <button onClick={()=>setRevealed(true)} style={{background:(AC(data.ac)||T),color:INK(),border:'none',padding:'15px 42px',fontSize:PX(16),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
+            <button onClick={()=>setRevealed(true)} style={{background:(ACC(data.ac)||T),color:INK(),border:'none',padding:'15px 42px',fontSize:PX(16),fontWeight:FW(700),borderRadius:100,cursor:'pointer',fontFamily:'inherit'}}>
               Reveal Answer
             </button>
           ):(
-            <div style={{background:`${AC(data.ac)||T}12`,border:`1px solid ${AC(data.ac)||T}35`,padding:V('18px 24px','14px 16px'),borderRadius:12,color:(AC(data.ac)||T),fontSize:PXV(17,14),lineHeight:1.6,textAlign:'left'}}>
+            <div style={{background:`${ACC(data.ac)||T}12`,border:`1px solid ${ACC(data.ac)||T}35`,padding:V('18px 24px','14px 16px'),borderRadius:12,color:(ACC(data.ac)||T),fontSize:PXV(17,14),lineHeight:1.6,textAlign:'left'}}>
               <strong>Explanation:</strong> {data.explanation}
             </div>
           )}
@@ -1326,7 +1326,7 @@ const Diagram = ({kind,items,ac}) => {
   return null;
 };
 
-const DiagramSlide = ({data}) => { const AC=AC(data.ac)||T; return (
+const DiagramSlide = ({data}) => { const AC=ACC(data.ac)||T; return (
   <div style={SR({padding:V('0 70px','26px 16px'),height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',zIndex:2})}>
     <P>
       {data.module&&<ModuleTag module={data.module} color={AC}/>}
@@ -1340,7 +1340,7 @@ const DiagramSlide = ({data}) => { const AC=AC(data.ac)||T; return (
 
 // ── PROMPT — copy-paste AI mother prompt ────────────────────────────────
 const PromptSlide = ({data}) => {
-  const c = AC(data.ac) || data.color || T;
+  const c = ACC(data.ac) || data.color || T;
   const [copied,setCopied] = useState(false);
   const copy = () => {
     try { navigator.clipboard.writeText(data.prompt).then(()=>{setCopied(true);setTimeout(()=>setCopied(false),1600);}); }
