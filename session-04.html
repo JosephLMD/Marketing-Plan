@@ -52,10 +52,13 @@ const KP = 1.3;                                   // escala tipográfica
 /* ── tamaño por tipo ── */
 // Tipos que aprietan más contenido y por eso venían con letra más chica.
 let TIPO = '';
-const EXTRA_TIPO = {comparison:1.18, case:1.14, diagram:1.15, quiz:1.10,
-                    windows_grid:1.15, glocal_venn:1.15, value_chain_visual:1.15,
-                    five_stage_model:1.15, entry_modes:1.15, io_framework:1.15};
-const KT = () => KP * (EXTRA_TIPO[TIPO] || 1);
+const EXTRA_TIPO = {comparison:1.18, case:1.14, diagram:1.15, quiz:1.10};
+// Medido componente a componente: de los 28 esquemas, sólo el Venn de
+// glocalización usa position:absolute con medidas fijas. Los demás son
+// rejillas, flex o SVG: reflujen solos y su letra SÍ debe escalar.
+// El Venn no está aquí porque se amplía con transform en su propia diapositiva.
+const COMPUESTAS = [];
+const KT = () => COMPUESTAS.indexOf(TIPO) > -1 ? 1 : KP * (EXTRA_TIPO[TIPO] || 1);
 const PX  = n => PROJ ? Math.round(n*KT()) : n;       // tamaños sueltos
 const PXV = (d,m) => PROJ ? Math.round(d*KT()) : (MOB ? m : d);
 const FW  = w => PROJ ? Math.min(900, w+100) : w;   // un escalón más de peso
@@ -840,8 +843,8 @@ const ComparisonSlide = ({data}) => (
             </div>
             <div style={{padding:'16px 20px',display:'flex',flexDirection:'column',gap:12}}>
               {side.items.map((item,i)=>(
-                <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start'}}>
-                  <div style={{fontSize:PX(12),fontWeight:FW(700),color:side.color,minWidth:V(100,82),flexShrink:0,paddingTop:2}}>{item.k}</div>
+                <div key={i} style={{display:'grid',gridTemplateColumns:V(PX(104)+'px 1fr','84px 1fr'),columnGap:12,alignItems:'baseline'}}>
+                  <div style={{fontSize:PX(12),fontWeight:FW(700),color:side.color}}>{item.k}</div>
                   <div style={{fontSize:PXV(14,13),color:G,lineHeight:1.5}}>{item.v}</div>
                 </div>
               ))}
@@ -906,7 +909,7 @@ const GlocalVennSlide = () => (
       <h2 style={{fontFamily:"'Fraunces',serif",fontSize:PXV(42,26),marginBottom:V(28,18)}}>The Glocalization Framework</h2>
       <div style={{display:'flex',flexDirection:V('row','column'),gap:V(32,20),alignItems:'center'}}>
         {/* Venn-style diagram */}
-        <div style={{position:'relative',width:V(380,'100%'),maxWidth:380,height:V(220,190),flexShrink:0}}>
+        <div style={{position:'relative',width:V(470,'100%'),maxWidth:470,height:V(220,190),flexShrink:0}}>
           {/* Global circle */}
           <div style={{position:'absolute',left:0,top:10,width:V(260,'66%'),height:V(200,170),borderRadius:'50%',background:`${BL}15`,border:`2px solid ${BL}40`,display:'flex',flexDirection:'column',alignItems:'flex-start',justifyContent:'center',paddingLeft:V(24,16)}}>
             <div style={{fontSize:PXV(13,11),fontWeight:FW(700),color:BL,marginBottom:8}}>GLOBAL</div>
@@ -1451,6 +1454,7 @@ function App(){
 
   const renderSlide=()=>{
     TIPO = s.type;
+    try{ var d=document.documentElement; d.dataset.tipo = s.type; d.dataset.compuesta = (COMPUESTAS.indexOf(s.type)>-1 ? '1' : '0');}catch(e){}
     switch(s.type){
       case 'title':            return <TitleSlide data={s}/>;
       case 'impact':           return <ImpactSlide data={s}/>;

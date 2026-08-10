@@ -47,6 +47,11 @@
       .section{margin:32px 0 14px}
       footer{flex-direction:column}
     }
+  
+    .card .marca{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      height:86%;width:auto;max-width:88%;object-fit:contain;opacity:.26;
+      pointer-events:none;z-index:0;user-select:none}
+    .card>*:not(.marca){position:relative;z-index:1}
   </style>
 </head>
 <body>
@@ -55,7 +60,7 @@
 <div class="wrap">
   <div class="tag">Escuela de Administración · Marketing Strategy</div>
   <h1>Marketing Plan<br>Interactive Masterclasses</h1>
-  <p class="sub">Eleven interactive study decks built from the course sessions — concepts explained in depth, real brand cases, exercises with instant feedback, and a graded 10-question quiz in every session.</p>
+  <p class="sub">Eleven interactive study decks built from the course sessions: concepts explained in depth, real brand cases, exercises with instant feedback, and a graded 10-question quiz in every session.</p>
   <p class="hint">Works on any device · no installation · swipe on mobile, arrow keys on desktop · press F for fullscreen</p>
   <div class="prog"><span>11 of 11 ready</span><div class="bar"><i style="width:100%"></i></div><span>Course complete ✓</span></div>
 <!-- ══ QR del curso · generado sin librerías, funciona sin internet ══ -->
@@ -206,6 +211,15 @@ document.addEventListener('keydown',function(e){
       <p>Awareness → trial → purchase → repurchase → main brand: turning the funnel's gaps into measurable marketing objectives.</p>
       <div class="meta"><span class="pill">2 modules</span><span class="pill">2 exercises</span><span class="pill">8-question quiz</span></div>
       <div class="open">Open tool →</div>
+    </a>
+
+    <a class="card" style="--ac:var(--rd)" href="activity-one-new-coke.html">
+      <img class="marca" src="img/coke-mark.svg" alt="" aria-hidden="true" loading="lazy">
+      <div class="ch"><span>Activity 1</span><span class="badge ready">Ready</span></div>
+      <h2>The New Coke</h2>
+      <p>Coca-Cola just hired you. Invent the next Creation: a name, a flavour, a can and a campaign. Twelve past drops to learn from, and the exact sizes to design at.</p>
+      <div class="meta"><span class="pill">7 sections</span><span class="pill">group project</span><span class="pill">5.0 points</span></div>
+      <div class="open">Open the brief &rarr;</div>
     </a>
   </div>
 
