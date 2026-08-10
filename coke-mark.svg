@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1500" width="1500" height="1500" role="img" aria-label="Coca-Cola Creations">
+<title>Coca-Cola Creations</title>
+<desc>A can with a burst of sparks, standing for the Creations limited edition platform.</desc>
+
+<!-- Formas MACIZAS, no contornos. La primera versión iba a trazo fino y sobre
+     fondo oscuro, a baja opacidad, desaparecía: medía 1.04:1 contra el fondo
+     del hero, o sea nada. El trébol de Adidas se ve porque es una silueta
+     rellena; esta ahora hace lo mismo.
+
+     Todo en la misma familia de rojo y NADA de blanco. El blanco obligaría a
+     bajar la opacidad para no arruinar el texto que va encima: una cinta
+     blanca al 26 % dejaba el texto gris en 3.60:1 y AA pide 4.50:1.
+     Con un solo tono, el punto más claro del dibujo es #C8102E y el contraste
+     del texto se puede calcular exacto.
+     Lienzo 1500x1500, igual que las demás marcas. -->
+
+<g fill="#C8102E">
+
+  <!-- La lata. 306 de ancho por 742 de alto, algo más de 2.4 a 1, que es la
+       proporción real de una lata. La primera versión la hice de 512x596 y
+       al mirarla parecía un barril. Los hombros se estrechan arriba. -->
+  <path d="M597 458
+           C 597 420, 903 420, 903 458
+           L 903 1074
+           C 903 1120, 597 1120, 597 1074
+           Z"/>
+
+  <!-- las chispas: rombos macizos, se leen mucho mejor que las líneas -->
+  <path d="M750 108 l40 128 -40 128 -40 -128 z"/>
+  <path d="M300 286 l150 66 96 118 -150 -66 z"/>
+  <path d="M1200 286 l-150 66 -96 118 150 -66 z"/>
+  <path d="M170 700 l168 16 128 68 -168 -16 z"/>
+  <path d="M1330 700 l-168 16 -128 68 168 -16 z"/>
+
+  <!-- las estrellas de cuatro puntas que Creations pone siempre -->
+  <path d="M1214 1010 l44 100 100 44 -100 44 -44 100 -44 -100 -100 -44 100 -44 z"/>
+  <path d="M300 1064 l32 76 76 32 -76 32 -32 76 -32 -76 -76 -32 76 -32 z"/>
+
+</g>
+
+<!-- El detalle interior va en rojo OSCURO, nunca en blanco. Al quedar por
+     debajo del rojo base en luminancia, el peor caso para el texto de encima
+     sigue siendo #C8102E y la cuenta de contraste no se mueve. -->
+<g fill="#6E0A19">
+  <!-- la onda, el guiño a la cinta de la marca -->
+  <path d="M597 726 C 670 686, 830 786, 903 746 L 903 812
+           C 830 852, 670 752, 597 792 Z"/>
+  <!-- los dos rebordes, arriba y abajo -->
+  <path d="M598 508 C 640 494, 860 494, 902 508 L 902 538
+           C 860 524, 640 524, 598 538 Z"/>
+  <path d="M598 1000 C 640 986, 860 986, 902 1000 L 902 1030
+           C 860 1016, 640 1016, 598 1030 Z"/>
+</g>
+
+</svg>

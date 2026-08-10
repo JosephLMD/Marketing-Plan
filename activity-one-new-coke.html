@@ -45,7 +45,11 @@ header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
 .hero p{font-size:clamp(16px,2.3vw,20px);color:#C9CCD3;max-width:62ch;line-height:1.55}
 .hero .meta{margin-top:24px;font-size:13.5px;color:#8A9099}
 .hero .mark{position:absolute;right:-40px;top:50%;transform:translateY(-50%);height:150%;
-  opacity:.10;pointer-events:none;z-index:0}
+  opacity:.26;pointer-events:none;z-index:0}
+  /* Iba en .10, que servía para el bodegón a color porque tenía blanco.
+     Con la marca de un solo tono, .10 medía 1.04:1 contra el fondo: invisible.
+     .26 la deja en 1.17:1 y el texto más débil del hero (#8A9099) aguanta
+     en 4.72:1, por encima del 4.5:1 que pide AA. */
 
 .idx{padding:38px 0 10px}
 .idx h2{font-size:14px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
@@ -249,7 +253,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
 </header>
 
 <div class="hero">
-  <img class="mark" src="img/coke-mark.svg" alt="" aria-hidden="true">
+  <img class="mark" src="coke-mark.svg" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="k">Activity 1 · Group project</div>
     <h1>You just got the client.<br>It is Coca-Cola.</h1>
@@ -364,7 +368,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
           <span class="cif">limited runs</span></div>
       </div>
       <div class="plat">
-        <div class="logo"><img src="img/coke-studio.png" alt="Coke Studio" loading="lazy"></div>
+        <div class="logo"><img src="coke-studio.png" alt="Coke Studio" loading="lazy"></div>
         <h4>Built on music</h4>
         <p>Started in Pakistan in 2008 and went global. Musicians record together and the
           sessions are released free. Coca-Cola is barely in the frame, and that is the point.
@@ -385,7 +389,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
     </div>
 
     <figure class="figura">
-      <img src="img/coke-logo-history.png" alt="The Coca-Cola logo from 1886 to today, showing each version and the years it was used." loading="lazy">
+      <img src="coke-logo-history.png" alt="The Coca-Cola logo from 1886 to today, showing each version and the years it was used." loading="lazy">
       <figcaption><b>Worth noticing before you design anything.</b> The wordmark has barely
         moved since 1941, and the shape of it has been recognisable since 1887. Creations
         change the colour, the world and the story around the can. They do not change the
@@ -631,7 +635,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
 
 
     <figure class="figura">
-      <img src="img/coke-move-kv.jpg" alt="Coca-Cola Move key visual: the can on the left, the Coca-Cola script filling the width, the campaign name top right and the Creations mark bottom right." loading="lazy" style="max-width:560px">
+      <img src="coke-move-kv.jpg" alt="Coca-Cola Move key visual: the can on the left, the Coca-Cola script filling the width, the campaign name top right and the Creations mark bottom right." loading="lazy" style="max-width:560px">
       <figcaption><b>What a Creations key visual actually looks like.</b> This is Move, the one
         with Rosalía. Notice the parts: the can on one side, the Coca-Cola script filling almost
         the whole width, the campaign name and "limited edition" small in a corner, the Creations
