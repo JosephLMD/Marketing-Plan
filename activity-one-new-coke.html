@@ -44,12 +44,19 @@ header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
   margin-bottom:18px}
 .hero p{font-size:clamp(16px,2.3vw,20px);color:#C9CCD3;max-width:62ch;line-height:1.55}
 .hero .meta{margin-top:24px;font-size:13.5px;color:#8A9099}
-.hero .mark{position:absolute;right:-40px;top:50%;transform:translateY(-50%);height:150%;
-  opacity:.26;pointer-events:none;z-index:0}
-  /* Iba en .10, que servía para el bodegón a color porque tenía blanco.
-     Con la marca de un solo tono, .10 medía 1.04:1 contra el fondo: invisible.
-     .26 la deja en 1.17:1 y el texto más débil del hero (#8A9099) aguanta
-     en 4.72:1, por encima del 4.5:1 que pide AA. */
+/* La marca del hero es el lettering con el chorro de color, pero pasado a un
+   solo tono. No es capricho: ghosteada detrás del texto, cualquier imagen que
+   conserve blancos tumba el contraste en cuanto se sube la opacidad. Con un
+   solo tono el píxel más claro es siempre #C8102E y la cuenta sale exacta.
+   Además, a un 26 % sobre negro los colores del original se volvían barro,
+   así que no se pierde nada visible y se gana el contraste garantizado.
+   El script queda en hueco, transparente, porque en el original era blanco.
+
+   Se dimensiona por ANCHO, no por alto: la imagen es apaisada (1.41:1) y
+   con height:150% se desbordaba a lo ancho y se comía el hero entero. */
+.hero .mark{position:absolute;right:-60px;top:50%;transform:translateY(-50%);
+  width:min(620px,58%);height:auto;opacity:.26;pointer-events:none;z-index:0}
+@media(max-width:760px){.hero .mark{width:86%;right:-70px;opacity:.20}}
 
 .idx{padding:38px 0 10px}
 .idx h2{font-size:14px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
@@ -84,6 +91,11 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
 
 .figura{background:#fff;border:1px solid var(--linea);border-radius:15px;padding:16px;
   margin:22px 0;box-shadow:var(--sombra);text-align:center}
+/* La lata en blanco viene a 350 px. Si se deja crecer se pone borrosa, así que
+   se le pone tope y se le da un fondo gris muy suave: es plata sobre blanco y
+   sin él los bordes del metal se pierden contra el fondo de la ficha. */
+.figura.lienzo{background:linear-gradient(180deg,#FBFBFA,#F0F0EC)}
+.figura.lienzo img{max-width:230px;margin-bottom:4px}
 .figura img{max-width:100%;height:auto;border-radius:9px;display:block;margin:0 auto}
 .figura figcaption{font-size:13.5px;color:var(--gris);margin-top:12px;line-height:1.5;
   text-align:left}
@@ -253,7 +265,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
 </header>
 
 <div class="hero">
-  <img class="mark" src="coke-mark.svg" alt="" aria-hidden="true">
+  <img class="mark" src="marca-splash.png" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="k">Activity 1 · Group project</div>
     <h1>You just got the client.<br>It is Coca-Cola.</h1>
@@ -360,7 +372,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
 
     <div class="plats">
       <div class="plat">
-        <div class="logo"><span class="txt">Creations</span></div>
+        <div class="logo"><img src="creations-lockup.png" alt="Coca-Cola Creations" loading="lazy"></div>
         <h4>Built on ideas</h4>
         <p>Limited edition drinks that answer a question: what does space taste like, what
           does a dream taste like. The drink is the souvenir of the idea.</p>
@@ -568,6 +580,14 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
         </ul></div>
     </div>
 
+    <figure class="figura lienzo">
+      <img src="lata-en-blanco.png" alt="A blank silver aluminium can with no label, water drops on the metal." loading="lazy">
+      <figcaption><b>This is what you are handing in, before you touch it.</b> Every Creation on
+        this page started here. Starlight, Dreamworld and Y3000 are all the same object with a
+        different idea wrapped around it, which is the whole point of the exercise: you are not
+        being asked to invent a drink, you are being asked to invent a reason. The artwork you
+        design in section 06 goes on this, and then into AR.</figcaption>
+    </figure>
 
     <div class="enclase">
       <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="#5BD4EE" stroke-width="1.6"
