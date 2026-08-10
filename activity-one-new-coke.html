@@ -96,6 +96,18 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
    sin él los bordes del metal se pierden contra el fondo de la ficha. */
 .figura.lienzo{background:linear-gradient(180deg,#FBFBFA,#F0F0EC)}
 .figura.lienzo img{max-width:230px;margin-bottom:4px}
+/* El tope de ancho iba en un style= dentro de la etiqueta, y un estilo en
+   linea le gana a la hoja de estilos: anulaba el max-width:100% de .figura img
+   y en el movil la foto salia a sus 419 px naturales dentro de una columna de
+   unos 320, o sea por fuera de la ficha. Con min() manda el que sea menor. */
+.figura.kv img{max-width:min(100%,560px)}
+
+/* Red de seguridad para la tabla de medidas: son tres columnas con textos
+   largos y en pantallas estrechas puede empujar el ancho de toda la pagina.
+   Si no cabe, que se deslice ella sola en vez de romper el resto. */
+.tabla-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0}
+.tabla-scroll .medidas{margin:0;min-width:520px}
+@media(min-width:640px){.tabla-scroll .medidas{min-width:0}}
 .figura img{max-width:100%;height:auto;border-radius:9px;display:block;margin:0 auto}
 .figura figcaption{font-size:13.5px;color:var(--gris);margin-top:12px;line-height:1.5;
   text-align:left}
@@ -654,8 +666,8 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
       the day. Use these.</p>
 
 
-    <figure class="figura">
-      <img src="coke-move-kv.jpg" alt="Coca-Cola Move key visual: the can on the left, the Coca-Cola script filling the width, the campaign name top right and the Creations mark bottom right." loading="lazy" style="max-width:560px">
+    <figure class="figura kv">
+      <img src="coke-move-kv.jpg" alt="Coca-Cola Move key visual: the can on the left, the Coca-Cola script filling the width, the campaign name top right and the Creations mark bottom right." loading="lazy">
       <figcaption><b>What a Creations key visual actually looks like.</b> This is Move, the one
         with Rosalía. Notice the parts: the can on one side, the Coca-Cola script filling almost
         the whole width, the campaign name and "limited edition" small in a corner, the Creations
@@ -664,7 +676,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
         the sizes below.</i></figcaption>
     </figure>
 
-    <table class="medidas">
+    <div class="tabla-scroll"><table class="medidas">
       <thead><tr><th>Piece</th><th>Size</th></tr></thead>
       <tbody>
         <tr><td>Key visual, 16:9</td>
@@ -684,7 +696,7 @@ h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
           <td>Keep text and the logo at least <code>5 %</code> in from every edge, on every
             piece</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <div class="cuenta">
       <b>Where the can measurement comes from.</b> A 330 ml can is a cylinder about
