@@ -1802,5 +1802,145 @@ html.proyector #vz .pista{color:rgba(0,0,0,.55)}
   }
 })();
 </script>
+
+<script>
+/* ═══ AJUSTE AL PROYECTOR ═══════════════════════════════════════════════
+   Que la diapositiva ocupe toda la pantalla y NUNCA haya que rodar.
+
+   Como. La caja de la diapositiva tiene un solo hijo, asi que se le aplica
+   un transform:scale, la misma idea del visor de esquemas. Pero un scale a
+   secas agranda tambien el ancho y la lamina se sale por la derecha, asi que
+   ANTES se divide el ancho entre la escala. Al cambiar el ancho el texto se
+   reparte de nuevo de verdad: no es una lupa sobre la misma composicion,
+   las lineas se recomponen al tamano nuevo.
+
+   Como el alto depende del ancho y el ancho depende de la escala, la cuenta
+   se repite tres o cuatro veces hasta que deja de moverse. Converge rapido.
+
+   Si una lamina no cabe ni al minimo, se le deja el scroll a ESA sola: antes
+   que recortar contenido y que se pierda algo en clase, es preferible.
+   ══════════════════════════════════════════════════════════════════════ */
+(function(){
+  var ANCHO_BASE = 1560;   // el max-width que ya tenia el mazo
+  var MIN = 0.62;          // por debajo de esto no se encoge
+  var MAX = 2.20;          // ni crece mas que esto
+  var PASOS = 4;
+  var ultimo = {escala:1, apretadas:[]};
+  var pedido = null;
+
+  function esProyector(){
+    return document.documentElement.classList.contains('proyector');
+  }
+  function caja(){ return document.querySelector('.slide-enter'); }
+  function lamina(){ var c = caja(); return c ? c.firstElementChild : null; }
+
+  function limpia(h){
+    if(!h) return;
+    h.style.transform = '';
+    h.style.transformOrigin = '';
+    h.style.width = '';
+    h.style.maxWidth = '';
+    h.style.marginLeft = '';
+    h.style.marginTop = '';
+  }
+
+  function ajusta(){
+    pedido = null;
+    var c = caja(), h = lamina();
+    if(!c || !h) return;
+
+    if(!esProyector()){
+      limpia(h);
+      c.style.overflow = '';
+      return;
+    }
+
+    var dispW = c.clientWidth, dispH = c.clientHeight;
+    if(!dispW || !dispH) return;
+
+    var base = Math.min(dispW, ANCHO_BASE);
+
+    /* medir sin transform, si no scrollHeight sale ya escalado */
+    h.style.transformOrigin = 'top left';
+    h.style.transform = 'none';
+    h.style.marginLeft = '0px';
+    h.style.marginTop  = '0px';
+    h.style.maxWidth = 'none';
+
+    var esc = 1, alto = 0;
+    for(var i = 0; i < PASOS; i++){
+      h.style.width = (base / esc) + 'px';
+      alto = h.scrollHeight;
+      if(!alto) break;
+      /* Media geometrica, no el cociente pelado.
+         Al estrechar el ancho el alto sube, asi que el alto pintado va con el
+         CUADRADO de la escala. Con esc = dispH/alto la cuenta salta de un
+         valor a otro y vuelve, sin parar: es la iteracion x -> C/x, que oscila
+         con periodo 2 y no converge nunca. La raiz del producto amortigua el
+         salto y cae en el punto fijo casi de una. */
+      var nueva = Math.sqrt(esc * (dispH / alto));
+      if(nueva > MAX) nueva = MAX;
+      if(nueva < MIN) nueva = MIN;
+      if(Math.abs(nueva - esc) < 0.005){ esc = nueva; break; }
+      esc = nueva;
+    }
+    h.style.width = (base / esc) + 'px';
+    alto = h.scrollHeight;
+
+    var altoPintado = alto * esc;
+    var apretada = altoPintado > dispH + 1;      /* no cupo ni al minimo */
+
+    h.style.transform  = 'scale(' + esc.toFixed(4) + ')';
+    h.style.marginLeft = Math.max(0, (dispW - base) / 2) + 'px';
+    h.style.marginTop  = apretada ? '0px'
+                       : Math.max(0, (dispH - altoPintado) / 2) + 'px';
+
+    /* el inline de React pone overflow:auto; se respeta solo si hace falta */
+    c.style.overflow = apretada ? 'auto' : 'hidden';
+
+    ultimo = {escala:+esc.toFixed(3), alto:alto, disp:dispH, apretada:apretada};
+  }
+
+  function pide(){
+    if(pedido) return;
+    pedido = requestAnimationFrame(ajusta);
+  }
+
+  function arranca(){
+    var raiz = document.getElementById('root');
+    if(!raiz){ setTimeout(arranca, 120); return; }
+
+    /* Solo childList: si vigilara los atributos, mis propios cambios de
+       style dispararian el observador y se realimentaria sin parar. */
+    new MutationObserver(pide).observe(raiz, {childList:true, subtree:true});
+
+    window.addEventListener('resize', pide);
+    window.addEventListener('orientationchange', pide);
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(pide);   /* la tipografia web cambia los altos */
+    }
+
+    /* el boton de proyector no avisa, asi que se envuelve */
+    var previo = window.toggleProyector;
+    if(typeof previo === 'function'){
+      window.toggleProyector = function(){
+        previo.apply(this, arguments);
+        pide(); setTimeout(pide, 60); setTimeout(pide, 260);
+      };
+    }
+    pide();
+    setTimeout(pide, 400);
+  }
+
+  window.__ajusteInfo = function(){ return ultimo; };
+  window.__ajusta = pide;
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', arranca);
+  } else {
+    arranca();
+  }
+})();
+</script>
 </body>
 </html>
