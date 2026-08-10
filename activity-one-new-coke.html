@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Activity 1 · The New Coke · Marketing Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Los siete colores de las tarjetas están comprobados: todos pasan 4.5:1
+   con texto blanco encima. El rojo es el oficial de Coca-Cola, #C8102E. */
+:root{
+  --tinta:#16181D; --hueso:#F7F7F4; --gris:#626974; --linea:#E3E3DE;
+  --c1:#C8102E;  /* el encargo      */
+  --c2:#1864AB;  /* qué es Creations*/
+  --c3:#6B21A8;  /* los lanzamientos*/
+  --c4:#237032;  /* qué funciona    */
+  --c5:#212529;  /* la entrega      */
+  --c6:#0B7285;  /* las medidas     */
+  --c7:#A61E4D;  /* la rúbrica      */
+  --coke:#C8102E;
+  --sombra:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{font-family:'Manrope',system-ui,-apple-system,sans-serif;color:var(--tinta);
+  background:var(--hueso);line-height:1.62;font-size:17px;-webkit-text-size-adjust:100%}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+.bar{max-width:940px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px}
+.bar .tag{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--c1)}
+.bar .tt{font-weight:800;font-size:15px;letter-spacing:-.3px}
+.bar .sp{margin-left:auto;font-size:13px;color:var(--gris);font-weight:600}
+@media(max-width:620px){.bar .sp{display:none}}
+
+.hero{background:var(--tinta);color:#fff;padding:60px 0 54px;position:relative;overflow:hidden}
+.hero .wrap{position:relative;z-index:1}
+.hero .k{font-size:12px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;
+  color:#FF7B8F;margin-bottom:16px}
+.hero h1{font-size:clamp(30px,6vw,50px);line-height:1.1;letter-spacing:-1.6px;font-weight:800;
+  margin-bottom:18px}
+.hero p{font-size:clamp(16px,2.3vw,20px);color:#C9CCD3;max-width:62ch;line-height:1.55}
+.hero .meta{margin-top:24px;font-size:13.5px;color:#8A9099}
+.hero .mark{position:absolute;right:-40px;top:50%;transform:translateY(-50%);height:150%;
+  opacity:.10;pointer-events:none;z-index:0}
+
+.idx{padding:38px 0 10px}
+.idx h2{font-size:14px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--gris);margin-bottom:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:13px}
+.card{text-decoration:none;color:#fff;border-radius:15px;padding:19px 20px 17px;
+  box-shadow:var(--sombra);transition:transform .13s ease,box-shadow .13s ease;
+  min-height:120px;display:flex;flex-direction:column}
+.card:hover,.card:focus-visible{transform:translateY(-3px);
+  box-shadow:0 3px 8px rgba(0,0,0,.08),0 14px 32px rgba(0,0,0,.14);outline:none}
+.card .n{font-size:11.5px;font-weight:800;letter-spacing:1.5px;opacity:.85;margin-bottom:7px}
+.card .t{font-size:19.5px;font-weight:800;letter-spacing:-.5px;line-height:1.2;margin-bottom:5px}
+.card .d{font-size:13.5px;line-height:1.45;opacity:.92;font-weight:500;margin-top:auto}
+
+section{padding:44px 0 8px;scroll-margin-top:74px}
+.chip{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.4px;
+  text-transform:uppercase;color:#fff;padding:5px 11px;border-radius:100px;margin-bottom:8px}
+h2.st{font-size:clamp(24px,4.2vw,34px);letter-spacing:-1px;font-weight:800;line-height:1.15;
+  margin:6px 0 14px}
+.lead{font-size:18.5px;color:#3A4049;max-width:66ch;margin-bottom:18px;line-height:1.6}
+p{margin-bottom:15px;max-width:70ch}
+h3{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:26px 0 9px}
+
+.voc{background:#fff;border:1px solid var(--linea);border-radius:15px;padding:20px 22px;
+  margin:22px 0;box-shadow:var(--sombra)}
+.voc h4{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--c1);margin-bottom:13px}
+.voc dl{display:grid;grid-template-columns:1fr;gap:11px}
+@media(min-width:680px){.voc dl{grid-template-columns:1fr 1fr;gap:11px 26px}}
+.voc dt{font-weight:800;font-size:15px}
+.voc dd{font-size:14.5px;color:#454C56;line-height:1.5}
+
+.figura{background:#fff;border:1px solid var(--linea);border-radius:15px;padding:16px;
+  margin:22px 0;box-shadow:var(--sombra);text-align:center}
+.figura img{max-width:100%;height:auto;border-radius:9px;display:block;margin:0 auto}
+.figura figcaption{font-size:13.5px;color:var(--gris);margin-top:12px;line-height:1.5;
+  text-align:left}
+
+.tl{position:relative;margin:24px 0 8px;padding-left:30px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:2.5px;
+  background:linear-gradient(var(--c3),#D9BDF2);border-radius:2px}
+.ev{position:relative;margin-bottom:19px}
+.ev::before{content:'';position:absolute;left:-29px;top:5px;width:12px;height:12px;
+  border-radius:50%;background:var(--c3);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--c3)}
+.ev.rojo::before{background:var(--coke);box-shadow:0 0 0 2px var(--coke)}
+.ev .y{font-size:13px;font-weight:800;color:var(--c3);letter-spacing:.4px}
+.ev.rojo .y{color:var(--coke)}
+.ev .h{font-weight:800;font-size:16.5px;margin:1px 0 2px;letter-spacing:-.3px}
+.ev .p{font-size:15px;color:#454C56;line-height:1.5;max-width:64ch;margin:0}
+.ev .lk{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:13px;
+  font-weight:700;color:var(--c3);text-decoration:none;border-bottom:1.5px solid #DCC6F0;
+  padding-bottom:1px}
+.ev .lk:hover{border-bottom-color:var(--c3)}
+.ev .lk::after{content:'↗';font-size:11px;opacity:.7}
+.ev.rojo .lk{color:var(--coke);border-bottom-color:#F2C3CB}
+.ev.rojo .lk:hover{border-bottom-color:var(--coke)}
+
+.patrones{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:13px;
+  margin:20px 0}
+.pat{background:#fff;border:1px solid var(--linea);border-radius:15px;padding:18px 19px;
+  box-shadow:var(--sombra)}
+.pat .num{width:32px;height:32px;border-radius:9px;background:var(--c4);color:#fff;
+  font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:11px}
+.pat h4{font-size:17px;font-weight:800;letter-spacing:-.35px;margin-bottom:6px}
+.pat p{font-size:14.5px;color:#454C56;line-height:1.5;margin:0}
+
+.entrega{display:grid;grid-template-columns:1fr;gap:12px;margin:20px 0}
+@media(min-width:700px){.entrega{grid-template-columns:1fr 1fr}}
+.ent{background:#fff;border:1px solid var(--linea);border-radius:15px;padding:18px 20px;
+  box-shadow:var(--sombra);position:relative}
+.ent .pts{position:absolute;top:16px;right:18px;font-size:13px;font-weight:800;color:#fff;
+  background:var(--c5);border-radius:100px;padding:3px 11px}
+.ent h4{font-size:17.5px;font-weight:800;letter-spacing:-.35px;margin-bottom:6px;
+  padding-right:56px}
+.ent p{font-size:14.5px;color:#454C56;line-height:1.5;margin:0 0 8px}
+.ent ul{list-style:none;margin:0}
+.ent li{font-size:14px;color:#454C56;line-height:1.5;padding-left:16px;position:relative;
+  margin-bottom:5px}
+.ent li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;
+  border-radius:50%;background:var(--c5)}
+.ent li b{color:var(--tinta)}
+
+.escalera{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 6px}
+.pel{background:#fff;border:1.5px solid var(--c5);border-radius:100px;padding:7px 16px;
+  font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+.pel.fin{background:var(--c5);color:#fff}
+.flechita{color:var(--gris);font-weight:800}
+
+.medidas{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--linea);
+  border-radius:15px;overflow:hidden;margin:18px 0;box-shadow:var(--sombra);font-size:15px}
+.medidas th{background:#FAFAF8;text-align:left;padding:12px 18px;font-size:12.5px;
+  font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--gris);
+  border-bottom:1px solid var(--linea)}
+.medidas td{padding:12px 18px;border-bottom:1px solid var(--linea);vertical-align:top}
+.medidas tr:last-child td{border-bottom:none}
+.medidas td:first-child{font-weight:700;width:210px}
+.medidas code{background:#EEF3F5;color:#0B5A69;padding:2px 7px;border-radius:5px;
+  font-family:ui-monospace,Menlo,monospace;font-size:13.5px;font-weight:700}
+@media(max-width:600px){.medidas td:first-child{width:auto}
+  .medidas{font-size:13.5px} .medidas th,.medidas td{padding:10px 12px}}
+
+.cuenta{background:#EEF7F9;border:1px solid #BFE0E7;border-radius:14px;padding:17px 20px;
+  margin:18px 0;font-size:15px;line-height:1.6;color:#0A4A57}
+.cuenta b{color:#062E36}
+.cuenta code{background:#fff;padding:2px 8px;border-radius:5px;
+  font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:700}
+
+.rub{background:#fff;border:1px solid var(--linea);border-radius:16px;overflow:hidden;
+  margin:20px 0;box-shadow:var(--sombra)}
+.rr{display:grid;grid-template-columns:1fr;border-top:1px solid var(--linea)}
+@media(min-width:700px){.rr{grid-template-columns:190px 1fr}}
+.rr:first-child{border-top:none}
+.rr .rl{padding:16px 20px;background:#FAFAF8;border-bottom:1px solid var(--linea)}
+@media(min-width:700px){.rr .rl{border-bottom:none;border-right:1px solid var(--linea)}}
+.rr .pct{font-size:30px;font-weight:800;color:var(--c7);letter-spacing:-1.2px;line-height:1}
+.rr .rn{font-size:16px;font-weight:800;margin-top:3px;letter-spacing:-.3px}
+.rr .rb{padding:16px 20px;font-size:14.5px;color:#3A4049;line-height:1.55}
+.rr.total .rl{background:var(--c7)}
+.rr.total .pct,.rr.total .rn{color:#fff}
+
+.note{background:#FFF1F3;border:1px solid #F5C2CB;border-radius:14px;padding:17px 20px;
+  margin:20px 0;font-size:15px;line-height:1.55;color:#6E1122}
+.note b{color:#4C0A17}
+
+.src{margin:30px 0 0;padding:20px 0 40px;border-top:1px solid var(--linea);
+  font-size:13.5px;color:var(--gris);line-height:1.6}
+.src a{color:var(--c2)}
+.src p{max-width:none}
+.top-link{display:inline-block;margin:22px 0 0;font-size:13.5px;font-weight:700;
+  color:var(--gris);text-decoration:none}
+.top-link:hover{color:var(--tinta)}
+
+.hero .cta{display:inline-flex;align-items:center;gap:9px;margin-top:22px;background:#fff;
+  color:#16181D;text-decoration:none;font-weight:800;font-size:15.5px;letter-spacing:-.2px;
+  padding:13px 22px;border-radius:100px;box-shadow:0 6px 20px rgba(0,0,0,.28)}
+.hero .cta:hover{background:#FFE8EC}
+.hero .cta .ico{font-size:13px;opacity:.65}
+.hero .cta-nota{margin-top:11px;font-size:13.5px;color:#A9AEB6;max-width:52ch;line-height:1.5}
+
+.pel.obj{background:var(--c1);border-color:var(--c1);color:#fff;position:relative}
+/* La etiqueta iba debajo y, al partirse la escalera en el móvil, se montaba
+   sobre la píldora de la fila siguiente. Ahora va encima, y la escalera
+   reserva ese alto por arriba, así que no choca a ningún ancho. */
+.pel.obj::after{content:'your objective';position:absolute;left:50%;bottom:calc(100% + 5px);
+  transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;color:var(--c1)}
+.escalera{margin-top:34px;margin-bottom:10px}
+.objbox{background:#FFF1F3;border:1.5px solid #F2A9B6;border-radius:16px;padding:20px 23px;
+  margin:22px 0}
+.objbox .ol{font-size:11.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:#8E1226;margin-bottom:9px}
+.objbox .ot{font-size:20px;font-weight:800;line-height:1.35;color:#4C0A17;letter-spacing:-.4px;
+  margin-bottom:9px}
+.objbox p{font-size:14.5px;line-height:1.55;color:#6E1122;margin:0;max-width:none}
+.objbox p b{color:#4C0A17}
+
+/* ── las dos plataformas, Creations y Coke Studio ── */
+.plats{display:grid;grid-template-columns:1fr;gap:13px;margin:22px 0}
+@media(min-width:700px){.plats{grid-template-columns:1fr 1fr}}
+.plat{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:20px 22px;
+  box-shadow:var(--sombra);display:flex;flex-direction:column}
+.plat .logo{height:74px;display:flex;align-items:center;margin-bottom:14px}
+.plat .logo img{height:100%;width:auto;object-fit:contain}
+.plat .logo .txt{font-size:27px;font-weight:800;letter-spacing:-1px;color:var(--coke)}
+.plat h4{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px}
+.plat p{font-size:14.5px;color:#454C56;line-height:1.55;margin:0 0 12px}
+.plat .cifras{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto}
+.plat .cif{background:#F4F4F1;border-radius:100px;padding:4px 11px;font-size:12.5px;
+  font-weight:700;color:#3A4049}
+
+/* ── aviso de lo que se hace en clase ── */
+.enclase{background:#0F2A33;color:#fff;border-radius:17px;padding:22px 25px;margin:24px 0;
+  position:relative;overflow:hidden}
+.enclase .et{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.5px;
+  text-transform:uppercase;background:#5BD4EE;color:#062730;padding:4px 11px;
+  border-radius:100px;margin-bottom:11px}
+.enclase h4{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.25;
+  margin-bottom:10px;color:#fff}
+.enclase p{font-size:15px;line-height:1.6;color:#C2DDE4;margin:0 0 10px;max-width:64ch}
+.enclase p:last-child{margin-bottom:0}
+.enclase b{color:#fff}
+.enclase .ar{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:96px;
+  height:96px;opacity:.16;pointer-events:none}
+@media(max-width:700px){.enclase .ar{display:none}}
+
+@media print{header{position:static} .card{break-inside:avoid}
+  body{background:#fff;font-size:11pt} section{padding:18px 0 4px}
+  .hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  a{text-decoration:none;color:inherit}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <span class="tag">Activity 1</span>
+    <span class="tt">The New Coke</span>
+    <span class="sp">Marketing Plan · Group project</span>
+  </div>
+</header>
+
+<div class="hero">
+  <img class="mark" src="img/coke-mark.svg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="k">Activity 1 · Group project</div>
+    <h1>You just got the client.<br>It is Coca-Cola.</h1>
+    <p>They want the next Coca-Cola Creation, and they want it from you. A name, a flavour,
+       a can, and a campaign that explains why any of it should exist. This page has the
+       brief, the twelve drops that came before you, and the exact sizes to design at.</p>
+    <a class="cta" id="cta-creations" href="https://www.coca-cola.com/sg/en/offerings/creations" target="_blank" rel="noopener">
+       Open Coca-Cola Creations first <span class="ico">↗</span></a>
+    <div class="cta-nota">Go and look at the real thing before you read anything else. Five minutes
+      on that page is worth more than five paragraphs from us.</div>
+    <div class="meta" style="margin-top:20px">Marketing Plan · Delivery 1 · Work in groups · 5.0 points · Objective: Awareness · Built in AR in class</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="idx">
+    <h2>Pick a section</h2>
+    <div class="cards">
+      <a class="card" style="background:var(--c1)" href="#brief">
+        <div class="n">01</div><div class="t">The brief</div>
+        <div class="d">What the client is asking for, in plain words.</div></a>
+      <a class="card" style="background:var(--c2)" href="#creations">
+        <div class="n">02</div><div class="t">What Creations is</div>
+        <div class="d">The platform you are being asked to add to.</div></a>
+      <a class="card" style="background:var(--c3)" href="#drops">
+        <div class="n">03</div><div class="t">The twelve drops</div>
+        <div class="d">Every Creation so far, and what each one bet on.</div></a>
+      <a class="card" style="background:var(--c4)" href="#patrones">
+        <div class="n">04</div><div class="t">What makes one work</div>
+        <div class="d">Six patterns you can steal.</div></a>
+      <a class="card" style="background:var(--c5)" href="#entrega">
+        <div class="n">05</div><div class="t">What you deliver</div>
+        <div class="d">Four pieces, and the template to hand in.</div></a>
+      <a class="card" style="background:var(--c6)" href="#medidas">
+        <div class="n">06</div><div class="t">Sizes and specs</div>
+        <div class="d">Design at these measurements, not by eye.</div></a>
+      <a class="card" style="background:var(--c7)" href="#rubrica">
+        <div class="n">07</div><div class="t">How you are graded</div>
+        <div class="d">All 5.0 points, broken down.</div></a>
+    </div>
+  </div>
+
+  <!-- ═══ 01 ═══ -->
+  <section id="brief">
+    <span class="chip" style="background:var(--c1)">01 · The brief</span>
+    <h2 class="st">The brief</h2>
+    <p class="lead">Coca-Cola has a platform called <b>Creations</b>: limited edition drinks
+      built around an idea rather than a fruit. They want the next one. Your group is the
+      agency.</p>
+
+    <p>You are not being asked to invent a soft drink. You are being asked to invent
+      <b>a reason for one to exist</b>, and then make people care. That is the whole
+      exercise. The flavour is the easy part.</p>
+
+    <div class="voc">
+      <h4>Words you will need</h4>
+      <dl>
+        <dt>Creation</dt>
+        <dd>A limited edition Coca-Cola built around a concept, with its own name, can and campaign.</dd>
+        <dt>Awareness</dt>
+        <dd>How many people know it exists. The first rung of the ladder, and usually the objective for a launch.</dd>
+        <dt>Big idea</dt>
+        <dd>The one thought the whole campaign hangs on. If you need three sentences, it is not one idea yet.</dd>
+        <dt>Key message</dt>
+        <dd>The single thing you want someone to remember a week later.</dd>
+        <dt>Key visual</dt>
+        <dd>The main image of the campaign. Yours has to be horizontal, 16:9.</dd>
+        <dt>Limited edition</dt>
+        <dd>On sale for a short window on purpose. Scarcity is part of the marketing, not an accident.</dd>
+      </dl>
+    </div>
+
+    <div class="note">
+      <b>Work in groups, and make it fun.</b> This is the one delivery where a silly idea
+      taken seriously beats a serious idea done carefully. Coca-Cola sold a drink that
+      tasted like <i>a dream</i> and another that tasted like <i>pixels</i>. Nobody on that
+      team was being cautious.
+    </div>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 02 ═══ -->
+  <section id="creations">
+    <span class="chip" style="background:var(--c2)">02 · The platform</span>
+    <h2 class="st">What Coca-Cola Creations is</h2>
+    <p class="lead">Launched in February 2022 as a global innovation platform. Limited runs,
+      unusual branding, aimed squarely at younger drinkers, and always tied to something
+      digital.</p>
+
+    <p>The trick that makes it work: every Creation starts from <b>an abstract idea</b>, not
+      a flavour. "What does space taste like?" is not a question a flavour lab can answer,
+      which is exactly why it makes people talk. The drink is the answer to a question the
+      marketing asked first.</p>
+
+    <p>Most of them are built on <b>Coca-Cola Zero Sugar</b>, run for a few weeks or months,
+      and live through augmented reality, gaming, TikTok or a music collaboration rather than
+      through television.</p>
+
+
+    <h3>Creations is not the only platform doing this</h3>
+    <p>Coca-Cola runs a second one built on culture rather than on product, and it is worth
+      knowing about because it shows the same thinking taken somewhere else entirely.</p>
+
+    <div class="plats">
+      <div class="plat">
+        <div class="logo"><span class="txt">Creations</span></div>
+        <h4>Built on ideas</h4>
+        <p>Limited edition drinks that answer a question: what does space taste like, what
+          does a dream taste like. The drink is the souvenir of the idea.</p>
+        <div class="cifras"><span class="cif">since 2022</span><span class="cif">12 drops</span>
+          <span class="cif">limited runs</span></div>
+      </div>
+      <div class="plat">
+        <div class="logo"><img src="img/coke-studio.png" alt="Coke Studio" loading="lazy"></div>
+        <h4>Built on music</h4>
+        <p>Started in Pakistan in 2008 and went global. Musicians record together and the
+          sessions are released free. Coca-Cola is barely in the frame, and that is the point.
+          It went global with a film called "The Conductor", where seven artists reimagine
+          Queen's "A Kind of Magic".</p>
+        <div class="cifras"><span class="cif">since 2008</span>
+          <span class="cif">24M+ subscribers</span><span class="cif">5bn+ views</span>
+          <span class="cif">180+ countries</span></div>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Why this matters for your brief.</b> Five billion views is <b>awareness</b>, and
+      Coke Studio bought it by giving people something they actually wanted rather than by
+      advertising at them. Notice also which direction it travelled: Creations goes global
+      then adapts to each market, Coke Studio started in one country and grew outwards. Both
+      work. Decide which way yours goes.
+    </div>
+
+    <figure class="figura">
+      <img src="img/coke-logo-history.png" alt="The Coca-Cola logo from 1886 to today, showing each version and the years it was used." loading="lazy">
+      <figcaption><b>Worth noticing before you design anything.</b> The wordmark has barely
+        moved since 1941, and the shape of it has been recognisable since 1887. Creations
+        change the colour, the world and the story around the can. They do not change the
+        logo. Whatever you design, that script has to survive it.</figcaption>
+    </figure>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 03 ═══ -->
+  <section id="drops">
+    <span class="chip" style="background:var(--c3)">03 · The drops</span>
+    <h2 class="st">The twelve that came before you</h2>
+    <p class="lead">Read these the way an agency would: not "what did it taste like" but
+      <b>what was the bet</b>. Red dots are the ones that changed what the platform could do.</p>
+
+    <div class="tl">
+      <div class="ev rojo"><div class="y">February 2022</div>
+        <div class="h">Starlight · the one that started it</div>
+        <div class="p">"Space flavoured". A reddish cola meant to evoke stargazing round a
+          campfire. Reviewers tasted cotton candy and vanilla. It also shows how Coca-Cola
+          adapts a name by market: Starlight in the US, <b>Intergalactic</b> in the UK,
+          <b>Stardust</b> in South Korea, <b>Starshine</b> in Thailand.
+          <a class="lk" href="https://www.marketingdive.com/news/coke-lifts-off-new-innovation-platform-with-space-flavored-starlight-cola/619058/" target="_blank" rel="noopener">Marketing Dive on the launch</a></div></div>
+
+      <div class="ev"><div class="y">April 2022</div>
+        <div class="h">Byte · what pixels taste like</div>
+        <div class="p">Gaming flavoured, "born in the metaverse", and sold only online. The
+          bet was that a drink could launch inside a game rather than in a shop.
+          <a class="lk" href="https://www.marketingdive.com/news/coca-cola-coke-byte-pixel-new-flavor-gamers-fortnite/621503/" target="_blank" rel="noopener">Marketing Dive on the Fortnite launch</a></div></div>
+
+      <div class="ev"><div class="y">June 2022</div>
+        <div class="h">Marshmello · the first artist</div>
+        <div class="p">Strawberry and watermelon, with the DJ's name on the can. Extended
+          with a Twitch mission and digital collectibles. The bet: borrow a fanbase.
+          <a class="lk" href="https://www.marketingdive.com/news/Coke-Marshmello-limited-flavor-Coca-Cola-Creations/626392/" target="_blank" rel="noopener">Marketing Dive on the collaboration</a></div></div>
+
+      <div class="ev"><div class="y">August 2022</div>
+        <div class="h">Dreamworld · what a dream tastes like</div>
+        <div class="p">Aimed openly at Gen Z and "the infinite potential of the mind". The
+          most abstract prompt so far. Look at what the campaign actually was: an AR music
+          experience with Tomorrowland, digital fashion with DressX, Snapchat lenses, bus
+          takeovers, hand-painted murals, a Times Square billboard and pop-ups on campuses.
+          That is the level of "promotional material" you are aiming at.
+          <a class="lk" href="https://www.marketingdive.com/news/coke-dreamworld-creations-launch/629330/" target="_blank" rel="noopener">Marketing Dive on Dreamworld</a></div></div>
+
+      <div class="ev"><div class="y">October 2022</div>
+        <div class="h">Soul Blast · anime, and only in Asia</div>
+        <div class="p">Launched with <i>Bleach: Thousand-Year Blood War</i> in Japan, China
+          and Taiwan only. A Creation built for one region rather than the world.</div></div>
+
+      <div class="ev rojo"><div class="y">February 2023</div>
+        <div class="h">Move · with Rosalía</div>
+        <div class="p">"Transformation flavoured", co-created with the Spanish artist, who
+          also redrew the logo in her own hand for the can. The closest example to what a
+          Latin American Creation could look like.
+          <a class="lk" href="https://www.marketingdive.com/news/coca-cola-move-creations-rosalia-transformation-flavored/642618/" target="_blank" rel="noopener">Marketing Dive on Move</a></div></div>
+
+      <div class="ev"><div class="y">June 2023</div>
+        <div class="h">Ultimate · with League of Legends</div>
+        <div class="p">Made with Riot Games, sold in Turkey, China, the US, Egypt, Brazil and
+          Canada. The flavour was described as tasting like <i>+XP</i>, which tells you the
+          idea came before the recipe.</div></div>
+
+      <div class="ev"><div class="y">September 2023</div>
+        <div class="h">Y3000 · co-created with AI</div>
+        <div class="p">A cola imagining the year 3000, with the flavour and the artwork
+          shaped with artificial intelligence, plus a fashion capsule with AMBUSH. The bet:
+          the process itself is the story.</div></div>
+
+      <div class="ev"><div class="y">February 2024</div>
+        <div class="h">Happy Tears · sold on TikTok Shop</div>
+        <div class="p">Coke with a salty splash of minerals and a pinch of peach, launched
+          for Random Acts of Kindness Day and sold <b>only through TikTok Shop</b> in the US
+          and Great Britain. The channel was the campaign.</div></div>
+
+      <div class="ev"><div class="y">February 2024</div>
+        <div class="h">K-Wave · K-pop in a can</div>
+        <div class="p">Made with JYP Entertainment artists, built around the feeling of
+          seeing your idols in person. Still running promotions years later, which is rare
+          for a limited edition.
+          <a class="lk" href="https://www.marketingdive.com/news/coca-cola-soda-k-pop-limited-edition/707911/" target="_blank" rel="noopener">Marketing Dive on K-Wave</a></div></div>
+
+      <div class="ev"><div class="y">May 2024</div>
+        <div class="h">Wozzaah · made for Africa Day</div>
+        <div class="p">Launched for Africa Day in Nigeria, Algeria, South Africa and Morocco.
+          A Creation anchored to a date and a continent rather than to a celebrity.</div></div>
+
+      <div class="ev rojo"><div class="y">September 2024</div>
+        <div class="h">Oreo · the two-way collaboration</div>
+        <div class="p">Two products at once: a Coca-Cola Oreo Zero Sugar, and an Oreo
+          cookie with Coca-Cola syrup in one half and a red base embossed with the Coca-Cola
+          script in the other, filled with creme holding popping candy so it fizzes. A frozen
+          version went to McDonald's and 7-Eleven. The campaign was built on being
+          <b>"Besties"</b>: a Spotify feature that compares your music taste with a friend and
+          builds a shared playlist, plus a "Bestie Mode" merch line with Forever21. Two brands,
+          one idea, double the reach at no extra media cost. Worth copying.
+          <a class="lk" href="https://www.fooddive.com/news/oreo-coca-cola-mondelez-partnership-limited-time-snacking/723614/" target="_blank" rel="noopener">Food Dive on the Oreo partnership</a></div></div>
+    </div>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 04 ═══ -->
+  <section id="patrones">
+    <span class="chip" style="background:var(--c4)">04 · The patterns</span>
+    <h2 class="st">Six things almost every Creation does</h2>
+    <p class="lead">Take these as a checklist. If your idea does four of the six, it will
+      feel like a real Creation.</p>
+
+    <div class="patrones">
+      <div class="pat"><div class="num">1</div>
+        <h4>Start from an idea, not a fruit</h4>
+        <p>Space, dreams, pixels, transformation, the year 3000. Never "mango". The idea has
+          to be something you cannot actually taste.</p></div>
+      <div class="pat"><div class="num">2</div>
+        <h4>Borrow somebody's audience</h4>
+        <p>An artist, a game, an anime, a K-pop label, another brand. You get their fans on
+          day one instead of buying them.</p></div>
+      <div class="pat"><div class="num">3</div>
+        <h4>Live somewhere digital</h4>
+        <p>Augmented reality, Twitch, TikTok Shop, inside a game. The can is the souvenir;
+          the experience is the campaign. Every Creation did this, and so will yours.</p></div>
+      <div class="pat"><div class="num">4</div>
+        <h4>Make it run out</h4>
+        <p>Limited on purpose. Scarcity is what turns a drink into an event and gets people
+          posting before it disappears.</p></div>
+      <div class="pat"><div class="num">5</div>
+        <h4>Bend it to the market</h4>
+        <p>One drink, four names: Starlight, Intergalactic, Stardust, Starshine. Think about
+          what yours is called in Colombia.</p></div>
+      <div class="pat"><div class="num">6</div>
+        <h4>Change everything except the logo</h4>
+        <p>New colour, new world, new story. The script stays. That is the thing you are
+          borrowing equity from.</p></div>
+    </div>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 05 ═══ -->
+  <section id="entrega">
+    <span class="chip" style="background:var(--c5)">05 · The delivery</span>
+    <h2 class="st">What you hand in</h2>
+    <p class="lead">Four pieces. Five points. Everything below comes straight from the client
+      brief.</p>
+
+    <div class="entrega">
+      <div class="ent"><span class="pts">1.0</span>
+        <h4>Campaign name</h4>
+        <p>The Coca-Cola name for your Creation, plus a slogan or two lines about the
+          campaign.</p>
+        <ul><li>It should sound like it belongs next to Starlight, Dreamworld and Y3000</li>
+          <li>Test it: could it be a Pepsi campaign? Then it is not there yet</li></ul></div>
+
+      <div class="ent"><span class="pts">1.0</span>
+        <h4>The flavour</h4>
+        <p>What it tastes like, and more importantly <b>what idea the taste is answering</b>.</p>
+        <ul><li>Say the idea first, then the taste</li>
+          <li>"Tastes like the last day of school" beats "tastes like lemon"</li></ul></div>
+
+      <div class="ent"><span class="pts">1.0</span>
+        <h4>The new design</h4>
+        <p>The Creations key visual, <b>horizontal 16:9</b>. Exact sizes in section 06.</p>
+        <ul><li>Show the can</li>
+          <li>The Coca-Cola script has to stay readable</li></ul></div>
+
+      <div class="ent"><span class="pts">2.0</span>
+        <h4>The campaign brief</h4>
+        <p>Six questions, answered in order. This is worth as much as the other three
+          together.</p>
+        <ul>
+          <li><b>Target:</b> who?</li>
+          <li><b>Opportunity:</b> why?</li>
+          <li><b>Objective:</b> what? For this brief it is <b>Awareness</b></li>
+          <li><b>Big idea:</b> how?</li>
+          <li><b>Key message:</b> what should they remember?</li>
+          <li><b>Schedule:</b> when?</li>
+        </ul></div>
+    </div>
+
+
+    <div class="enclase">
+      <svg class="ar" viewBox="0 0 24 24" fill="none" stroke="#5BD4EE" stroke-width="1.6"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/>
+        <path d="M12 7.5l4 2.2v4.6l-4 2.2-4-2.2V9.7z"/><path d="M12 12.3l4-2.3M12 12.3l-4-2.3M12 12.3v4.2"/>
+      </svg>
+      <span class="et">Happening in class</span>
+      <h4>You are going to build your can in AR</h4>
+      <p>On top of everything above, each group will put its Creation into
+        <b>augmented reality</b>, so the can can be seen standing in the room rather than only
+        on a slide.</p>
+      <p>You do not need to prepare anything for this now, and nothing about it is explained
+        on this page on purpose. <b>We do it together in class, step by step.</b> Just know it
+        is coming, and design your can properly, because it is the artwork from section 06 that
+        gets used.</p>
+    </div>
+
+    <h3>Your objective is Awareness</h3>
+    <p>The brief asks you to write from the marketing objective. For this campaign it is
+      already decided: <b>Awareness</b>. You are launching something that does not exist yet,
+      so the job is to make people know about it and talk about it. Everything in your brief
+      should be pointed at that.</p>
+    <div class="escalera">
+      <span class="pel obj">Awareness</span><span class="flechita">→</span>
+      <span class="pel">Trial</span><span class="flechita">→</span>
+      <span class="pel">Purchase</span><span class="flechita">→</span>
+      <span class="pel">Repurchase</span><span class="flechita">→</span>
+      <span class="pel fin">Main brand</span>
+    </div>
+
+    <div class="objbox">
+      <div class="ol">The main objective</div>
+      <div class="ot">Awareness. Not sales.</div>
+      <p>Nobody has tasted your drink and nobody has heard of it, so measuring purchases makes
+        no sense yet. Judge your own ideas by <b>how many people would find out and how much
+        they would talk</b>, not by how many cans they would buy. If an activity in your brief
+        does not create awareness, cut it or explain why it is there.</p>
+    </div>
+
+    <h3>The delivery template</h3>
+    <div class="ent" style="margin-top:14px">
+      <ul>
+        <li><b>Campaign name</b> and a slogan, or a couple of lines about the campaign</li>
+        <li><b>Brief:</b> around <b>500 words maximum</b>, written from the marketing
+          objective (<b>Awareness</b>), explaining the campaign activities</li>
+        <li><b>Promotional material:</b> finished pieces, not descriptions. Ads, billboards,
+          newspaper, TikTok, Instagram. <b>At least two.</b></li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <b>Finished means finished.</b> "A TikTok where someone opens the can" is a sentence,
+      not a piece of promotional material. Make the thing.
+    </div>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 06 ═══ -->
+  <section id="medidas">
+    <span class="chip" style="background:var(--c6)">06 · Sizes</span>
+    <h2 class="st">Design at these sizes</h2>
+    <p class="lead">Guessing the size is how a good design ends up stretched or pixelated on
+      the day. Use these.</p>
+
+
+    <figure class="figura">
+      <img src="img/coke-move-kv.jpg" alt="Coca-Cola Move key visual: the can on the left, the Coca-Cola script filling the width, the campaign name top right and the Creations mark bottom right." loading="lazy" style="max-width:560px">
+      <figcaption><b>What a Creations key visual actually looks like.</b> This is Move, the one
+        with Rosalía. Notice the parts: the can on one side, the Coca-Cola script filling almost
+        the whole width, the campaign name and "limited edition" small in a corner, the Creations
+        mark bottom right, and the artist's own handwriting over the logo. Yours needs the same
+        pieces. <i>Reference crop, low resolution. Do not copy the layout, and design yours at
+        the sizes below.</i></figcaption>
+    </figure>
+
+    <table class="medidas">
+      <thead><tr><th>Piece</th><th>Size</th></tr></thead>
+      <tbody>
+        <tr><td>Key visual, 16:9</td>
+          <td><code>1920 × 1080 px</code> minimum. <code>3840 × 2160 px</code> if it will be
+            printed or projected. Both are exactly 16:9.</td></tr>
+        <tr><td>Can wrap, 330 ml</td>
+          <td><code>207 × 102 mm</code> of artwork, plus 3 mm bleed on each side, so make the
+            file <code>213 × 108 mm</code>. At 300 dpi that is about
+            <code>2449 × 1205 px</code>.</td></tr>
+        <tr><td>Instagram post</td><td><code>1080 × 1080 px</code> square, or <code>1080 × 1350 px</code> portrait</td></tr>
+        <tr><td>Instagram story, Reel, TikTok</td><td><code>1080 × 1920 px</code>, vertical 9:16</td></tr>
+        <tr><td>Billboard, horizontal</td>
+          <td>Work to a ratio, not to pixels. <code>3:1</code> is common. Keep the message
+            under seven words: people read it at speed.</td></tr>
+        <tr><td>Newspaper, half page</td><td>About <code>250 × 170 mm</code>, at 300 dpi, in CMYK if it goes to print</td></tr>
+        <tr><td>Safe margin</td>
+          <td>Keep text and the logo at least <code>5 %</code> in from every edge, on every
+            piece</td></tr>
+      </tbody>
+    </table>
+
+    <div class="cuenta">
+      <b>Where the can measurement comes from.</b> A 330 ml can is a cylinder about
+      <code>66 mm</code> across. The label has to go all the way round it, so the width of
+      your artwork is the circumference:
+      <code>π × 66 = 207 mm</code>. The can is <code>115 mm</code> tall, but the top and
+      bottom curve away, so only about <code>102 mm</code> of height actually prints flat.
+      If you design a beautiful can at 200 × 200 mm, it will not wrap.
+    </div>
+
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <!-- ═══ 07 ═══ -->
+  <section id="rubrica">
+    <span class="chip" style="background:var(--c7)">07 · The rubric</span>
+    <h2 class="st">How you are graded</h2>
+    <p class="lead">Five points, split across the four deliverables. Read it before you
+      start.</p>
+
+    <div class="rub">
+      <div class="rr"><div class="rl"><div class="pct">1.0</div><div class="rn">Campaign name</div></div>
+        <div class="rb">The Coca-Cola name for your Creation, with a slogan or a couple of
+          lines. Judged on whether it is specific, memorable, and could only belong to your
+          idea.</div></div>
+      <div class="rr"><div class="rl"><div class="pct">1.0</div><div class="rn">New design</div></div>
+        <div class="rb">The Creations key visual, horizontal 16:9, at the sizes in section 06.
+          Judged on craft and on whether it carries the idea, not just decorates it.</div></div>
+      <div class="rr"><div class="rl"><div class="pct">1.0</div><div class="rn">Flavour</div></div>
+        <div class="rb">The flavour and the idea behind it. Judged on whether the taste
+          answers a question worth asking.</div></div>
+      <div class="rr"><div class="rl"><div class="pct">2.0</div><div class="rn">Campaign brief</div></div>
+        <div class="rb">Target, opportunity, objective, big idea, key message and schedule,
+          around 500 words, written from the Awareness objective. Plus at least two finished
+          pieces of promotional material. This is worth double.</div></div>
+      <div class="rr total"><div class="rl"><div class="pct">5.0</div><div class="rn">Total</div></div>
+        <div class="rb">Group work. The brief is the biggest single piece, so give it the
+          most time, and write it after the idea is settled rather than before.</div></div>
+    </div>
+    <a class="top-link" href="#brief">↑ Back to the sections</a>
+  </section>
+
+  <div class="src">
+    <p><b>Sources.</b> Coca-Cola Creations, official platform page and product announcements,
+      <a href="https://www.coca-cola.com/sg/en/offerings/creations" target="_blank" rel="noopener">coca-cola.com</a>
+      and <a href="https://www.coca-colacompany.com/" target="_blank" rel="noopener">coca-colacompany.com</a>.
+      Launch dates, markets and flavour descriptions cross-checked against
+      <a href="https://en.wikipedia.org/wiki/Coca-Cola_Creations" target="_blank" rel="noopener">the Coca-Cola Creations record</a>
+      and the Marketing Dive articles linked in section 03. Can dimensions are the standard
+      330 ml format; confirm with your printer before a real production run.</p>
+    <p style="margin-top:10px">Prepared for Marketing Plan, 2026. Coca-Cola, Creations and all
+      other brand names belong to their owners and are used here for educational purposes.
+      This is a classroom exercise and is not affiliated with The Coca-Cola Company.</p>
+  </div>
+
+</div>
+</body>
+</html>
