@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ejemplo genérico · OREO Golden Ticket · Actividad 2</title>
+<meta name="description" content="Ejemplo genérico resuelto de la Actividad 2: el brief completo de OREO Golden Ticket, presentado como se presenta un brief de verdad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Mismo sistema que la Actividad 2, para que se lea como hermana.
+   Los colores estan comprobados a 4.5:1 con blanco encima. */
+:root{
+  --tinta:#16181D; --hueso:#F7F7F4; --gris:#626974; --linea:#E3E3DE;
+  --c1:#00539F; --c2:#8A5A00; --c3:#A61E4D; --c4:#0B7285; --c8:#3B4CA8;
+  --oreo:#00539F; --oro:#F2B705;
+  --sombra:0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{font-family:'Manrope',system-ui,-apple-system,sans-serif;color:var(--tinta);
+  background:var(--hueso);font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(18px,4vw,34px)}
+
+header{position:sticky;top:0;z-index:60;background:rgba(247,247,244,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--linea)}
+.bar{max-width:1040px;margin:0 auto;padding:12px clamp(18px,4vw,34px);display:flex;
+  align-items:center;gap:12px;flex-wrap:wrap}
+.tag{background:var(--oro);color:var(--tinta);font-size:12px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.tt{font-weight:800;letter-spacing:-.02em}
+.sp{color:var(--gris);font-size:14px;margin-left:auto}
+.sp a{color:var(--c1);font-weight:600}
+
+.hero{position:relative;overflow:hidden;background:var(--oreo);color:#fff;
+  padding:clamp(44px,7vw,82px) 0 clamp(36px,6vw,62px)}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 86% -12%,rgba(242,183,5,.36),transparent 58%)}
+.hero .galleta{position:absolute;right:-70px;top:-60px;width:min(400px,50vw);opacity:.10;
+  transform:rotate(-12deg);pointer-events:none;filter:brightness(0) invert(1)}
+@media(max-width:760px){.hero .galleta{right:-120px;top:-40px;width:280px;opacity:.07}}
+.hero .wrap{position:relative;z-index:1}
+.hero .k{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-bottom:16px}
+.hero h1{font-size:clamp(34px,5.8vw,66px);font-weight:800;letter-spacing:-.032em;line-height:1.02;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--oro)}
+.hero p{margin-top:20px;max-width:58ch;font-size:clamp(16px,1.7vw,19px);opacity:.94}
+.logo-oreo{height:56px;width:56px;margin-bottom:20px}
+
+/* ══ LA FRANJA DE ADVERTENCIA ══
+   Es lo primero despues de la portada y vuelve a aparecer al final. Diagonales
+   amarillas y negras, como una cinta de obra: se entiende antes de leerla. */
+.franja{background:repeating-linear-gradient(45deg,var(--oro) 0 16px,#16181D 16px 32px);
+  padding:5px}
+.franja .in{background:#fff;padding:clamp(20px,3.4vw,32px) clamp(18px,4vw,40px)}
+.franja b{display:block;font-size:clamp(19px,2.6vw,26px);font-weight:800;letter-spacing:-.02em;
+  margin-bottom:8px}
+.franja p{max-width:70ch;margin:0;font-size:16px}
+
+section{padding:clamp(42px,6vw,76px) 0}
+.et{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;padding:4px 11px;border-radius:100px;margin-bottom:16px}
+h2.h{font-size:clamp(25px,3.4vw,38px);font-weight:800;letter-spacing:-.026em;line-height:1.12;
+  margin-bottom:16px;max-width:24ch}
+section p{max-width:66ch;margin-bottom:14px}
+h3{font-size:20px;font-weight:800;letter-spacing:-.015em;margin:30px 0 10px}
+.caja{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:22px;
+  box-shadow:var(--sombra);margin:22px 0}
+.caja h4{font-size:17px;font-weight:800;margin-bottom:8px}
+.aviso{background:#FFF8E1;border:1px solid #F2D98B;border-left:4px solid var(--oro)}
+ul.li{list-style:none;max-width:66ch}
+ul.li li{padding-left:22px;position:relative;margin-bottom:9px}
+ul.li li::before{content:'';position:absolute;left:0;top:11px;width:8px;height:8px;
+  border-radius:50%;background:var(--oreo)}
+
+/* ══ EL BRIEF, COMO SE PRESENTA ══
+   No es una tabla de casillas: son laminas. Cada una tiene un solo trabajo y
+   se para sola en pantalla. Ese es el punto que hay que ensenar. */
+.deck{counter-reset:lam}
+.lam{background:#fff;border:1px solid var(--linea);border-radius:16px;box-shadow:var(--sombra);
+  padding:clamp(26px,4.4vw,52px);margin:18px 0;position:relative;overflow:hidden}
+.lam::before{counter-increment:lam;content:counter(lam,decimal-leading-zero);
+  position:absolute;top:clamp(18px,3vw,28px);right:clamp(18px,3vw,32px);
+  font-size:13px;font-weight:800;letter-spacing:.1em;color:#B9BDC4}
+.lam .rot{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--c1);margin-bottom:12px}
+.lam h3.lt{font-size:clamp(23px,3.2vw,34px);font-weight:800;letter-spacing:-.026em;
+  line-height:1.14;margin:0 0 14px;max-width:22ch}
+.lam p{max-width:64ch;margin-bottom:12px}
+.lam p:last-child{margin-bottom:0}
+.lam .grande{font-size:clamp(20px,2.7vw,27px);font-weight:700;letter-spacing:-.02em;
+  line-height:1.32;max-width:26ch;color:var(--tinta)}
+.lam .apoyo{font-size:15px;color:var(--gris);max-width:62ch}
+.lam.oscura{background:var(--oreo);color:#fff;border-color:var(--oreo)}
+.lam.oscura::before{color:rgba(255,255,255,.5)}
+.lam.oscura .rot{color:var(--oro)}
+.lam.oscura .apoyo{color:rgba(255,255,255,.86)}
+.lam.dorada{background:var(--oro);border-color:#D9A404}
+.lam.dorada::before{color:#8A6400}
+.lam.dorada .rot{color:#6B4A00}
+/* la ficha de una persona, no de un segmento */
+.persona{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:18px}
+.persona .ini{width:60px;height:60px;border-radius:50%;background:var(--c3);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:800;flex-shrink:0}
+.persona .q{font-size:16.5px;line-height:1.6;max-width:56ch}
+.persona .q i{display:block;font-style:normal;font-size:13.5px;color:var(--gris);margin-top:7px}
+/* las seis W, en rejilla */
+.ws{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:20px}
+.ws div{border:1px solid var(--linea);border-radius:11px;padding:14px 15px;background:#FBFBF9}
+.ws b{display:block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--c4);margin-bottom:5px}
+.ws span{font-size:15px;line-height:1.5}
+.ws .fuerte{background:#FFF8E1;border-color:#F2D98B}
+.ws .fuerte b{color:#8A5A00}
+/* los pasos de la mecanica */
+.pasos{counter-reset:pa;margin-top:20px;display:grid;gap:11px}
+.pasos div{counter-increment:pa;position:relative;padding-left:46px;font-size:16px}
+.pasos div::before{content:counter(pa);position:absolute;left:0;top:-1px;width:30px;height:30px;
+  border-radius:50%;background:var(--tinta);color:#fff;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:800}
+/* canales */
+.can{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;margin-top:20px}
+.can div{border-radius:12px;padding:16px 17px;color:#fff}
+.can b{display:block;font-size:16.5px;font-weight:800;margin-bottom:5px}
+.can span{font-size:14.5px;line-height:1.5;opacity:.95}
+/* cronograma */
+.crono{display:grid;gap:12px;margin-top:20px}
+.crono div{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:start;
+  border-left:3px solid var(--oro);padding:4px 0 4px 16px}
+@media(max-width:640px){.crono div{grid-template-columns:1fr;gap:4px}}
+.crono b{font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--c2)}
+.crono span{font-size:16px;line-height:1.56}
+
+/* el nombre */
+.nombre{background:var(--oro);border-radius:18px;padding:clamp(28px,5vw,52px);text-align:center;margin:24px 0}
+.nombre .q{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#6B4A00;
+  font-weight:700;margin-bottom:14px}
+.nombre b{display:block;font-size:clamp(32px,6vw,62px);font-weight:800;letter-spacing:-.03em;
+  line-height:1.04;color:var(--tinta)}
+.nombre span{display:block;margin-top:14px;font-size:16px;color:#5A3F00;max-width:46ch;
+  margin-left:auto;margin-right:auto}
+
+/* piezas */
+.piezas{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin:24px 0}
+.pieza{background:#fff;border:1px solid var(--linea);border-radius:16px;overflow:hidden;
+  box-shadow:var(--sombra);display:flex;flex-direction:column}
+.pieza .lienzo{background:#EDEDEA;display:flex;align-items:center;justify-content:center;padding:16px}
+.pieza .lienzo img,.pieza .lienzo video{border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.16)}
+.pieza .info{padding:16px 18px 18px;border-top:1px solid var(--linea)}
+.pieza .info b{display:block;font-size:16.5px;font-weight:800}
+.pieza .info .med{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--c1);margin:4px 0 7px}
+.pieza .info p{font-size:14.5px;color:var(--gris);margin:0;max-width:none}
+.ancha{grid-column:1/-1}
+.tel{width:236px;border:9px solid #16181D;border-radius:28px;overflow:hidden;background:#000;
+  box-shadow:0 8px 30px rgba(0,0,0,.24)}
+.tel video{width:100%;height:auto;display:block;border-radius:0;box-shadow:none}
+
+footer{border-top:1px solid var(--linea);padding:30px 0 44px;color:var(--gris);font-size:13.5px}
+footer b{color:var(--tinta)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <span class="tag">Ejemplo genérico</span>
+    <span class="tt">OREO Golden Ticket</span>
+    <span class="sp"><a href="activity-two-oreo-golden.html">← Volver a la Actividad 2</a></span>
+  </div>
+</header>
+
+<div class="hero">
+  <img class="galleta" src="logo-D3vlQ8nU.svg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <img class="logo-oreo" src="logo-D3vlQ8nU.svg" alt="OREO" width="56" height="56">
+    <div class="k">Actividad 2 · Ejemplo genérico resuelto</div>
+    <h1>OREO<br>Golden <em>Ticket</em></h1>
+    <p>La misma actividad que les tocó a ustedes, resuelta de principio a fin: el brief
+      presentado como se presenta un brief de verdad, y las cuatro piezas producidas.</p>
+  </div>
+</div>
+
+<div class="franja">
+  <div class="in">
+    <b>Esto es un ejemplo genérico. No es su entrega.</b>
+    <p>Este es el ejemplo que se dio en clase para todo el salón, así que todo el mundo ya lo
+      tiene. Si lo entregan, van a entregar exactamente lo mismo que los otros equipos. Está aquí
+      para que vean el nivel de detalle que se espera y cómo se arma un brief, no para que lo
+      copien.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <span class="et" style="background:var(--c1)">01 · El nombre</span>
+    <h2 class="h">Tres palabras que explican toda la mecánica</h2>
+
+    <div class="nombre">
+      <div class="q">Nombre de campaña</div>
+      <b>OREO Golden Ticket</b>
+      <span>Busca el Golden Ticket en tus OREO Golden y gánate un viaje todo pago a conocer
+        el Golden Gate.</span>
+    </div>
+
+    <h3>Por qué funciona</h3>
+    <ul class="li">
+      <li><b>La marca ya está adentro.</b> "Golden" es el producto. No hay que explicar de qué
+        galleta hablamos, el nombre lo dice.</li>
+      <li><b>El premio también.</b> Golden Ticket, Golden Gate. La misma palabra viaja del empaque
+        al destino, y esa repetición es la que lo hace pegajoso.</li>
+      <li><b>Se dice fácil en voz alta.</b> Pruébenlo: se puede gritar en una tienda y se
+        entiende. Ese es el examen que casi ningún nombre pasa.</li>
+      <li><b>No necesita explicación.</b> Prueben el suyo: si les pide una frase que lo aclare,
+        casi siempre hay uno mejor esperando ahí cerca, y suele salir de las mismas palabras.</li>
+    </ul>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)">
+  <div class="wrap">
+    <span class="et" style="background:var(--c4)">02 · El brief</span>
+    <h2 class="h">Un brief no es llenar casillas. Es una presentación.</h2>
+    <p>Las casillas son el índice, no el trabajo. Cuando ustedes presenten, nadie va a leerles una
+      tabla: se van a parar al frente y van a contar una historia que empieza en un problema y
+      termina en cuatro piezas. Cada lámina de aquí abajo hace <b>un</b> trabajo y se para sola.
+      Así se ve.</p>
+
+    <div class="deck">
+
+      <div class="lam oscura">
+        <div class="rot">De qué se trata</div>
+        <h3 class="lt">OREO Golden existe hace rato. Casi nadie la ha probado.</h3>
+        <p class="grande" style="color:#fff">No es un problema de distribución. Está en la góndola,
+          al lado de la clásica. Es que la mano nunca llega hasta allá.</p>
+        <p class="apoyo" style="margin-top:16px">Esta lámina existe para que en treinta segundos
+          todo el mundo en la sala esté hablando del mismo problema. Si esto no queda claro, nada
+          de lo que sigue importa.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">Objetivo</div>
+        <h3 class="lt">Awareness y trial. En ese orden, y no se vale saltarse el primero.</h3>
+        <p><b>Awareness:</b> que la gente sepa que existe una OREO Golden. Hoy muchos ni siquiera
+          la registran en el anaquel.</p>
+        <p><b>Trial:</b> que la prueben una vez. Con una basta, porque el producto se defiende
+          solo; el problema nunca fue el sabor.</p>
+        <p class="apoyo">Vale la pena decir también lo que dejamos por fuera: fidelizar, cambiarle
+          la galleta de siempre a alguien, vender más OREO en general. Todas son metas válidas y
+          en otro momento serían la campaña entera. Escoger dos y nombrar las que quedan para
+          después es lo que hace que todo lo demás se pueda decidir rápido.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">Target</div>
+        <h3 class="lt">Gen Z y millennials jóvenes. Pero eso todavía no es una persona.</h3>
+        <p>Compran snack por impulso, piden por domicilio y deciden en segundos frente a una
+          góndola o una pantalla. Hasta ahí llega la demografía. Un target de verdad se ve así:</p>
+        <div class="persona">
+          <div class="ini">D</div>
+          <div class="q">"Yo pido algo dulce como a las cuatro, cuando ya no aguanto la clase.
+            Pido lo mismo casi siempre porque no quiero perder el antojo en algo que de pronto no
+            me guste."
+            <i>Daniela, 21, estudiante · Bogotá · entrevista 7</i></div>
+        </div>
+        <p class="apoyo" style="margin-top:18px">Esa frase no salió de una base de datos: salió de
+          preguntarle a alguien. Por eso la actividad les pide veinte entrevistas. Una sola frase
+          bien escogida vale más que tres párrafos de "jóvenes urbanos digitales".</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">Análisis de mercado · las 6 W</div>
+        <h3 class="lt">Seis preguntas, seis respuestas cortas</h3>
+        <div class="ws">
+          <div><b>Qué</b><span>Una OREO de vainilla con relleno blanco. Misma galleta, otro
+            registro de sabor.</span></div>
+          <div><b>Quién</b><span>Gen Z y millennials jóvenes, compradores de impulso.</span></div>
+          <div><b>Cuándo</b><span>El antojo de media tarde y el de la noche.</span></div>
+          <div><b>Dónde</b><span>Tienda de barrio, D1, Ara y Rappi.</span></div>
+          <div><b>Por qué</b><span>La categoría de snacks crece cerca de 5% al año y la galleta es
+            uno de los snacks más consumidos del país.</span></div>
+          <div class="fuerte"><b>Por qué no la han probado</b><span>Porque no saben que existe, y
+            porque la clásica nunca falla. Esta es la W que abre la campaña.</span></div>
+        </div>
+        <p class="apoyo" style="margin-top:18px">Las primeras cinco describen; la sexta explica.
+          Cuando encuentren la suya se va a notar sola, porque va a sonar distinta a las otras
+          cinco y va a dar un poco de rabia. Esa es la señal de que ahí está la campaña.</p>
+      </div>
+
+      <div class="lam dorada">
+        <div class="rot">Insight</div>
+        <h3 class="lt">Nadie arriesga un antojo.</h3>
+        <p class="grande">Cuando por fin tienes ganas de algo dulce, ese no es el momento de
+          experimentar. Probar un sabor nuevo es apostar el antojo, y por eso la mano va sola hacia
+          la de siempre.</p>
+        <p class="apoyo" style="margin-top:16px;color:#5A3F00">Un insight no es un dato ni una
+          conclusión: es una verdad incómoda que la gente reconoce cuando la oye. Tienen una
+          prueba de bolsillo para saber si ya llegaron: léanselo en voz alta a alguien. Si dice
+          "sí, así soy", lo tienen. Si dice "claro, obvio", todavía es un dato, y casi siempre el
+          insight está una pregunta más abajo del mismo dato.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">La idea</div>
+        <h3 class="lt">Si probarla es una apuesta, entonces que la apuesta pague.</h3>
+        <p class="grande">Metemos un ticket dorado dentro de paquetes de OREO Golden.</p>
+        <p style="margin-top:14px">Comprarla deja de ser "probar un sabor nuevo" y pasa a ser
+          "participar por un viaje". El riesgo no desaparece: se convierte en la razón para
+          comprar. El empaque se vuelve el medio y abrir el paquete se vuelve el contenido.</p>
+        <p class="apoyo">Noten que la idea es la respuesta directa al insight. Hay una prueba
+          rápida que pueden hacerle a la suya: tapen el insight y vuelvan a leer la idea. Si sin
+          él la idea queda coja, van muy bien, porque quiere decir que una nació de la otra.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">La mecánica</div>
+        <h3 class="lt">Cómo funciona en la vida real</h3>
+        <div class="pasos">
+          <div>Se distribuyen tickets dorados dentro de paquetes de OREO Golden en tienda de
+            barrio, D1, Ara y Rappi.</div>
+          <div>El empaque anuncia la promoción por fuera. Si el aviso está solo por dentro, nadie
+            la compra por eso.</div>
+          <div>Quien encuentra el ticket entra a la página, registra el código y valida.</div>
+          <div>El ganador viaja a San Francisco con acompañante, todo pago.</div>
+          <div>El viaje se graba y se publica para que se vuelva viral. Ese contenido es la
+            prueba de que el ticket existía y es lo que sostiene la campaña en su tercera
+            semana.</div>
+        </div>
+        <p class="apoyo" style="margin-top:18px">Esta es la lámina que casi nadie incluye, y por eso
+          es la que más los distingue. Si logran contar la suya en cinco pasos concretos, ya la
+          tienen resuelta; y si algún paso todavía no sale, ese hueco es justo lo más interesante
+          que van a resolver esta semana.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">Canales</div>
+        <h3 class="lt">Cuatro canales, cuatro trabajos distintos</h3>
+        <div class="can">
+          <div style="background:var(--c3)"><b>Rappi</b><span>Aquí la persona ya tiene hambre y la
+            app abierta. Es el único canal donde el antojo se convierte en compra sin que nadie se
+            levante.</span></div>
+          <div style="background:var(--c8)"><b>Instagram y TikTok</b><span>Aquí es donde se
+            viraliza. El video del hallazgo es lo único de la campaña que la gente quiere ver por
+            gusto y grabar por su cuenta, y eso es lo que la reparte sin pagarlo.</span></div>
+          <div style="background:var(--c2)"><b>Valla</b><span>Le da tamaño. Hace que la promoción
+            se sienta real y de marca grande, no un concurso de internet.</span></div>
+          <div style="background:var(--c4)"><b>Tiendas y universidades</b><span>La degustación. Es
+            lo único que garantiza la prueba, que era la mitad del objetivo.</span></div>
+        </div>
+        <p class="apoyo" style="margin-top:18px">Un truco que sirve mucho: escríbanle a cada canal
+          una frase que diga qué trabajo hace, distinto al de los demás. Los que ya tienen su
+          frase quedan blindados para cuando les pregunten en la sustentación, y el que todavía no
+          la tiene les está mostrando un trabajo que nadie está haciendo todavía. Cualquiera de
+          las dos cosas les sirve.</p>
+      </div>
+
+      <div class="lam">
+        <div class="rot">Cronograma</div>
+        <h3 class="lt">Tres semanas, y el orden se puede defender</h3>
+        <div class="crono">
+          <div><b>Semana 1</b><span>Sale la valla y arrancan los banners en Rappi. Nadie ha ganado
+            todavía. La única tarea de esta semana es que se sepa.</span></div>
+          <div><b>Semana 2</b><span>Degustación en universidades y tiendas, y el reel del hallazgo
+            en IG y TikTok. Aquí es donde la gente prueba.</span></div>
+          <div><b>Semana 3</b><span>Aparece el primer ganador y se vuelve el contenido. Aquí la
+            campaña tiene que volverse viral: el viaje real es la prueba de que el ticket existía,
+            y esa prueba la reparte la gente, no el pauta. Un ganador de verdad grabando su
+            reacción se comparte solo, y eso es alcance que no se compra.</span></div>
+        </div>
+        <p class="apoyo" style="margin-top:18px"><b>Por qué en ese orden:</b> la degustación no
+          puede ir en semana 1, porque sería regalarle galletas a gente que no sabe que hay un
+          premio adentro. Y el ganador no puede salir en semana 1 porque nadie habría comprado
+          todavía. Cada semana existe porque la anterior la hizo posible, y esa dependencia es
+          justo lo que convierte una lista de fechas en un cronograma. Un ejercicio corto: tomen
+          sus semanas y traten de intercambiarlas. Si el plan se rompe, quedó bien armado.</p>
+      </div>
+
+      <div class="lam oscura">
+        <div class="rot">El cierre</div>
+        <h3 class="lt">Todo el brief cabe en una frase</h3>
+        <p class="grande" style="color:#fff">Nadie arriesga un antojo, así que le pusimos un premio
+          adentro al riesgo.</p>
+        <p class="apoyo" style="margin-top:16px">Intenten escribir la suya antes de presentar.
+          Cuando quepa en una frase van a saber que adentro quedó una sola idea; y si todavía no
+          cabe, esa misma frase les va a mostrar cuáles son las dos que están peleando, para que
+          escojan con cuál se quedan. Sirve en los dos casos.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="et" style="background:var(--c3)">03 · Las piezas</span>
+    <h2 class="h">La misma idea, en cuatro formatos</h2>
+    <p>Una idea que solo funciona en un formato no es una campaña. Fíjense en que las cuatro dicen
+      lo mismo y ninguna se ve igual: cada una está hecha para el sitio donde va a vivir.</p>
+
+    <div class="piezas">
+
+      <div class="pieza">
+        <div class="lienzo">
+          <div class="tel">
+            <video src="ejemplo/reel-vertical.mp4" poster="ejemplo/poster-vertical.jpg"
+                   controls muted loop playsinline preload="metadata"></video>
+          </div>
+        </div>
+        <div class="info">
+          <b>Reel · TikTok</b>
+          <div class="med">1080 × 1920 · 9:16 · 3 s</div>
+          <p>El hallazgo, sin una sola palabra. Abre el paquete, aparece el ticket. Se entiende con
+            el sonido apagado, que es como se ve la mayoría del scroll.</p>
+        </div>
+      </div>
+
+      <div class="pieza">
+        <div class="lienzo">
+          <img src="ejemplo/ig-post.jpg" alt="Post de Instagram de la campaña OREO Golden Ticket"
+               style="max-height:420px;width:auto" loading="lazy">
+        </div>
+        <div class="info">
+          <b>Post de feed · Instagram</b>
+          <div class="med">1080 × 1350 · 4:5</div>
+          <p>La versión quieta. La foto sostiene el hallazgo y la banda dorada dice el nombre y el
+            premio, para quien la ve sin darle play.</p>
+        </div>
+      </div>
+
+      <div class="pieza ancha">
+        <div class="lienzo">
+          <img src="ejemplo/rappi-banner.jpg" alt="Banner de Rappi de la campaña OREO Golden Ticket"
+               loading="lazy">
+        </div>
+        <div class="info">
+          <b>Banner · Rappi</b>
+          <div class="med">Formato ancho de home</div>
+          <p>Aquí la persona ya tiene hambre y la app abierta. Por eso este es el único formato
+            donde el botón de comprar aparece de una: no hay que convencer, hay que no estorbar.
+            Noten el co-branding, Rappi y OREO juntos, que es lo que hace creíble la promoción.</p>
+        </div>
+      </div>
+
+      <div class="pieza ancha">
+        <div class="lienzo">
+          <img src="ejemplo/billboard.jpg" alt="Valla en avenida de la campaña OREO Golden Ticket"
+               loading="lazy">
+        </div>
+        <div class="info">
+          <b>Valla</b>
+          <div class="med">Formato exterior · vista desde la vía</div>
+          <p>Se lee en tres segundos a sesenta kilómetros por hora: producto, ticket, premio. Nada
+            más cabe. La valla no vende; hace que la promoción se sienta grande y de verdad, para
+            que cuando aparezca en Rappi ya la conozcas.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="caja">
+      <h4>Lo que hay que notar</h4>
+      <ul class="li" style="margin-top:8px">
+        <li><b>El video es el mismo hallazgo en dos formatos.</b> Vertical para el feed, horizontal
+          para pantalla. Se graba una vez y se monta dos veces.</li>
+        <li><b>El dorado aparece en las cuatro.</b> Es lo único que amarra las piezas entre sí. Si
+          tapan los logos, todavía se ve que son la misma campaña.</li>
+        <li><b>Ninguna pieza explica el producto.</b> Explican el premio. El producto se prueba
+          solo, y para eso hay que comprarlo primero.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;border-top:1px solid var(--linea)">
+  <div class="wrap">
+    <span class="et" style="background:var(--c2)">04 · Antes de que copien esto</span>
+    <h2 class="h">Este ejemplo ya está usado, y por partida doble</h2>
+    <p>Primero, el ticket dorado ya lo hizo alguien más hace sesenta años, en un libro que todo el
+      mundo conoce. Funciona precisamente porque es familiar. Segundo, y más importante para su
+      nota: este ejemplo se dio en clase para todos. Los otros equipos lo tienen igual que
+      ustedes.</p>
+    <p>Lo que sí deberían llevarse de aquí:</p>
+    <ul class="li">
+      <li>El nombre sale del producto, no de una lluvia de ideas aparte.</li>
+      <li>La actividad responde al insight. Aquí el insight era "nadie arriesga un antojo" y la
+        idea convierte ese riesgo en premio. Miren si la suya se puede amarrar igual de corto.</li>
+      <li>Cada lámina hace un solo trabajo y se para sola.</li>
+      <li>El cronograma tiene un orden que se puede defender en voz alta.</li>
+      <li>Las cuatro piezas se parecen entre sí sin ser la misma.</li>
+    </ul>
+
+    <div class="caja aviso">
+      <h4>Sobre estas imágenes</h4>
+      <p style="margin:0">La valla y el banner de Rappi son montajes hechos con inteligencia
+        artificial para este ejercicio. No son piezas oficiales de la marca ni campañas reales. Lo
+        decimos aquí por la misma razón por la que a ustedes se les pide etiquetar sus datos: si
+        algo es una estimación o un montaje, se dice.</p>
+    </div>
+  </div>
+</section>
+
+<div class="franja">
+  <div class="in">
+    <b>Última vez: esto es genérico.</b>
+    <p>Vayan a hacer sus veinte entrevistas y encuentren su propia sexta W. La idea buena está
+      ahí, en algo que alguien les va a decir sin darse cuenta de que se los dijo.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <b>Marketing Plan · Actividad 2 · Ejemplo genérico resuelto</b><br>
+    OREO Golden Ticket · Mecánica propuesta en clase · Piezas producidas como ejercicio<br>
+    Ejercicio académico. Sin afiliación ni respaldo de Mondelēz International ni de Rappi. OREO y
+    OREO Golden son marcas de su titular, usadas aquí con fines de clase.
+  </div>
+</footer>
+
+</body>
+</html>
